@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTPからAI召喚へ | SHIMANEKO TECH LOG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container" style="text-align: center;">
+            <a href="../index.html" class="logo">SHIMANEKO TECH LOG</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="article-container">
+            <header class="article-header">
+                <span class="tag"
+                    style="background: var(--color-primary); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold;">COLUMN</span>
+                <h1>FTPからAI召喚へ。<br><span style="font-size: 0.6em; color: var(--color-secondary);">Web制作が「会話」になった日</span>
+                </h1>
+                <time
+                    style="display: block; margin-top: 10px; color: var(--color-secondary); font-weight: bold;">2026.02.09</time>
+            </header>
+
+            <div class="article-body">
+                <p>こんにちは、しまねこデザインのコンブです。<br>
+                    昔話をするつもりはないんですが、Webサイトを作るのって、以前はもっと「工事」みたいな感じだったんですよね。</p>
+
+                <h2>1. 昔の「工事現場」</h2>
+                <p>FTPソフトを使ってファイルをサーバーにアップロードしたり、黒い画面（ターミナル）で呪文のようなコマンドを打ち込んだり。<br>
+                    正直、デザインに集中したいのに「環境構築」で一日が終わる…なんてこともよくありました。</p>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+graph TD
+    Me[私] -->|必死に勉強| Code[HTML/CSS/JS]
+    Code -->|FTPでアップ| Server[サーバー]
+    Server -->|エラー!| Me
+    Me -->|徹夜で修正| Code
+    
+    style Me fill:#e0e0e0
+    style Server fill:#ffcccc
+                    </pre>
+                    <div class="diagram-caption">図: 以前の辛かったワークフロー</div>
+                </div>
+
+                <h2>2. 「これ作って」で、できる時代</h2>
+                <div class="concept-box">
+                    <div class="concept-title">🤖 AI = 優秀な施工業者</div>
+                    <p>今は、私が「こんな家（サイト）がいいな」と話すだけ。<br>
+                        面倒な基礎工事や配線（コーディング・環境構築）は、AIパートナーが裏で全部やってくれます。</p>
+                </div>
+
+                <p>私はこのサイトを <strong>Antigravity（通称：AIくん）</strong> にお願いして作ってもらいました。<br>
+                    「アストロ？ ギットハブ？」最初は難しい言葉も出ましたが、最終的にはメモ帳で編集できる一番シンプルな形に落ち着きました。</p>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant Me as 私 (Director)
+    participant AI as AI (Engineer)
+    
+    Me->>AI: 「いい感じのブログ作って！」
+    AI-->>Me: 「了解！Astroで構築します」
+    Me->>AI: 「いや、もっとシンプルに！」
+    AI-->>Me: 「じゃあVanilla構成にしますね」
+    
+    Note over Me, AI: 会話だけで完成！
+                    </pre>
+                    <div class="diagram-caption">図: 今の「会話ベース」のワークフロー</div>
+                </div>
+
+                <h2>3. アトリエにおける「システム部」</h2>
+                <p>私たちデザイナーにとって、技術は「魔法の杖」であるべきです。<br>
+                    杖の作り方（コード）を必死に覚えるよりも、どんな魔法をかけたいか（アイディア）を考えることに時間を使いたい。</p>
+
+                <p>これからの「しまねこデザイン」のシステム部は、私とAIくんの二人三脚です。<br>
+                    私が「こんなことしたい！」と叫べば、AIくんが裏側でいい感じに整えてくれる。<br>
+                    そんな、会話から生まれるWeb制作を、ここから始めていこうと思います。</p>
+
+                <div
+                    style="text-align: center; margin-top: 80px; padding: 40px; border-top: 1px solid var(--color-border);">
+                    <a href="../index.html" class="read-btn"
+                        style="display: inline-block; padding: 15px 40px; width: auto;">Topへ戻る</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Shimaneko Design</p>
+        </div>
+    </footer>
+
+    <!-- Mermaid Loader -->
+    <script type="module" src="../js/visuals.js"></script>
+
+</body>
+
+</html>

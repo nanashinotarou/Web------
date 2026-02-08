@@ -1,0 +1,290 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ウェブデザイン技能検定3級 模擬試験【実技編】50問</title>
+  <style>
+    /* CSSは元のファイルと同じものを全て維持 */
+    :root{
+      --bg:#ffffff;
+      --card:#f9fafb;
+      --accent:#2563eb;
+      --muted:#374151;
+      --ok:#16a34a;
+      --bad:#ef4444;
+      --text:#111827;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,Segoe UI,Roboto,Arial;
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .card{
+      background:var(--card);
+      max-width:820px;
+      width:100%;
+      border-radius:12px;
+      padding:24px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    }
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    h1{font-size:20px;margin:0}
+    .meta{color:var(--muted);font-size:13px}
+    .progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-top:12px}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#7c3aed);width:0%}
+    .question{margin:18px 0;padding:18px;border-radius:8px;background:#f3f4f6}
+    .qnum{font-size:13px;color:var(--muted)}
+    .qtext{font-size:18px;margin-top:8px}
+
+    .choices{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}
+    .choice{padding:12px 14px;border-radius:8px;border:1px solid #d1d5db;background:#ffffff;cursor:pointer;text-align:left;color:var(--text)}
+    .choice:hover{transform:translateY(-2px);background:#f9fafb}
+    .choice.correct{border-color:var(--ok);background:#dcfce7}
+    .choice.wrong{border-color:var(--bad);background:#fee2e2}
+
+    .controls{display:flex;gap:10px;align-items:center;margin-top:18px}
+    button.btn{background:var(--accent);color:#fff; padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600}
+    button.ghost{background:transparent;border:1px solid #d1d5db;color:var(--muted)}
+
+    .result{display:none;padding:18px;margin-top:18px;border-radius:8px;background:#f3f4f6}
+    .result.show{display:block}
+    .score{font-size:22px;font-weight:700;color:var(--text)}
+    .small{font-size:13px;color:var(--muted)}
+
+    @media(min-width:640px){.choices{grid-template-columns:repeat(2,1fr)}}
+
+    footer{margin-top:14px;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <header>
+      <div>
+        <h1>ウェブデザイン技能検定3級 模擬試験【実技編】</h1>
+        <div class="meta">50問 — HTMLコーディング・CSSスタイリング</div>
+        <div class="progress" aria-hidden="true"><i id="progBar"></i></div>
+      </div>
+      <div class="meta" id="status">問題 1 / 50</div>
+    </header>
+
+    <section id="quizArea">
+      <div class="question">
+        <div class="qnum" id="qNum">問題 1</div>
+        <div class="qtext" id="qText">読み込み中...</div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="controls">
+        <button class="btn" id="nextBtn" disabled>次へ</button>
+        <button class="ghost" id="restartBtn">最初から</button>
+        <div style="margin-left:auto" class="small" id="feedback"></div>
+      </div>
+    </section>
+
+    <section class="result" id="resultBox" aria-live="polite">
+      <div class="score" id="finalScore">あなたのスコア: 0 / 50</div>
+      <div class="small" id="detailText">良いところと、改善ポイントを表示します。</div>
+      <div style="margin-top:12px">
+        <button class="btn" id="retryBtn">もう一度チャレンジ</button>
+        <button class="ghost" id="reviewBtn">解答を確認</button>
+      </div>
+    </section>
+
+    <footer>作成: ウェブデザイン技能検定3級 模擬試験【実技編】</footer>
+  </main>
+
+<script>
+// =========================================================
+// 問題データ 50問 (実技編) 
+// =========================================================
+const QUESTIONS = [
+  {q: 'HTML5で、Webサイトの閲覧者が視覚障碍者や検索エンジンなど、**非視覚的環境**で画像の内容を理解するために記述すべき属性はどれか。', choices: ['`title`', '`alt`', '`src`', '`width`'], a: 1, explain: '`alt`属性（代替テキスト）は、画像が表示できない場合や非視覚的環境で、画像の内容を伝えるために必須です。'},
+  {q: 'CSSにおいて、**文字の色**を指定するプロパティはどれか。', choices: ['`background-color`', '`font-style`', '`color`', '`text-decoration`'], a: 2, explain: '`color`プロパティは文字の色（前景色）を指定します。`background-color`は背景色です。'},
+  {q: 'HTML5で、Webページに**ハイパーリンク**を作成するために使用する要素はどれか。', choices: ['`<img>`', '`<a>`', '`<p>`', '`<h1>`'], a: 1, explain: '`<a>`要素（アンカー要素）は、他のページやファイルへのリンクを作成するために使用されます。'},
+  {q: 'CSSで「黒」を色コードで指定する場合、最も**短い記述**で表現できるものはどれか。', choices: ['`#000000`', '`#FFF`', '`#000`', '`black`'], a: 2, explain: '16進数カラーコードでは、RRGGBBの各桁が同じ数字（例：`#000000`）の場合、`#000`のように3桁に短縮できます。'},
+  {q: 'HTML5において、Webページの**主要なナビゲーションリンク**のグループ化に最もセマンティック（意味的）に適切な要素はどれか。', choices: ['`<div>`', '`<nav>`', '`<section>`', '`<header>`'], a: 1, explain: '`<nav>`要素は、ナビゲーションリンクのセクションであることを示します。'},
+  {q: '要素の**横幅を300ピクセル**に指定するCSSプロパティと値の記述として、[ ] に入る適切な値は？<br>`width: [ ] ;`', choices: ['300px', '300', '300%', '300pt'], a: 0, explain: 'CSSでピクセル指定をする場合は、単位の`px`が必要です。'},
+  {q: 'CSSの**ボックスモデル**において、要素の境界線（`border`）の**外側**にある、他の要素との間に空けるスペースを設定するプロパティはどれか。', choices: ['`padding`', '`margin`', '`width`', '`outline`'], a: 1, explain: '`margin`は境界線の外側の余白、`padding`は境界線の内側（内容との間）の余白です。'},
+  {q: 'HTML5で、Webサイト上で**独立した一つの完結したコンテンツ**を示すために最も適切な要素はどれか。', choices: ['`<section>`', '`<aside>`', '`<article>`', '`<footer>`'], a: 2, explain: '`<article>`要素は、それだけで独立して意味を成すコンテンツを表すために使用されます。'},
+  {q: 'CSSにおいて、最も高い**セレクタの優先順位（詳細度）**を持つものはどれか。', choices: ['要素名セレクタ（例：`p`）', 'クラスセレクタ（例：`.box`）', 'IDセレクタ（例：`#main`）', '`style`属性を用いたインラインスタイル'], a: 3, explain: 'インラインスタイル（HTMLタグ内の`style=""`属性）が最も優先されます。'},
+  {q: 'ユーザーが入力した情報をサーバーに送信するための**送信ボタン**を作成するために、`<input>`要素に指定する`type`属性の値はどれか。', choices: ['`type="button"`', '`type="reset"`', '`type="submit"`', '`type="text"`'], a: 2, explain: '`type="submit"`が、フォームの内容をサーバーに送信する役割を持つボタンを作成します。'},
+  {q: '要素をブロックレベル要素のように、幅や高さを指定でき、かつテキストを流し込めるようにする`display`プロパティの値はどれか。', choices: ['`inline`', '`block`', '`none`', '`inline-block`'], a: 3, explain: '`inline-block`は、`width/height`を指定でき、要素が横に並ぶように振る舞います。'},
+  {q: 'Webページで**表（テーブル）**を作成する際に、必ず使用する要素は？', choices: ['`<ul>`', '`<td>`', '`<table>`', '`<section>`'], a: 2, explain: '表を定義する最も基本的な要素です。'},
+  {q: 'CSSで、要素にマウスカーソルを合わせたときのスタイルを指定する**擬似クラス**はどれか。', choices: ['`:focus`', '`:active`', '`:visited`', '`:hover`'], a: 3, explain: '`:hover`は、要素にカーソルが乗った状態を指定します。'},
+  {q: 'HTML5で、Webページの**文書構造の区切り**として汎用的に使用される要素はどれか。', choices: ['`<span>`', '`<div>`', '`<blockquote>`', '`<main>`'], a: 1, explain: '`<div>`（ディビジョン）は、特定の意味を持たず、レイアウトの区切りとして広く使用されます。'},
+  {q: 'ボックスモデルにおいて、内容（コンテンツ）と境界線（`border`）の間にあるスペースを設定するプロパティはどれか。', choices: ['`margin`', '`padding`', '`width`', '`outline`'], a: 1, explain: '`padding`は、要素の内容（テキストや画像）と枠線の間の余白（内側の余白）です。'},
+  {q: 'リンクを設定する際に、別ウィンドウ（タブ）で開くように指定する`target`属性の値はどれか。', choices: ['`_self`', '`_parent`', '`_top`', '`_blank`'], a: 3, explain: '`target="_blank"`でリンク先を新しいウィンドウまたはタブで開きます。'},
+  {q: 'CSSファイルをHTML文書に適用する最も一般的な方法はどれか。', choices: ['`<body>`タグ内に`<style>`要素を記述する', '`<head>`タグ内に`<link>`要素を記述する', '`<footer>`タグ内に`<script>`要素を記述する', '外部CSSファイルをコピー＆ペーストする'], a: 1, explain: '**`<link>`要素**を`<head>`内に記述し、外部CSSファイルを読み込むのが標準的な方法です。'},
+  {q: 'HTMLの基本構造において、CSSやJavaScriptの読み込み、ページのタイトルなど、**ユーザーに表示されない情報**を記述するエリアを示す要素は？', choices: ['`<body>`', '`<head>`', '`<footer>`', '`<section>`'], a: 1, explain: '**`<head>`要素**には、文書のメタデータ（タイトル、文字コードなど）を記述します。'},
+  {q: '特定の要素に**クラス属性**（例：`<div class="main">`）でスタイルを適用する際のCSSセレクタの記法はどれか。', choices: ['`#main`', '`.main`', '`main`', '`[main]`'], a: 1, explain: 'クラスセレクタは、要素名の前に**ドット（`.`）**を付けて記述します。'},
+  {q: 'ページのメインコンテンツを記述する領域を示すために最も適切な要素はどれか。', choices: ['`<section>`', '`<aside>`', '`<article>`', '`<main>`'], a: 3, explain: '**`<main>`要素**は、文書の主要なコンテンツ（各ページで固有な内容）を示すために使用されます。'},
+  {q: '以下のCSS記述で、指定した要素を**非表示**にするプロパティと値の組み合わせはどれか。', choices: ['`visibility: hidden;`', '`opacity: 0;`', '`display: none;`', '`z-index: -1;`'], a: 2, explain: '**`display: none;`** は、要素を非表示にし、かつその要素が占めていた空間も取り除きます。'},
+  {q: 'HTML文書の冒頭に記述し、使用するHTMLのバージョン（規格）をブラウザに伝えるための記述はどれか。', choices: ['`<title>`', '`<meta>`', '`<!DOCTYPE html>`', '`<html>`'], a: 2, explain: '**`<!DOCTYPE html>`** は、HTML5文書であることを宣言するための記述です。'},
+  {q: 'CSSで要素の**背景画像**を指定するプロパティは？', choices: ['`image-src`', '`background-image`', '`src-image`', '`content-image`'], a: 1, explain: '要素の背景画像を指定するには、`background-image`プロパティを使用します。'},
+  {q: 'Webサイトのリンクテキストの色を、訪問済みの状態（クリックした後）に変更するためのCSSの**擬似クラス**は？', choices: ['`:hover`', '`:active`', '`:link`', '`:visited`'], a: 3, explain: '`:visited`は、ユーザーがすでにアクセスしたリンクにスタイルを適用する擬似クラスです。'},
+  {q: 'HTMLで、文章を段落としてマークアップするために使用される要素は？', choices: ['`<span>`', '`<br>`', '`<p>`', '`<div>`'], a: 2, explain: '`<p>`要素は、一つの段落（パラグラフ）を表します。'},
+  {q: 'Webサイトで使用する画像形式で、**透過性**（透明な背景）と**可逆圧縮**（画質の劣化がない圧縮）に対応しており、ロゴやアイコンに適している形式は？', choices: ['JPEG', 'GIF', 'PNG', 'SVG'], a: 2, explain: '**PNG**は、高い透過性と可逆圧縮を特徴とし、ロゴやイラストに適しています。'},
+  {q: 'CSSで要素を**中央揃え**にするために、ブロックレベル要素に設定するプロパティと値の組み合わせは？', choices: ['`text-align: center;`', '`margin: auto;`', '`align-items: center;`', '`position: center;`'], a: 1, explain: 'ブロックレベル要素を水平方向の中央に配置するには、`margin: auto;`（左右のマージンを自動調整）を設定します。'},
+  {q: 'HTMLのフォーム要素で、ユーザーに**複数行のテキスト**を入力させるために使用する要素は？', choices: ['`<input type="text">`', '`<textarea>`', '`<select>`', '`<label>`'], a: 1, explain: '`<textarea>`要素は、複数行にわたる長いテキストの入力を受け付けます。'},
+  {q: 'CSSのプロパティで、テキストの行と行の間のスペース（行間）を設定するものは？', choices: ['`text-spacing`', '`line-height`', '`font-space`', '`letter-spacing`'], a: 1, explain: '`line-height`は、行の高さを指定し、行間を調整します。'},
+  {q: 'HTMLで、箇条書きのリスト（順序なしリスト）を作成するために使用する要素は？', choices: ['`<ol>`', '`<ul>`', '`<li>`', '`<dl>`'], a: 1, explain: '`<ul>`要素（Unordered List）は、順序のない箇条書きのリストを定義します。'},
+  {q: 'CSSで要素に**影**を付けるためのプロパティは？', choices: ['`box-shadow`', '`element-shadow`', '`text-shadow`', '`filter: drop-shadow`'], a: 0, explain: 'ブロック要素に影を付けるには`box-shadow`を、テキストに影を付けるには`text-shadow`を使用しますが、一般的に要素の影は`box-shadow`です。'},
+  {q: 'CSSで、要素を他の要素の上に重ねて表示するためのプロパティは？', choices: ['`opacity`', '`display`', '`z-index`', '`position`'], a: 2, explain: '`z-index`プロパティは、要素の重なり順（Z軸方向）を指定します。'},
+  {q: 'HTML5で、文章中の**特に重要なテキスト**を強調するために使用される要素は？', choices: ['`<b>`', '`<i>`', '`<strong>`', '`<mark>`'], a: 2, explain: '`<strong>`要素は、その内容が**重要**であることを意味的に強調します。`<b>`は単に見た目を太字にする要素です。'},
+  {q: 'CSSの`position`プロパティで、親要素を基準として位置を決める値は？', choices: ['`static`', '`fixed`', '`absolute`', '`relative`'], a: 3, explain: '`position: relative;`にすると、要素自身を基準として、他のプロパティ（top, leftなど）で位置を微調整できます。'},
+  {q: 'Webサイトで使用する画像形式で、**アニメーション**に対応しており、色数が256色までに制限される形式は？', choices: ['JPEG', 'GIF', 'PNG', 'WebP'], a: 1, explain: '**GIF**は、アニメーションと透明度（2値）に対応しますが、表現できる色数が少ないです。'},
+  {q: 'CSSで要素の**外枠線**（境界線）を設定するプロパティは？', choices: ['`outline`', '`border`', '`shadow`', '`line`'], a: 1, explain: '`border`プロパティは、要素の幅や色、スタイルなど、外枠線の詳細を設定します。'},
+  {q: 'HTMLで、ページのタイトルをブラウザのタブなどに表示させるために、`<head>`内に記述する要素は？', choices: ['`<h1>`', '`<meta>`', '`<title>`', '`<body>`'], a: 2, explain: '`<title>`要素は、Webページのタイトルを定義します。'},
+  {q: 'CSSで、要素が**画面をスクロールしても常に同じ位置**に留まるように設定する`position`の値は？', choices: ['`static`', '`relative`', '`absolute`', '`fixed`'], a: 3, explain: '`position: fixed;`は、要素をビューポート（画面）の特定の場所に固定します。'},
+  {q: 'HTMLのフォームで、ユーザーに**一つの選択肢だけ**を選ばせるために使用する`<input>`の`type`属性の値は？', choices: ['`checkbox`', '`radio`', '`select`', '`submit`'], a: 1, explain: '`type="radio"`は、同じ`name`属性を持つグループ内で、一つだけ選択できるボタンを作成します。'},
+  {q: 'CSSで、要素の**文字サイズ**を指定するプロパティは？', choices: ['`text-size`', '`font-family`', '`font-weight`', '`font-size`'], a: 3, explain: '`font-size`プロパティは、テキストの大きさを指定します。'},
+  {q: 'HTML5で、Webページ上の**フッター（著作権情報、連絡先など）**を示すために使用される要素は？', choices: ['`<section>`', '`<nav>`', '`<footer>`', '`<details>`'], a: 2, explain: '`<footer>`要素は、最も近いセクショニングルート（ページやセクション）のフッターを表します。'},
+  {q: 'CSSで**複数のクラス**（例: `.box .small`）を指定した場合、適用される要素は？', choices: ['`.box`の子要素である`.small`', '`.box`と`.small`の両方のクラスを持つ要素', '`.box`または`.small`のいずれかのクラスを持つ要素', '`.small`の子要素である`.box`'], a: 1, explain: 'セレクタをスペースで区切らずに連続して記述すると、**両方のクラス**を持つ要素にのみスタイルが適用されます。'},
+  {q: 'HTMLで、画像に**キャプション**（図の説明文）を関連付けて表示するために使用する要素の組み合わせは？', choices: ['`<img>`と`<p>`', '`<figure>`と`<figcaption>`', '`<div>`と`<span>`', '`<table>`と`<th>`'], a: 1, explain: '`<figure>`で画像（`<img>`）を囲み、`<figcaption>`でキャプションを提供します。'},
+  {q: 'CSSの`background-repeat`プロパティで、背景画像を**繰り返し表示しない**ようにする値は？', choices: ['`repeat`', '`repeat-x`', '`no-repeat`', '`space`'], a: 2, explain: '`no-repeat`は、背景画像を一度だけ表示し、繰り返しません。'},
+  {q: 'HTMLの属性で、要素に**一意の識別名**を付け、CSSやJavaScriptからその要素を特定するために使用されるものは？', choices: ['`class`', '`name`', '`type`', '`id`'], a: 3, explain: '`id`属性は、文書内で**一つだけ**の要素を一意に識別するために使われます。'},
+  {q: 'CSSで、要素の**不透明度（透明度）**を設定するプロパティは？', choices: ['`visibility`', '`display`', '`opacity`', '`alpha`'], a: 2, explain: '`opacity`プロパティは、値0（完全透明）から1（完全不透明）で要素の不透明度を調整します。'},
+  {q: 'HTMLで、**順序付きのリスト**（番号付きリスト）を作成するために使用する要素は？', choices: ['`<ul>`', '`<dl>`', '`<ol>`', '`<li>`'], a: 2, explain: '`<ol>`要素（Ordered List）は、番号やアルファベットで順序を示すリストを定義します。'},
+  {q: 'CSSの**単位**で、親要素の文字サイズ（`font-size`）を基準にした相対的なサイズを表すものは？', choices: ['`px`', '`em`', '`rem`', '`%`'], a: 1, explain: '`em`は、その要素が継承した親要素のフォントサイズを基準（1em = 100%）とする相対単位です。'},
+  {q: 'Webサイトで使用する画像形式で、**ベクター画像**（拡大縮小しても画質が劣化しない）を作成するために使用されるものは？', choices: ['JPEG', 'PNG', 'GIF', 'SVG'], a: 3, explain: '**SVG (Scalable Vector Graphics)** は、XMLベースのベクター画像フォーマットです。'},
+  {q: 'HTMLで、フォーム内の入力項目（`<input>`など）に対して、**説明文**を関連付けるために使用する要素は？', choices: ['`<figcaption>`', '`<legend>`', '`<label>`', '`<header>`'], a: 2, explain: '`<label>`要素は、フォーム部品と説明文を結びつけ、アクセシビリティを高めます。'},
+  {q: 'CSSで、テキストを**中央揃え**にするために使用するプロパティと値の組み合わせは？', choices: ['`align-content: center;`', '`text-align: center;`', '`vertical-align: middle;`', '`display: center;`'], a: 1, explain: '要素内のテキストを中央揃えにするには`text-align: center;`を使用します。'}
+];
+
+// =========================================================
+// 元のコードのクイズロジック（変更なし）
+// =========================================================
+let idx = 0;
+let score = 0;
+let answered = false;
+const total = QUESTIONS.length;
+
+const qText = document.getElementById('qText');
+const qNum = document.getElementById('qNum');
+const choicesEl = document.getElementById('choices');
+const nextBtn = document.getElementById('nextBtn');
+const restartBtn = document.getElementById('restartBtn');
+const status = document.getElementById('status');
+const progBar = document.getElementById('progBar');
+const feedback = document.getElementById('feedback');
+const resultBox = document.getElementById('resultBox');
+const finalScore = document.getElementById('finalScore');
+const detailText = document.getElementById('detailText');
+const retryBtn = document.getElementById('retryBtn');
+const reviewBtn = document.getElementById('reviewBtn');
+
+function renderQuestion() {
+  const item = QUESTIONS[idx];
+  qNum.textContent = `問題 ${idx+1}`;
+  qText.textContent = item.q;
+  choicesEl.innerHTML = '';
+  item.choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.type = 'button';
+    btn.innerHTML = `<strong>${String.fromCharCode(65+i)}.</strong> ${c}`;
+    btn.dataset.index = i;
+    btn.addEventListener('click', onChoose);
+    choicesEl.appendChild(btn);
+  });
+  status.textContent = `問題 ${idx+1} / ${total}`;
+  progBar.style.width = `${Math.round((idx/total)*100)}%`;
+  nextBtn.disabled = true;
+  feedback.textContent = '';
+  answered = false;
+}
+
+function onChoose(e) {
+  if (answered) return;
+  answered = true;
+  const chosen = Number(e.currentTarget.dataset.index);
+  const item = QUESTIONS[idx];
+  const correctIndex = item.a;
+  const choiceButtons = [...choicesEl.querySelectorAll('.choice')];
+  choiceButtons.forEach((b)=>{ b.disabled = true; });
+
+  if (chosen === correctIndex) {
+    e.currentTarget.classList.add('correct');
+    score += 1;
+    feedback.textContent = '正解！';
+  } else {
+    e.currentTarget.classList.add('wrong');
+    // 正解表示
+    const correctBtn = choiceButtons.find(b => Number(b.dataset.index) === correctIndex);
+    if (correctBtn) correctBtn.classList.add('correct');
+    feedback.textContent = '不正解。';
+  }
+
+  // 説明文を下に追加
+  const explain = document.createElement('div');
+  explain.style.marginTop = '12px';
+  explain.style.color = 'var(--muted)';
+  explain.textContent = '【解説】' + item.explain || '';
+  document.querySelector('.question').appendChild(explain);
+
+  nextBtn.disabled = false;
+}
+
+nextBtn.addEventListener('click', ()=>{
+  if (!answered) return;
+  idx += 1;
+  if (idx >= total) {
+    showResult();
+  } else {
+    // remove previous explanation if any
+    const prevExplain = document.querySelector('.question > div[style]');
+    if (prevExplain) prevExplain.remove();
+    renderQuestion();
+  }
+});
+
+function showResult() {
+  progBar.style.width = '100%';
+  document.getElementById('quizArea').style.display = 'none';
+  resultBox.classList.add('show');
+  finalScore.textContent = `あなたのスコア: ${score} / ${total}`;
+  const rate = Math.round((score/total)*100);
+  detailText.textContent = `正答率 ${rate}% — ` + (
+    rate >= 80 ? '素晴らしい！ 基礎はしっかりしています。' :
+    rate >= 60 ? 'まずまずです。苦手な部分を復習しましょう。' :
+    '復習をおすすめします。用語や指標の意味を確認しましょう。'
+  );
+}
+
+restartBtn.addEventListener('click', ()=>{
+  resetQuiz();
+});
+retryBtn.addEventListener('click', ()=>{
+  resetQuiz();
+});
+reviewBtn.addEventListener('click', ()=>{
+  // シンプルなレビュー: 全問題と解説を表示
+  let rev = '--- 全問題と解説一覧 ---\n\n';
+  QUESTIONS.forEach((q,i)=>{
+    rev += `${i+1}. ${q.q}\n正解: ${String.fromCharCode(65+q.a)}. ${q.choices[q.a]}\n【解説】: ${q.explain || ''}\n\n`;
+  });
+  alert(rev);
+});
+
+function resetQuiz() {
+  idx = 0; score = 0; answered = false;
+  document.getElementById('quizArea').style.display = '';
+  resultBox.classList.remove('show');
+  // clear any leftover explain
+  const prevExplain = document.querySelector('.question > div[style]');
+  if (prevExplain) prevExplain.remove();
+  renderQuestion();
+}
+
+// 初期化
+renderQuestion();
+</script>
+</body>
+</html>

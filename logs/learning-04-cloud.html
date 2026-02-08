@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 4: Cloud & AI | SHIMANEKO TECH LOG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container" style="text-align: center;">
+            <a href="../index.html" class="logo">SHIMANEKO TECH LOG</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="article-container">
+            <header class="article-header">
+                <span class="level-badge"
+                    style="background: var(--color-text); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold;">LEVEL
+                    4</span>
+                <h1>The Cloud & AI<br><span
+                        style="font-size: 0.5em; color: var(--color-secondary); display: block; margin-top: 10px;">現代の最適解</span>
+                </h1>
+            </header>
+
+            <div class="article-body">
+                <p>長い旅の果てに、私たちは「静的ファイル」という原点に戻ってきました。<br>
+                    しかし、それはLevel 1の「不便な静的」ではありません。<strong>SSG (Static Site Generation)</strong> という強力な武器を手に入れた、進化した姿です。
+                </p>
+
+                <h2>1. SSG：ビルド時の魔法</h2>
+
+                <div class="concept-box">
+                    <div class="concept-title">🏭 全自動お弁当工場</div>
+                    <p>Level 2では「注文のたびに作る」でしたが、Level
+                        4では<strong>「夜のうちに工場（ビルド）で全種類のお弁当を一気に作って、お店に並べておく」</strong>スタイルです。<br>
+                        だから、お客さんが来た瞬間に渡せます（爆速）。</p>
+                </div>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+flowchart LR
+    Dev[開発者] -->|Code/Markdown| Build[ビルド・サーバ]
+    Build -->|SSG: 事前にHTML生成| Deploy[配信サーバー (CDN)]
+    
+    User[ユーザーA] -->|Get| Deploy
+    UserB[ユーザーB] -->|Get| Deploy
+    
+    style Build fill:#FFB74D,stroke:#333
+    style Deploy fill:#26A69A,color:white,stroke:#333
+                    </pre>
+                    <div class="diagram-caption">図: 安全・高速な配信フロー</div>
+                </div>
+
+                <h2>2. 時代の比較</h2>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+gantt
+    title 技術の変遷と「待ち時間」
+    dateFormat  X
+    axisFormat %s
+    
+    section Level 1 (Static)
+    即座に表示       :active, 0, 1
+    
+    section Level 2 (Dynamic)
+    サーバーで生成中 :crit, 0, 3
+    表示             :active, 3, 4
+    
+    section Level 3 (SPA)
+    JS読み込み       :crit, 0, 2
+    データ取得       :crit, 2, 4
+    表示             :active, 4, 5
+    
+    section Level 4 (SSG)
+    即座に表示       :active, 0, 1
+                    </pre>
+                    <div class="diagram-caption">図: ユーザーを待たせないのはどれ？</div>
+                </div>
+
+                <h2>3. そしてAIとの共創へ</h2>
+                <p>コードを書くこと自体はAIが爆速でやってくれる時代になりました。<br>
+                    だからこそ、人間に必要なスキルは「コードを暗記すること」ではなく、<strong>「仕組み（アーキテクチャ）を理解し、正しい道具を選ぶ力」</strong> なのです。</p>
+
+                <div class="concept-box" style="border-color: var(--color-primary); background: #FFF3E0;">
+                    <div class="concept-title">🚀 Next Stage</div>
+                    <p>このサイト自体も、私が「こんなサイトがいい」と言って、AIが「AstroやVanilla」で構築しました。<br>
+                        あなたも、自分のアトリエで、AIという仲間と一緒に新しいものを作り出してください。</p>
+                </div>
+
+                <div
+                    style="text-align: center; margin-top: 80px; padding: 40px; border-top: 1px solid var(--color-border);">
+                    <h3 style="color: var(--color-text); margin-bottom: 20px;">Adventure Completed! 🎉</h3>
+                    <a href="../index.html" class="read-btn"
+                        style="display: inline-block; padding: 15px 40px; width: auto;">Topへ戻る</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Shimaneko Design</p>
+        </div>
+    </footer>
+
+    <script type="module" src="../js/visuals.js"></script>
+
+</body>
+
+</html>

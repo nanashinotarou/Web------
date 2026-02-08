@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 3: The Frontend Revolution | SHIMANEKO TECH LOG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container" style="text-align: center;">
+            <a href="../index.html" class="logo">SHIMANEKO TECH LOG</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="article-container">
+            <header class="article-header">
+                <span class="level-badge"
+                    style="background: var(--color-text); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold;">LEVEL
+                    3</span>
+                <h1>The Frontend Revolution<br><span
+                        style="font-size: 0.5em; color: var(--color-secondary); display: block; margin-top: 10px;">ブラウザの反乱</span>
+                </h1>
+            </header>
+
+            <div class="article-body">
+                <p>Google Mapsの登場が世界を変えました。地図をドラッグしても画面が真っ白にリロードされない！<br>
+                    これが <strong>Ajax（非同期通信）</strong> の衝撃であり、<strong>SPA (Single Page Application)</strong> の幕開けでした。</p>
+
+                <h2>1. 「サーバーはデータだけよこせ」</h2>
+                <div class="concept-box">
+                    <div class="concept-title">🔄 自分で盛り付ける「バイキング」</div>
+                    <p>これまではサーバーが料理を完成させていましたが、これからは<strong>「素材（データ）だけもらって、自分（ブラウザ）で盛り付ける」</strong>スタイルに変わりました。</p>
+                </div>
+
+                <h3>クライアントサイド・レンダリング (CSR)</h3>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant User as ユーザー
+    participant Browser as ブラウザ (JS/React)
+    participant API as APIサーバー
+
+    User->>Browser: サイトにアクセス
+    Browser->>User: 🌀読込中... (枠だけ表示)
+    
+    Browser->>API: [Fetch] データください (JSON)
+    API-->>Browser: { "title": "Hello" }
+    
+    Browser->>Browser: JSが画面を組み立てる
+    Note over User: 画面遷移なしで<br>サクサク動く！
+                    </pre>
+                    <div class="diagram-caption">図: ブラウザが主役の世界</div>
+                </div>
+
+                <h2>2. 現代の武器たち</h2>
+                <div class="diagram-container">
+                    <pre class="mermaid">
+mindmap
+  root((Frontend))
+    jQuery
+      Old Hero
+      DOM操作
+    Modern Frameworks
+      React
+        Virtual DOM
+      Vue.js
+      Angular
+    Build Tools
+      Webpack
+      Vite
+                    </pre>
+                    <div class="diagram-caption">図: フロントエンド技術の進化</div>
+                </div>
+
+                <h2>3. 複雑化する世界</h2>
+                <p>しかし、開発は恐ろしく複雑になりました。ビルドツール、バンドル、依存関係地獄...。<br>
+                    そこでたどり着いたのが、原点回帰の思想「SSG」と「Cloud」です。</p>
+
+                <div style="text-align: center; margin-top: 80px;">
+                    <a href="learning-04-cloud.html" class="read-btn"
+                        style="display: inline-block; padding: 15px 40px; font-size: 1.2rem;">NEXT: Level 4へ進む →</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Shimaneko Design</p>
+        </div>
+    </footer>
+
+    <script type="module" src="../js/visuals.js"></script>
+
+</body>
+
+</html>

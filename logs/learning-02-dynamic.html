@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 2: The Dynamic Era | SHIMANEKO TECH LOG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container" style="text-align: center;">
+            <a href="../index.html" class="logo">SHIMANEKO TECH LOG</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="article-container">
+            <header class="article-header">
+                <span class="level-badge"
+                    style="background: var(--color-text); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold;">LEVEL
+                    2</span>
+                <h1>The Dynamic Era<br><span
+                        style="font-size: 0.5em; color: var(--color-secondary); display: block; margin-top: 10px;">サーバーサイドの魔法</span>
+                </h1>
+            </header>
+
+            <div class="article-body">
+                <p>人々は「掲示板」に書き込み、「ショッピングサイト」で買い物をし、「ブログ」を簡単に更新したいと願いました。<br>
+                    そこで登場したのが、<strong>サーバーサイド・スクリプト（PHPなど）</strong> と <strong>データベース（SQL）</strong> です。</p>
+
+                <h2>1. 「動的生成」とは？</h2>
+
+                <!-- Concept Box -->
+                <div class="concept-box">
+                    <div class="concept-title">🍳 注文を受けてから作る「レストラン」</div>
+                    <p>静的サイトが「作り置きのお弁当」だとしたら、動的サイトは「レストラン」です。<br>
+                        お客さん（あなた）の注文に合わせて、シェフ（PHP）がその場で料理（HTML）を作ります。</p>
+                </div>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+sequenceDiagram
+    autonumber
+    participant User as お客さん (Browser)
+    participant Server as ホール係 (Web Server)
+    participant PHP as シェフ (PHP)
+    participant DB as 冷蔵庫 (Database)
+
+    User->>Server: 「最新の記事を見せて！」
+    Server->>PHP: オーダー入りました！
+    
+    rect rgb(255, 250, 240)
+        Note right of PHP: ここから調理開始
+        PHP->>DB: 記事の具材ちょうだい (SQL)
+        DB-->>PHP: {記事A, 記事B...}
+        
+        PHP->>PHP: お皿(HTML)に盛り付け
+    end
+    
+    PHP-->>Server: 料理(HTML)完成!
+    Server-->>User: お待たせしました
+                    </pre>
+                    <div class="diagram-caption">図: サーバーサイドでの「調理」プロセス</div>
+                </div>
+
+                <h2>2. データベースの役割</h2>
+                <p>Excelのような表形式でデータを管理します。プログラム（PHP）は、ここから必要なデータだけを抜き出して使います。</p>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+erDiagram
+    Users ||--o{ Posts : writes
+    Users {
+        int id
+        string name
+        string email
+    }
+    Posts {
+        int id
+        string title
+        string content
+        datetime created_at
+    }
+                    </pre>
+                    <div class="diagram-caption">図: データの関係図（ER図）</div>
+                </div>
+
+                <h2>3. 光と影</h2>
+                <div class="concept-box">
+                    <div class="concept-title">⚠️ レストランの悩み</div>
+                    <p>毎回イチから作るので、<strong>お客さんが殺到するとシェフがパンクします（サーバーダウン）。</strong><br>
+                        また、包丁（プログラム）を使うので、怪我（セキュリティ事故）のリスクも増えました。</p>
+                </div>
+
+                <div style="text-align: center; margin-top: 80px;">
+                    <a href="learning-03-frontend.html" class="read-btn"
+                        style="display: inline-block; padding: 15px 40px; font-size: 1.2rem;">NEXT: Level 3へ進む →</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Shimaneko Design</p>
+        </div>
+    </footer>
+
+    <script type="module" src="../js/visuals.js"></script>
+
+</body>
+
+</html>

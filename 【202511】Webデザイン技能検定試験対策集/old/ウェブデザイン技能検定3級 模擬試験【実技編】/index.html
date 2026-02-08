@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ウェブデザイン技能検定3級 模擬試験【実技対策・記述編】</title>
+  <style>
+    /* デザイン設定だよ（実技対策バージョン） */
+    :root{
+      --bg:#ffffff;
+      --card:#f9fafb;
+      --accent:#007bff; 
+      --muted:#374151;
+      --ok:#16a34a;
+      --text:#111827;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,Segoe UI,Roboto,Arial;
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .card{
+      background:var(--card);
+      max-width:820px;
+      width:100%;
+      border-radius:12px;
+      padding:24px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    }
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    h1{font-size:20px;margin:0}
+    .meta{color:var(--muted);font-size:13px}
+    .progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-top:12px}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#00c7e2);width:0%}
+
+    /* 実技記述パートのスタイル */
+    .question{margin:18px 0;padding:18px;border-radius:8px;background:#f3f4f6}
+    .qnum{font-size:13px;color:var(--muted)}
+    .qtext{font-size:18px;margin-top:8px;font-weight:600;}
+    
+    /* コード入力エリア */
+    #codeEditor{
+      width:100%;
+      min-height:200px;
+      padding:10px;
+      border:1px solid #d1d5db;
+      border-radius:6px;
+      font-family:monospace; /* プログラミング用フォントで打ちやすく！ */
+      font-size:14px;
+      margin-top:10px;
+      resize:vertical;
+    }
+
+    .controls{display:flex;gap:10px;align-items:center;margin-top:18px}
+    button.btn{background:var(--accent);color:#fff; padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600}
+    button.ghost{background:transparent;border:1px solid #d1d5db;color:var(--muted)}
+    button.btn:disabled{opacity:0.6;cursor:not-allowed;}
+
+    /* 結果/解説エリア */
+    #resultArea{
+      margin-top:20px;
+      padding:15px;
+      border-radius:8px;
+      background:#e0f2f1; /* 答え合わせしやすいように目立つ色に！ */
+      border:1px solid #00c7e2;
+    }
+    #resultArea h3{color:var(--text);margin-top:0;}
+    #resultArea pre{
+      background:#ffffff;
+      padding:10px;
+      border-radius:4px;
+      overflow-x:auto;
+      font-size:13px;
+    }
+    .result-hidden { display: none; }
+
+
+    footer{
+      font-size:12px;
+      color:#aaa;
+      margin-top:20px;
+      text-align:center;
+    }
+  </style>
+
+</head>
+<body>
+  <main class="card">
+    <header>
+      <h1>ウェブデザイン技能検定3級 模擬試験【実技対策・記述編】</h1>
+      <div class="meta" id="status">問題 1 / 30</div>
+    </header>
+    
+    <div class="progress"><i id="progBar" style="width:0%"></i></div>
+
+    <div id="quizArea">
+      <div class="question">
+        <div class="qnum" id="qNum">問題 1</div>
+        <div class="qtext" id="qText"></div>
+        
+        <p class="small" style="margin-top:15px; color:#555;">▼ 以下のコードを修正・追記してね。</p>
+        <textarea id="codeEditor"></textarea>
+      </div>
+
+      <div class="controls">
+        <button class="btn" id="checkBtn" onclick="checkAnswer()">解答をチェック（自己採点）</button>
+        <button class="ghost" id="nextBtn" disabled>次の問題へ</button>
+      </div>
+
+      <div id="resultArea" class="result-hidden">
+        <h3>✅ 模範解答と採点ポイント</h3>
+        
+        <h4>【模範解答】</h4>
+        <pre id="solutionCode"></pre>
+
+        <h4>【採点ポイント・解説】</h4>
+        <p id="explanationText"></p>
+      </div>
+    </div>
+    
+    <div id="resultBox" class="result">
+    </div>
+    <footer>作成: ウェブデザイン技能検定3級 模擬試験【実技対策・記述編】</footer>
+  </main>
+
+<script>
+// =========================================================
+// 実技 練習問題データ（全30問！これだけで実技はバッチリ！）
+// =========================================================
+const PRACTICAL_QUESTIONS = [
+    // ----------------------------------------------------
+    // フェーズ1: パス/リンク/レイアウトの基本 (ID 1-4)
+    // ----------------------------------------------------
+    {
+        id: 1,
+        q: 'dataフォルダ内のindex.htmlで正しく表示できない画像を、正常に表示できるようにソースを修正しなさい。（ファイル構造を考慮し「img/img001.jpg」を適切な相対パスに修正）',
+        initialCode: 
+`<body>
+<h1>横浜の最新情報</h1>
+<h2>春の横浜お勧め観光スポット</h2>
+<img src="img/img001.jpg" alt="時計台の画像" class="watch" >
+<p>4月、横浜の春には恒例になった、大道芸イベントが開催されます。</p>
+</body>`,
+        solution: 
+`<body>
+<h1>横浜の最新情報</h1>
+<h2>春の横浜お勧め観光スポット</h2>
+<img src="images/img001.jpg" alt="時計台の画像" class="watch" >
+<p>4月、横浜の春には恒例になった、大道芸イベントが開催されます。</p>
+</body>`,
+        explanation: '画像が表示されない原因は、ファイルパスの誤りだよ。画像ファイルが「images」フォルダ内にあると想定して、**「img」を「images」に修正する**など、正確な相対パスの記述が大事！'
+    },
+    {
+        id: 2,
+        q: 'h2要素の下部にある3つのテキストから各ページへのリンクが正常に行われるようにしなさい。その際、HOMEはindex.htmlに、ニュースはnews.htmlに、交通案内はaccess.htmlに、それぞれリンクを設定しなさい。',
+        initialCode: 
+`<body>
+<h1>横浜の最新情報</h1>
+<h2>春の横浜お勧め観光スポット</h2>
+<p>HOME | ニュース | 交通案内</p>
+<img src="images/clock_tower.jpg" alt="時計台の画像" class="watch">
+<p>4月、横浜の春には恒例になった、大道芸イベントが開催されます。</p>
+</body>`,
+        solution: 
+`<body>
+<h1>横浜の最新情報</h1>
+<h2>春の横浜お勧め観光スポット</h2>
+<p><a href="index.html">HOME</a> | <a href="news.html">ニュース</a> | <a href="access.html">交通案内</a></p>
+<img src="images/clock_tower.jpg" alt="時計台の画像" class="watch">
+<p>4月、横浜の春には恒例になった、大道芸イベントが開催されます。</p>
+</body>`,
+        explanation: 'ハイパーリンクは`<a>`要素と`href`属性を使うよ。同じ階層のファイルなら、ファイル名だけ（例: `index.html`）を書けばOK！'
+    },
+    {
+        id: 3,
+        q: 'index.htmlのnav要素内のグローバルナビゲーションにある「ホーム」「協会情報」「試験概要」「お問い合わせ」に対し、それぞれ対応するページ（index.html、info.html、skilltest.html、form.html）へのリンクが正常に行われるように**HTMLコードを修正**しなさい。',
+        initialCode: 
+`<nav>
+    <ul>
+        <li>ホーム</li>
+        <li>協会情報</li>
+        <li>試験概要</li>
+        <li>お問い合わせ</li>
+    </ul>
+</nav>`,
+        solution: 
+`<nav>
+    <ul>
+        <li><a href="index.html">ホーム</a></li>
+        <li><a href="info.html">協会情報</a></li>
+        <li><a href="skilltest.html">試験概要</a></li>
+        <li><a href="form.html">お問い合わせ</a></li>
+    </ul>
+</nav>`,
+        explanation: 'ここでも`<a>`要素と相対パス（ファイル名）を使ってリンクを設定するよ。`<li>`の中に`<a>`を入れるのが基本パターン！'
+    },
+    {
+        id: 4,
+        q: 'スタイルシートを編集し、コンテンツ全体を囲む`#wrap`要素が、横方向で**常に中央に表示される**ように**CSSコードを修正**しなさい。',
+        initialCode: 
+`#wrap {
+    width: 800px;
+    /* ここに中央寄せのCSSを追記する */
+    border: 1px solid #ccc;
+    padding: 20px;
+}`,
+        solution: 
+`#wrap {
+    width: 800px;
+    /* marginの左右をautoに設定することで中央寄せができたね！ */
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+}`,
+        explanation: 'ブロック要素を中央に寄せるには、必ず`width`を指定した上で、`margin: 0 auto;`（上下マージン0、左右マージン自動）を設定するよ。Webデザインの超重要テクニックだよ！'
+    },
+    // ----------------------------------------------------
+    // フェーズ2: 色・構造化・フォームの基本 (ID 5-8)
+    // ----------------------------------------------------
+    {
+        id: 5,
+        q: 'スタイルシートを編集して、`h1`要素の**背景の色を#002244**に、**文字の色を#ffffff**に、それぞれ変更しなさい。',
+        initialCode: 
+`h1 {
+    font-size: 24px;
+    padding: 10px;
+    /* ここに背景色と文字色を設定する */
+}`,
+        solution: 
+`h1 {
+    font-size: 24px;
+    padding: 10px;
+    /* background-colorとcolorで設定！ */
+    background-color: #002244;
+    color: #ffffff; 
+}`,
+        explanation: '背景色は`background-color`、文字色は`color`プロパティだよ。16進数（#から始まる6桁）のカラーコードを正確に書く練習をしよう！'
+    },
+    {
+        id: 6,
+        q: '指定されたテキストを、**h1要素、h2要素、p要素、ol要素、ul要素**のすべてをもれなく使用し、ウェブページを適切に構造化しなさい。（初期コードの`<main>`内に、模範解答の構造を記述すること）',
+        initialCode: 
+`<main>
+ウェブデザイン技能検定の概要
+ウェブデザインに関する知識・技能、実務能力を問う検定です。
+試験には学科試験と実技試験があり、それぞれがマークシート方式と実技作業で実施されます。
+合格ライン
+学科・実技ともに100点満点中70点以上で合格となります。
+ただし、3級は実技試験の免除がありません。
+受検資格
+年齢、学歴、実務経験等に関係なく受検可能です。
+試験対策
+推奨される学習方法
+1. 学科は過去問を解く
+2. 実技は模範解答を元に手を動かす
+3. 知識を体系的に整理する
+注意事項
+・学科と実技は同時受検が原則です。
+・試験時間はそれぞれ60分です。
+</main>`,
+        solution: 
+`<main>
+    <h1>ウェブデザイン技能検定の概要</h1>
+    <p>ウェブデザインに関する知識・技能、実務能力を問う検定です。</p>
+    <p>試験には学科試験と実技試験があり、それぞれがマークシート方式と実技作業で実施されます。</p>
+
+    <h2>合格ライン</h2>
+    <p>学科・実技ともに100点満点中70点以上で合格となります。</p>
+    <p>ただし、3級は実技試験の免除がありません。</p>
+
+    <h2>受検資格</h2>
+    <p>年齢、学歴、実務経験等に関係なく受検可能です。</p>
+
+    <h2>試験対策</h2>
+    <h3>推奨される学習方法</h3>
+    <ol>
+        <li>学科は過去問を解く</li>
+        <li>実技は模範解答を元に手を動かす</li>
+        <li>知識を体系的に整理する</li>
+    </ol>
+    <h3>注意事項</h3>
+    <ul>
+        <li>学科と実技は同時受検が原則です。</li>
+        <li>試験時間はそれぞれ60分です。</li>
+        <li>（ここは解答には含まれていないけれど、olとulはliもセットで使うよ！）</li>
+    </ul>
+</main>`,
+        explanation: '構造化は、`<h1>`を最上位に、`<h2>`や`<h3>`で階層を分けるのがポイントだよ。`ol`と`ul`の使い分け（順序があるかないか）も確認しよう！'
+    },
+    {
+        id: 7,
+        q: 'お問い合わせフォームの「メールアドレス」入力欄（`<input>`要素）に、**HTML5で推奨される適切な`type`**を設定し、かつ、テキスト「メールアドレス」と**紐づけるための`<label>`要素**を修正しなさい。',
+        initialCode: 
+`<div>
+    メールアドレス
+    <input name="email" id="userEmail" value="">
+</div>`,
+        solution: 
+`<div>
+    <label for="userEmail">メールアドレス</label>
+    <input type="email" name="email" id="userEmail" value="">
+</div>`,
+        explanation: 'メールアドレスには`type="email"`を設定して、ブラウザに自動チェック（バリデーション）させよう！そして、`<label for="ID名">`と`<input id="ID名">`をセットで使って、アクセシビリティを高めるのが必須だよ。'
+    },
+    {
+        id: 8,
+        q: 'スタイルシートを編集し、ナビゲーションメニューの各項目（`nav li`）について、**上下に5px、左右に10pxの余白（内側の余白）**を設定しなさい。',
+        initialCode: 
+`nav li {
+    display: inline-block;
+    /* ここにpaddingを設定する */
+    border: 1px solid #ddd;
+}`,
+        solution: 
+`nav li {
+    display: inline-block;
+    /* 内側の余白はpaddingだね！「上下5px、左右10px」のショートハンドを使う */
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+}`,
+        explanation: '要素の**内側の余白**は`padding`だよ！`padding: 5px 10px;`と書くと、「上下に5px、左右に10px」と指定できるショートハンドは覚えておくと便利！'
+    },
+    // ----------------------------------------------------
+    // フェーズ3: テーブル/リスト装飾/セレクタ (ID 9-16)
+    // ----------------------------------------------------
+    {
+        id: 9,
+        q: '以下の表の情報を含むHTMLテーブル（表）を作成しなさい。ヘッダー（<th>）は「項目」「内容」とし、適切なHTMLコードを記述しなさい。',
+        initialCode: 
+`<div>
+    項目 内容
+    開催日 2025年10月1日
+    会場 東京ビッグサイト
+</div>`,
+        solution: 
+`<table>
+    <tr>
+        <th>項目</th>
+        <th>内容</th>
+    </tr>
+    <tr>
+        <td>開催日</td>
+        <td>2025年10月1日</td>
+    </tr>
+    <tr>
+        <td>会場</td>
+        <td>東京ビッグサイト</td>
+    </tr>
+</table>`,
+        explanation: '表の作成には`<table>`、行には`<tr>`、ヘッダーセルには`<th>`、データセルには`<td>`を使うよ。これらは実技で必ず押さえておきたい構造だね。'
+    },
+    {
+        id: 10,
+        q: 'スタイルシートを編集し、ナビゲーションメニューの`ul`要素のリスト項目について、**行頭の記号（点や数字）が表示されない**ように**CSSコードを修正**しなさい。',
+        initialCode: 
+`nav ul {
+    /* ここにリストの行頭記号を消すCSSを追記する */
+    margin: 0;
+    padding: 0;
+}`,
+        solution: 
+`nav ul {
+    /* list-style-typeをnoneにすることで行頭記号が消えるよ！ */
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}`,
+        explanation: 'リストの行頭記号（マーカー）を非表示にするには、`list-style-type: none;`を使うよ。ナビゲーションメニューを作る際によく使うテクニックだね。'
+    },
+    {
+        id: 11,
+        q: '外部CSSファイル（`style.css`）を、HTML文書に正しくリンクさせなさい。',
+        initialCode: 
+`<head>
+  <meta charset="utf-8" />
+  <title>タイトル</title>
+  </head>`,
+        solution: 
+`<head>
+  <meta charset="utf-8" />
+  <title>タイトル</title>
+  <link rel="stylesheet" href="style.css">
+</head>`,
+        explanation: '外部CSSを適用するには、`<link>`要素を`<head>`内に記述し、`rel="stylesheet"`と`href="ファイル名"`を指定するよ。これも超基本！'
+    },
+    {
+        id: 12,
+        q: '`alt`属性が設定されていない画像に、その内容を表す適切な代替テキスト「会社のロゴ」を設定しなさい。',
+        initialCode: 
+`<img src="logo.png">`,
+        solution: 
+`<img src="logo.png" alt="会社のロゴ">`,
+        explanation: '画像の内容を説明する**`alt`属性**は、アクセシビリティとして必須だよ。テキストは簡潔に！'
+    },
+    {
+        id: 13,
+        q: 'IDが`#main-img`の画像の幅を**400px**に設定し、高さを**自動調整**しなさい。',
+        initialCode: 
+`#main-img {
+    /* ここに幅と高さを設定する */
+}`,
+        solution: 
+`#main-img {
+    width: 400px;
+    height: auto;
+}`,
+        explanation: '画像のサイズ変更には`width`と`height`を使うよ。`height: auto;`にすると、縦横比が崩れずに画像が拡大・縮小されるよ。'
+    },
+    {
+        id: 14,
+        q: 'クラス名が`.highlight`のテキストの**文字色を赤（`#ff0000`）**に変更するCSSルールを記述しなさい。',
+        initialCode: 
+`/* ここに.highlightのスタイルを定義する */`,
+        solution: 
+`.highlight {
+    color: #ff0000;
+}`,
+        explanation: 'クラスセレクタはドット（`.`）から始めるよ。文字の色を変えるのは`color`プロパティだね。'
+    },
+    {
+        id: 15,
+        q: 'ID名が`#footer`の要素の**文字サイズを12px**にするCSSルールを記述しなさい。',
+        initialCode: 
+`/* ここに#footerのスタイルを定義する */`,
+        solution: 
+`#footer {
+    font-size: 12px;
+}`,
+        explanation: 'IDセレクタはシャープ（`#`）から始めるよ。文字サイズを変えるのは`font-size`プロパティだよ。'
+    },
+    {
+        id: 16,
+        q: 'ページ内のすべてのリンク（`a`要素）の**下線（アンダーライン）を消す**ようにCSSを記述しなさい。',
+        initialCode: 
+`a {
+    /* ここに下線を消すCSSを追記する */
+}`,
+        solution: 
+`a {
+    text-decoration: none;
+}`,
+        explanation: 'リンクの下線を消すには`text-decoration`プロパティに`none`を指定するよ。ナビゲーションメニューでよく使うよ！'
+    },
+    // ----------------------------------------------------
+    // フェーズ4: HTML5セマンティクスとフォームの応用 (ID 17-20)
+    // ----------------------------------------------------
+    {
+        id: 17,
+        q: '記事のコンテンツが終了した場所に、「記事コンテンツ終了」とブラウザに表示されないように**コメント**を挿入しなさい。',
+        initialCode: 
+`</article>
+`,
+        solution: 
+`</article>
+`,
+        explanation: 'コメントは``で終わるよ。ブラウザには表示されず、コードのメモとして使うよ。'
+    },
+    {
+        id: 18,
+        q: 'サイトの著作権情報を含む`<div>`を、より意味（セマンティック）のある**HTML5の新しい要素（`footer`）**に修正しなさい。',
+        initialCode: 
+`<div id="copyright">
+    &copy; 2025 Company Name
+</div>`,
+        solution: 
+`<footer id="copyright">
+    &copy; 2025 Company Name
+</footer>`,
+        explanation: '著作権情報など、ページの末尾にある補足情報には、**`<footer>`**を使うのがHTML5のセマンティックな書き方だよ。'
+    },
+    {
+        id: 19,
+        q: 'フォーム内のラジオボタン「男性」「女性」に対し、**どちらか一方しか選択できない**ように**HTMLコードを修正**しなさい。',
+        initialCode: 
+`<input type="radio" value="male">男性
+<input type="radio" value="female">女性`,
+        solution: 
+`<input type="radio" name="gender" value="male">男性
+<input type="radio" name="gender" value="female">女性`,
+        explanation: 'ラジオボタンをグループ化して一つしか選べないようにするには、同じ**`name`属性**を設定する必要があるよ。'
+    },
+    {
+        id: 20,
+        q: '画面幅が**768px以下**の場合に、`#wrap`要素の`width`を**100%**に変更する**メディアクエリ**を、`#wrap`の定義の後に記述しなさい。',
+        initialCode: 
+`#wrap {
+    width: 800px;
+    margin: 0 auto;
+}
+
+/* ここにメディアクエリを記述する */`,
+        solution: 
+`#wrap {
+    width: 800px;
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 768px) {
+    #wrap {
+        width: 100%;
+    }
+}`,
+        explanation: 'レスポンシブデザインの基本！`@media`ルールを使って、特定の条件（この場合は画面幅が768px以下）でのみ適用されるCSSを定義するよ。'
+    },
+    // ----------------------------------------------------
+    // フェーズ5: 応用的なCSS/HTMLタグ/メタ情報 (ID 21-30)
+    // ----------------------------------------------------
+    {
+        id: 21,
+        q: '外部サイトへのリンク（`<a>`要素）をクリックしたときに、**新しいタブでページが開く**ようにHTMLコードを修正しなさい。',
+        initialCode: 
+`<a href="https://example.com/external">外部サイトはこちら</a>`,
+        solution: 
+`<a href="https://example.com/external" target="_blank">外部サイトはこちら</a>`,
+        explanation: 'リンクを新しいタブで開くには、`target`属性に`_blank`を指定するよ。'
+    },
+    {
+        id: 22,
+        q: 'お問い合わせフォームに、複数行の意見を記述できる**テキストエリア**（`textarea`要素）を設置しなさい。',
+        initialCode: 
+`<div>
+    ご意見・ご要望
+    </div>`,
+        solution: 
+`<div>
+    ご意見・ご要望
+    <textarea name="comment" rows="5" cols="50"></textarea>
+</div>`,
+        explanation: '複数行の入力には`<textarea>`を使うよ。`rows`と`cols`で初期サイズを指定できるね。'
+    },
+    {
+        id: 23,
+        q: 'クラス名`.box`の要素に、**幅1px、実線、灰色（`#ccc`）**の枠線（`border`）を**一括指定**で設定しなさい。',
+        initialCode: 
+`.box {
+    padding: 10px;
+    /* ここに枠線を設定する */
+}`,
+        solution: 
+`.box {
+    padding: 10px;
+    border: 1px solid #ccc;
+}`,
+        explanation: '枠線は`border: 太さ 種類 色;`のショートハンドで一括指定できるよ。`solid`が実線の種類だね。'
+    },
+    {
+        id: 24,
+        q: '段落（`p`要素）内のテキストを**太字**にするCSSルールを記述しなさい。',
+        initialCode: 
+`p {
+    font-size: 16px;
+    /* ここに太字にするCSSを追記する */
+}`,
+        solution: 
+`p {
+    font-size: 16px;
+    font-weight: bold;
+}`,
+        explanation: '文字の太さを変更するには`font-weight`プロパティを使い、太字にするには`bold`を指定するよ。'
+    },
+    {
+        id: 25,
+        q: '独立した記事コンテンツを囲む`<div>`要素を、HTML5で推奨される**適切なセクショニング要素**に修正しなさい。',
+        initialCode: 
+`<div id="article-section">
+    <h2>最新ニュース</h2>
+    <p>記事の内容...</p>
+</div>`,
+        solution: 
+`<section id="article-section">
+    <h2>最新ニュース</h2>
+    <p>記事の内容...</p>
+</section>`,
+        explanation: '独立した意味を持つコンテンツのセクションには、`<div>`ではなく**`<section>`**を使うのがセマンティックな書き方だよ。'
+    },
+    {
+        id: 26,
+        q: '性別を選択する**ドロップダウンリスト**（初期値は「選択してください」）を、`<select>`と`<option>`要素を使って作成しなさい。',
+        initialCode: 
+``,
+        solution: 
+`<select name="gender">
+    <option value="">選択してください</option>
+    <option value="male">男性</option>
+    <option value="female">女性</option>
+</select>`,
+        explanation: 'ドロップダウンリストは`<select>`で作り、選択肢を`<option>`で囲むよ。最初の`<option>`に`value=""`を設定すると、未選択の状態を表現できるね。'
+    },
+    {
+        id: 27,
+        q: 'IDが`#main-content`の要素を**左に寄せ**（`float`）、その後に続くIDが`#clear-fix`の要素で**回り込みを解除**（`clear`）するCSSを記述しなさい。',
+        initialCode: 
+`#main-content {
+    width: 60%;
+    /* ここにフロートを設定する */
+}
+#clear-fix {
+    /* ここに回り込み解除を設定する */
+}`,
+        solution: 
+`#main-content {
+    width: 60%;
+    float: left;
+}
+#clear-fix {
+    clear: both;
+}`,
+        explanation: '要素を横に並べるには`float`を使い、レイアウトが崩れないよう、次の要素に`clear: both;`を設定して回り込みを解除するよ。'
+    },
+    {
+        id: 28,
+        q: 'ナビゲーション内のリンク（`nav a`）にマウスカーソルを乗せたとき（`:hover`）、**文字色を`#ff9900`**に変更するCSSルールを記述しなさい。',
+        initialCode: 
+`/* ここに:hoverのスタイルを定義する */`,
+        solution: 
+`nav a:hover {
+    color: #ff9900;
+}`,
+        explanation: 'マウスカーソルが乗っている状態は**`:hover`擬似クラス**で指定するよ。インタラクティブな表現の基本だね。'
+    },
+    {
+        id: 29,
+        q: '検索エンジン向けに、ページの概要（`description`）を**「ウェブデザイン技能検定3級の模擬試験です。」**として、`<head>`内に設定しなさい。',
+        initialCode: 
+`<head>
+  <meta charset="utf-8" />
+  <title>タイトル</title>
+  </head>`,
+        solution: 
+`<head>
+  <meta charset="utf-8" />
+  <title>タイトル</title>
+  <meta name="description" content="ウェブデザイン技能検定3級の模擬試験です。">
+</head>`,
+        explanation: 'ページの概要は`meta name="description"`で設定するよ。これは検索結果に表示される重要な情報（SEO）だね。'
+    },
+    {
+        id: 30,
+        q: 'HTML文書の文字コードが**「UTF-8」**であることを、`<head>`の最初のほうで正しく指定しなさい。',
+        initialCode: 
+`<head>
+  <title>タイトル</title>
+  <link rel="stylesheet" href="style.css">
+</head>`,
+        solution: 
+`<head>
+  <meta charset="utf-8" />
+  <title>タイトル</title>
+  <link rel="stylesheet" href="style.css">
+</head>`,
+        explanation: '文字化けを防ぐため、HTML5では`<meta charset="utf-8">`を`<head>`の冒頭で宣言するのがルールだよ。'
+    }
+];
+
+// =========================================================
+// 実技シミュレーターの頭脳（ロジック）
+// =========================================================
+let currentIdx = 0;
+const totalQuestions = PRACTICAL_QUESTIONS.length;
+
+const qText = document.getElementById('qText');
+const qNum = document.getElementById('qNum');
+const codeEditor = document.getElementById('codeEditor');
+const nextBtn = document.getElementById('nextBtn');
+const checkBtn = document.getElementById('checkBtn');
+const progBar = document.getElementById('progBar');
+const statusEl = document.getElementById('status');
+const resultArea = document.getElementById('resultArea');
+const solutionCode = document.getElementById('solutionCode');
+const explanationText = document.getElementById('explanationText');
+
+// 問題を表示する関数
+function renderQuestion() {
+  const item = PRACTICAL_QUESTIONS[currentIdx];
+  qNum.textContent = `問題 ${currentIdx+1}.`;
+  qText.textContent = item.q;
+  codeEditor.value = item.initialCode.trim(); // 初期コードをエディタにセット
+
+  // 答え合わせエリアを隠す
+  resultArea.classList.add('result-hidden');
+  nextBtn.disabled = true;
+  checkBtn.disabled = false;
+
+  statusEl.textContent = `問題 ${currentIdx+1} / ${totalQuestions}`;
+  progBar.style.width = `${Math.round((currentIdx / totalQuestions) * 100)}%`;
+}
+
+// 答えをチェックする関数（自己採点モード）
+function checkAnswer() {
+    const item = PRACTICAL_QUESTIONS[currentIdx];
+    
+    // 模範解答と解説を表示！
+    solutionCode.textContent = item.solution.trim();
+    explanationText.textContent = item.explanation;
+    
+    // エリアを見せる
+    resultArea.classList.remove('result-hidden');
+    nextBtn.disabled = false;
+    checkBtn.disabled = true; // 再チェックはできないようにする
+}
+
+// 次の問題へ進むボタンのイベント
+nextBtn.addEventListener('click', ()=>{
+  currentIdx += 1;
+  if (currentIdx >= totalQuestions) {
+    showFinishMessage();
+  } else {
+    renderQuestion();
+  }
+});
+
+// 全問終了時のメッセージ
+function showFinishMessage() {
+    progBar.style.width = '100%';
+    document.getElementById('quizArea').innerHTML = `
+        <div style="text-align:center; padding:50px;">
+            <h2>実技対策問題（全${totalQuestions}問）は全て完了しました！おつかれさま！</h2>
+            <p style="margin-top:15px; font-size:18px;">この${totalQuestions}問が解ければ、実技の基本はバッチリだよ！</p>
+            <p style="margin-top:15px; color:var(--muted);">「最初からやり直す」ボタンで、この最強の${totalQuestions}問を何度も練習してね！</p>
+            <button class="btn" style="margin-top:20px;" onclick="window.location.reload()">最初からやり直す</button>
+        </div>
+    `;
+}
+
+// 初期化（スタート！）
+renderQuestion();
+</script>
+</body>
+</html>

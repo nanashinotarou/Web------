@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Level 1: The Static Era | SHIMANEKO TECH LOG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container" style="text-align: center;">
+            <a href="../index.html" class="logo">SHIMANEKO TECH LOG</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="article-container">
+            <header class="article-header">
+                <span class="level-badge"
+                    style="background: var(--color-text); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold;">LEVEL
+                    1</span>
+                <h1>The Static Era<br><span
+                        style="font-size: 0.5em; color: var(--color-secondary); display: block; margin-top: 10px;">インターネットの夜明け</span>
+                </h1>
+            </header>
+
+            <div class="article-body">
+                <p>ようこそ、Web技術の歴史を紐解く冒険へ。<br>
+                    最初のレベルは「静的（Static）」な時代です。ここには複雑な計算も、データベースもありません。ただ純粋な「情報」と、それを運ぶ「仕組み」があるだけです。</p>
+
+                <h2>1. Webページの正体</h2>
+                <p>あなたが今見ているこの画面。これは魔法ではなく、遠くのコンピューター（サーバー）にある <strong>「HTMLファイル」</strong>
+                    というただのテキストファイルを、あなたのコンピューター（ブラウザ）が読み込んで表示したものです。</p>
+
+                <!-- Concept Box -->
+                <div class="concept-box">
+                    <div class="concept-title">💡 Webページ = お手紙</div>
+                    <p>Webページは、サーバーからあなたに届く「お手紙」のようなものです。<br>
+                        封筒の宛名が「URL」、便箋が「HTMLファイル」、配達員さんが「HTTP」です。</p>
+                </div>
+
+                <h3>仕組みの図解</h3>
+                <p>ブラウザがサーバーからファイルを受け取るまでの流れを見てみましょう。</p>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant User as あなた (Browser)
+    participant DNS as 住所録 (DNS)
+    participant Server as サーバー
+
+    User->>DNS: "shimaneko.tech" の住所はどこ？
+    DNS-->>User: 192.168.1.1 です！
+    
+    User->>Server: [HTTP GET] index.html ください！
+    Server-->>User: はい、どうぞ (HTMLファイル)
+    
+    Note over User: ブラウザがHTMLを<br>解釈して表示
+                    </pre>
+                    <div class="diagram-caption">図: Webページが表示されるまでの会話</div>
+                </div>
+
+                <h2>2. 登場人物の役割</h2>
+                <ul>
+                    <li><strong>HTML (HyperText Markup Language):</strong> 文章の構造（見出し、段落、リスト）を定義する「骨組み」。</li>
+                    <li><strong>HTTP (HyperText Transfer Protocol):</strong> ファイルをやり取りするための「約束事（通信プロトコル）」。</li>
+                    <li><strong>URL (Uniform Resource Locator):</strong> ファイルがどこにあるかを示す「住所」。</li>
+                </ul>
+
+                <h2>3. 「静的」であることの意味</h2>
+                <div class="diagram-container">
+                    <pre class="mermaid">
+graph LR
+    A[ユーザーA] -->|Request| S[サーバー]
+    B[ユーザーB] -->|Request| S
+    C[ユーザーC] -->|Request| S
+    
+    S -- 同じHTML --> A
+    S -- 同じHTML --> B
+    S -- 同じHTML --> C
+    
+    style S fill:#FFB74D,stroke:#333,stroke-width:2px
+                    </pre>
+                    <div class="diagram-caption">図: 誰がいつアクセスしても同じ内容（Static）</div>
+                </div>
+
+                <p>この時代のWebページは、誰がいつアクセスしても <strong>「常に同じ内容」</strong> が表示されました。<br>
+                    まるで印刷されたチラシのようなものです。</p>
+
+                <div style="text-align: center; margin-top: 80px;">
+                    <a href="learning-02-dynamic.html" class="read-btn"
+                        style="display: inline-block; padding: 15px 40px; font-size: 1.2rem;">NEXT: Level 2へ進む →</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Shimaneko Design</p>
+        </div>
+    </footer>
+
+    <!-- Mermaid Loader -->
+    <script type="module" src="../js/visuals.js"></script>
+
+</body>
+
+</html>
