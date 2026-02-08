@@ -374,6 +374,71 @@ a {
     animation: popIn 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
 }
 
+/* ==========================================================================
+   Feature: Atelier Radio (Audio)
+   ========================================================================== */
+.radio-player {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--color-card-bg);
+    border: 2px solid var(--color-text);
+    padding: 10px 15px;
+    border-radius: 12px;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+    z-index: 998;
+    /* Below cat counter modal but above page */
+    max-width: 250px;
+    transition: transform 0.3s;
+}
+
+.radio-player:hover {
+    transform: translateY(-5px);
+}
+
+.radio-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--color-text);
+    font-weight: bold;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.radio-controls button {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--color-text);
+    padding: 0 5px;
+    transition: color 0.2s;
+}
+
+.radio-controls button:hover {
+    color: var(--color-primary);
+}
+
+.radio-player.playing .music-note {
+    display: inline-block;
+    animation: dance 1s infinite alternate;
+}
+
+@keyframes dance {
+    0% {
+        transform: translateY(0) rotate(0);
+    }
+
+    100% {
+        transform: translateY(-5px) rotate(10deg);
+    }
+}
+
 .new-badge::before {
     content: "✨";
     font-size: 0.8rem;
