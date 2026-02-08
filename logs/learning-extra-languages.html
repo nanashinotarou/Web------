@@ -101,7 +101,61 @@ graph TD
                         最近のAIブームで人気爆発中。Web料理も作れるし、裏で複雑な計算もこなす万能選手。</p>
                 </div>
 
-                <h2>3. なぜ今回はシェフを雇わなかったの？</h2>
+                <h2>3. 深掘り：厨房の重要人物たち</h2>
+                <p>シェフ（言語）だけではレストランは回りません。<br>
+                    実は、他にも重要な役割を持ったスタッフが働いています。</p>
+
+                <h3>🤵 API（エーピーアイ）：優秀なウェイター</h3>
+                <div class="concept-box" style="background: #E0F2F1; border-color: #26A69A;">
+                    <div class="concept-title">注文と料理を運ぶ係</div>
+                    <p>お客さん（ブラウザ）は、直接厨房に入ってシェフに注文することはできません（不衛生だし危険です）。<br>
+                        必ず<strong>「API」という窓口（ウェイター）</strong>を通して注文し、料理を受け取ります。<br>
+                        <small>※ Application Programming Interface の略</small>
+                    </p>
+                </div>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant Customer as 😋 お客さん (ブラウザ)
+    participant API as 🤵 API (ウェイター)
+    participant Chef as 👨‍🍳 シェフ (サーバー)
+
+    Customer->>API: 注文：ハンバーグ定食
+    API->>Chef: オーダー入ります！
+    Chef->>Chef: 調理...
+    Chef->>API: 完成！
+    API->>Customer: お待たせしました
+                    </pre>
+                    <div class="diagram-caption">図: 彼がいないと注文が通らない</div>
+                </div>
+
+                <h3>🧊 Database（データベース）：無限の冷蔵庫</h3>
+                <div class="concept-box" style="background: #E8EAF6; border-color: #3F51B5;">
+                    <div class="concept-title">四次元ポケット的な収納</div>
+                    <p>何万件もの記事、ユーザー情報、商品データ…<br>
+                        これらを全て頭の中に入れておくのは不可能です。<br>
+                        シェフは必要な時に、巨大な倉庫<strong>「データベース（MySQLなど）」</strong>から、瞬時に必要な食材を取り出します。</p>
+                </div>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+graph LR
+    Chef[👨‍🍳 シェフ]
+    
+    subgraph Database [🧊 データベース]
+        Table1[ユーザーの棚]
+        Table2[記事の棚]
+        Table3[コメントの棚]
+    end
+    
+    Chef -->|SQL: ユーザーAの情報ちょーだい| Table1
+    Table1 -->|はいよ！| Chef
+                    </pre>
+                    <div class="diagram-caption">図: 整理整頓された巨大倉庫</div>
+                </div>
+
+                <h2>4. なぜ今回はシェフを雇わなかったの？</h2>
                 <p>これだけ優秀なシェフたちがいるのに、なぜこのテックログは「お弁当屋」スタイルを選んだのでしょうか？</p>
 
                 <div class="diagram-container">

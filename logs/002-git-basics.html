@@ -135,6 +135,58 @@ flowchart LR
                         あったら即削除！これだけで平和が訪れます。</p>
                 </div>
 
+                <hr style="margin: 60px 0; border: none; border-top: 2px dashed var(--color-border);">
+
+                <h2>5. 深掘り：パラレルワールド（ブランチ）</h2>
+                <div class="concept-box" style="background: #E8F5E9; border-color: #66BB6A;">
+                    <div class="concept-title">🌿 もしもの世界</div>
+                    <p>Gitの真骨頂は「本番の世界を汚さずに、実験用の世界を作れる」ことです。<br>
+                        これを<strong>「ブランチ（枝）」</strong>と呼びます。</p>
+                </div>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+gitGraph
+    commit id: "Ver.1"
+    commit id: "Ver.2"
+    branch feature
+    checkout feature
+    commit id: "実験中..."
+    commit id: "成功！"
+    checkout main
+    merge feature id: "合体"
+    commit id: "Ver.3"
+                    </pre>
+                    <div class="diagram-caption">図: 本線を守りながら実験する</div>
+                </div>
+
+                <h2>6. 深掘り：交換日記の掲示板（リモート）</h2>
+                <p>「手元のPC（ローカル）」と「GitHub（リモート）」の関係は、少しややこしいですね。<br>
+                    こう考えるとスッキリします。</p>
+
+                <div class="concept-box" style="background: #E3F2FD; border-color: #42A5F5;">
+                    <div class="concept-title">🏫 学校の掲示板</div>
+                    <ul>
+                        <li><strong>Push:</strong> 自分のノートの内容を、教室の掲示板に書き写すこと。</li>
+                        <li><strong>Pull:</strong> 誰かが掲示板に書いた内容を、自分のノートに書き写すこと。</li>
+                    </ul>
+                </div>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+sequenceDiagram
+    participant PC as 🏠 自分のPC
+    participant GitHub as ☁️ GitHub (掲示板)
+    participant Member as 🏠 メンバーのPC
+
+    PC->>PC: 作業してコミット (セーブ)
+    PC->>GitHub: Push (掲示板に書き写す)
+    Note over GitHub: 全員が見れる状態
+    GitHub->>Member: Pull (変更を取り込む)
+                    </pre>
+                    <div class="diagram-caption">図: Pushして初めてみんなに伝わる</div>
+                </div>
+
                 <div
                     style="text-align: center; margin-top: 80px; padding: 40px; border-top: 1px solid var(--color-border);">
                     <a href="../index.html" class="read-btn"

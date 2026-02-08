@@ -60,7 +60,38 @@ flowchart LR
                     <div class="diagram-caption">図: 安全・高速な配信フロー</div>
                 </div>
 
-                <h2>2. 時代の比較</h2>
+                <h2>2. 深掘り：分身の術（CDN）</h2>
+                <div class="concept-box" style="background: #E0F7FA; border-color: #00BCD4;">
+                    <div class="concept-title">🌏 世界中にコピーを置く</div>
+                    <p>なぜこのサイトは爆速なのか？<br>
+                        それは<strong>「CDN（シーディーエヌ）」</strong>という技術を使って、世界中のサーバーにこのサイトのコピー（分身）を置いているからです。<br>
+                        ユーザーは、一番近いコピーからデータを受け取るので、待ち時間がほぼゼロになります。</p>
+                </div>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+graph TD
+    Origin[🏠 オリジンサーバー<br>(本拠地: アメリカ)]
+    
+    subgraph World [🌏 世界中]
+        CDN1[🇯🇵 東京のコピー]
+        CDN2[🇬🇧 ロンドンのコピー]
+        CDN3[🇧🇷 ブラジルのコピー]
+    end
+    
+    Origin -.->|コピー配信| CDN1
+    Origin -.->|コピー配信| CDN2
+    Origin -.->|コピー配信| CDN3
+    
+    User[🏃 あなた (日本)] -->|一番近い！| CDN1
+    
+    style User fill:#FFF9C4
+    style CDN1 fill:#26A69A,color:white
+                    </pre>
+                    <div class="diagram-caption">図: 近所のコンビニから届くようなもの</div>
+                </div>
+
+                <h2>3. 時代の比較</h2>
 
                 <div class="diagram-container">
                     <pre class="mermaid">

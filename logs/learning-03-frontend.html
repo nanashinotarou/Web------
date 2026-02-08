@@ -62,7 +62,34 @@ sequenceDiagram
                     <div class="diagram-caption">図: ブラウザが主役の世界</div>
                 </div>
 
-                <h2>2. 現代の武器たち</h2>
+                <h2>2. 深掘り：生きている木（DOM）</h2>
+                <div class="concept-box" style="background: #F1F8E9; border-color: #8BC34A;">
+                    <div class="concept-title">🌳 DOM（ドム）ツリー</div>
+                    <p>ブラウザの中には、HTMLタグでできた巨大な樹（DOMツリー）が生えています。<br>
+                        JavaScriptは、この樹の枝を切ったり（削除）、新しい実をつけたり（追加）する<strong>「庭師」</strong>のような存在です。</p>
+                </div>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+graph TD
+    HTML[html] --> Body[body]
+    Body --> Header[header]
+    Body --> Main[main]
+    Main --> Article[article]
+    Article --> H1[h1: タイトル]
+    Article --> P[p: 本文]
+    
+    JS[js: 庭師]
+    
+    JS -.->|appendChild| P
+    JS -.->|remove| Header
+    
+    style JS fill:#FFF9C4,stroke:#FBC02D
+                    </pre>
+                    <div class="diagram-caption">図: JSがHTMLの構造を直接いじる</div>
+                </div>
+
+                <h2>3. 現代の武器たち</h2>
                 <div class="diagram-container">
                     <pre class="mermaid">
 mindmap
@@ -82,7 +109,7 @@ mindmap
                     <div class="diagram-caption">図: フロントエンド技術の進化</div>
                 </div>
 
-                <h2>3. 複雑化する世界</h2>
+                <h2>4. 複雑化する世界</h2>
                 <p>しかし、開発は恐ろしく複雑になりました。ビルドツール、バンドル、依存関係地獄...。<br>
                     そこでたどり着いたのが、原点回帰の思想「SSG」と「Cloud」です。</p>
 
