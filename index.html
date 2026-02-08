@@ -62,9 +62,27 @@
         <!-- Latest Logs -->
         <section>
             <h2 class="section-title">Latest Logs</h2>
+
+            <!-- Filters -->
+            <div class="log-filters" style="margin-bottom: 20px; display: flex; gap: 10px; flex-wrap: wrap;">
+                <button class="filter-btn active" data-filter="all">All</button>
+                <button class="filter-btn" data-filter="tech">Tech</button>
+                <button class="filter-btn" data-filter="column">Column</button>
+                <button class="filter-btn" data-filter="lab">Lab</button>
+            </div>
+
             <div class="logs-list">
 
-                <a href="logs/learning-extra-languages.html" class="log-card">
+                <a href="logs/lab-api.html" class="log-card" data-category="lab">
+                    <div class="log-meta">
+                        <time>2026.02.09</time>
+                        <span class="tag" style="background:var(--color-accent); color:white;">LAB</span>
+                    </div>
+                    <h3 class="log-title">Lab: 猫のトリビアAPI</h3>
+                    <p>外部APIからデータを取得する実験室。The Waiter Experiment.</p>
+                </a>
+
+                <a href="logs/learning-extra-languages.html" class="log-card" data-category="tech">
                     <div class="log-meta">
                         <time>2026.02.09</time>
                         <span class="tag" style="background:var(--color-primary); color:white;">EXTRA</span>
@@ -73,7 +91,7 @@
                     <p>【Webの裏側図鑑】お弁当屋とレストランの違い？PHP・Python・Rubyの正体とは。</p>
                 </a>
 
-                <a href="logs/002-git-basics.html" class="log-card">
+                <a href="logs/002-git-basics.html" class="log-card" data-category="tech">
                     <div class="log-meta">
                         <time>2026.02.09</time>
                         <span class="tag">Tutorial</span>
@@ -82,7 +100,7 @@
                     <p>なぜフォルダをコピーすると壊れるのか？マトリョーシカの罠と、正しい素材の借り方。</p>
                 </a>
 
-                <a href="logs/001-history.html" class="log-card">
+                <a href="logs/001-history.html" class="log-card" data-category="column">
                     <div class="log-meta">
                         <time>2026.02.09</time>
                         <span class="tag">Column</span>

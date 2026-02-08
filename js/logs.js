@@ -73,4 +73,30 @@ function initLogSorter() {
         btn.onclick = () => sortLogs(isDesc);
         return btn;
     }
+
+    // 4. Filtering Logic
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    if (filterBtns.length > 0) {
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update Active State
+                filterBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const filter = btn.dataset.filter;
+
+                logs.forEach(log => {
+                    const category = log.dataset.category;
+                    if (filter === 'all' || filter === category) {
+                        log.style.display = 'block';
+                        // Add fade-in animation
+                        log.style.opacity = '0';
+                        setTimeout(() => log.style.opacity = '1', 50);
+                    } else {
+                        log.style.display = 'none';
+                    }
+                });
+            });
+        });
+    }
 }
