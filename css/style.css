@@ -329,6 +329,68 @@ a {
     color: var(--color-card-bg);
 }
 
+/* Enhanced Sort Buttons */
+.sort-btn {
+    background: var(--color-white);
+    border: 2px solid var(--color-primary);
+    color: var(--color-text);
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s cubic-bezier(0.25, 0.8, 0.25, 1);
+    font-family: var(--font-main);
+    font-weight: bold;
+    box-shadow: 2px 2px 0 var(--color-border);
+}
+
+.sort-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 4px 4px 0 var(--color-primary);
+}
+
+.sort-btn.active {
+    background: var(--color-primary);
+    color: var(--color-white);
+    border-color: var(--color-text);
+    box-shadow: 2px 2px 0 var(--color-text);
+}
+
+/* Enhanced New Badge */
+.new-badge {
+    background: #FF7043;
+    /* Warmer Orange-Red */
+    color: white;
+    font-size: 0.75rem;
+    padding: 4px 10px;
+    border-radius: 20px;
+    /* Pill shape */
+    font-weight: bold;
+    margin-left: auto;
+    box-shadow: 0 2px 4px rgba(255, 112, 67, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    animation: popIn 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
+
+.new-badge::before {
+    content: "✨";
+    font-size: 0.8rem;
+}
+
+@keyframes popIn {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
 .log-card {
     display: block;
     background: var(--color-card-bg);
