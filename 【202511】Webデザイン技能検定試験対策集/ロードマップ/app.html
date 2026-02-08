@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Design Gr.3 | Practical Simulator</title>
+    <style>
+        /* =========================================
+           THEME: IDE DARK MODE (Pro Tools)
+           プロの現場(VS Code等)を意識した、
+           集中力を高めるダーク・インターフェース
+           ========================================= */
+        :root {
+            --bg-app: #1e1e1e;        /* VS Code Dark */
+            --bg-panel: #252526;      /* Panel Grey */
+            --bg-active: #37373d;     /* Active Item */
+            --text-main: #d4d4d4;     /* Light Grey */
+            --text-muted: #858585;    /* Muted Grey */
+            --accent: #007acc;        /* VS Code Blue */
+            --success: #4ec9b0;       /* Mint Green */
+            --error: #f44747;         /* Red */
+            --warning: #cca700;       /* Yellow */
+            --font-ui: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+            --font-code: "Consolas", "Monaco", "Courier New", monospace;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-ui);
+            background-color: var(--bg-app);
+            color: var(--text-main);
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* -------------------------------------------
+           SIDEBAR (Activity Bar)
+           ------------------------------------------- */
+        .activity-bar {
+            width: 50px;
+            background: #333333;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 10px;
+        }
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-left: 2px solid transparent;
+            margin-bottom: 10px;
+        }
+        .icon-btn:hover { color: #fff; }
+        .icon-btn.active { color: #fff; border-left-color: #fff; }
+        .home-link { margin-top: auto; margin-bottom: 20px; text-decoration: none; }
+
+        /* -------------------------------------------
+           SIDE PANEL (Explorer) - 修正版
+           ------------------------------------------- */
+        .sidebar {
+            width: 250px;
+            background: var(--bg-panel);
+            border-right: 1px solid #000;
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* 高さを確保 */
+            overflow: hidden; /* コンテナ自体ははみ出させない */
+        }
+        .sidebar-header {
+            padding: 10px 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--text-muted);
+            flex-shrink: 0; /* ヘッダーが潰れないようにする */
+        }
+        .file-list { 
+            list-style: none; 
+            padding: 0; 
+            margin: 0; 
+            flex: 1;          /* 余ったスペースを全部使う */
+            overflow-y: auto; /* ★ここが重要：縦スクロールを有効化 */
+        }
+        /* スクロールバーをカッコよくする（Webkit系） */
+        .file-list::-webkit-scrollbar { width: 8px; }
+        .file-list::-webkit-scrollbar-track { background: var(--bg-panel); }
+        .file-list::-webkit-scrollbar-thumb { background: #444; border-radius: 4px; }
+        .file-list::-webkit-scrollbar-thumb:hover { background: #555; }
+
+        .file-item {
+            padding: 8px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+        .file-item:hover { background: #2a2d2e; }
+        .file-item.active { background: var(--bg-active); color: #fff; }
+        .file-icon { margin-right: 8px; width: 16px; text-align: center; }
+        .file-status { margin-left: auto; font-size: 0.7rem; color: var(--success); display: none; }
+        .file-item.done .file-status { display: block; }
+
+        /* -------------------------------------------
+           MAIN EDITOR AREA
+           ------------------------------------------- */
+        .editor-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-app);
+        }
+
+        /* Tabs */
+        .editor-tabs {
+            display: flex;
+            background: var(--bg-panel);
+            height: 35px;
+            align-items: center;
+        }
+        .tab {
+            padding: 0 15px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            background: var(--bg-app);
+            border-top: 1px solid var(--accent);
+            color: #fff;
+            font-size: 0.9rem;
+            cursor: default;
+        }
+        .tab-icon { margin-right: 8px; color: var(--accent); }
+
+        /* Question Panel */
+        .question-panel {
+            padding: 30px;
+            border-bottom: 1px solid #333;
+            background: #1e1e1e;
+        }
+        .q-meta {
+            font-size: 0.8rem;
+            color: var(--accent);
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+        .q-text {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+        /* Code Input */
+        .code-container {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+        .line-numbers {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 40px;
+            background: var(--bg-app);
+            color: #555;
+            text-align: right;
+            padding: 20px 10px;
+            font-family: var(--font-code);
+            font-size: 1rem;
+            line-height: 1.5;
+            border-right: 1px solid #333;
+            z-index: 10;
+        }
+        textarea.code-editor {
+            flex: 1;
+            background: var(--bg-app);
+            color: #d4d4d4;
+            border: none;
+            padding: 20px 20px 20px 50px; /* Space for line numbers */
+            font-family: var(--font-code);
+            font-size: 1rem;
+            line-height: 1.5;
+            resize: none;
+            outline: none;
+        }
+        
+        /* Feedback & Status Bar */
+        .status-bar {
+            height: 25px;
+            background: var(--accent);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            font-size: 0.8rem;
+            justify-content: space-between;
+        }
+
+        .feedback-overlay {
+            position: absolute;
+            bottom: 30px; /* Above status bar */
+            right: 20px;
+            width: 400px;
+            background: #252526;
+            border: 1px solid #454545;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            border-radius: 4px;
+            padding: 20px;
+            display: none;
+            animation: slideUp 0.3s ease;
+            z-index: 100;
+        }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        .fb-header { font-weight: bold; margin-bottom: 10px; display: flex; align-items: center; }
+        .fb-header.success { color: var(--success); }
+        .fb-header.error { color: var(--error); }
+        .fb-content { font-size: 0.9rem; line-height: 1.6; color: #ccc; }
+        .fb-code { background: #000; padding: 5px 10px; font-family: var(--font-code); color: #ce9178; display: block; margin-top: 10px; border-radius: 3px; }
+
+        /* Buttons */
+        .action-bar {
+            padding: 15px;
+            background: var(--bg-panel);
+            border-top: 1px solid #333;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+        .btn {
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 2px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+        .btn:hover { background: #0062a3; }
+        .btn:disabled { background: #4d4d4d; color: #888; cursor: not-allowed; }
+        .btn-secondary { background: #3c3c3c; }
+
+    </style>
+</head>
+<body>
+
+<div class="activity-bar">
+    <div class="icon-btn active" title="Explorer">📂</div>
+    <div class="icon-btn" title="Search">🔍</div>
+    <div class="icon-btn" title="Source Control">⚡</div>
+    
+    <a href="index.html" class="icon-btn home-link" title="教科書に戻る (index.html)">🏠</a>
+</div>
+
+<div class="sidebar">
+    <div class="sidebar-header">EXPLORER: QUESTIONS</div>
+    <ul class="file-list" id="qList">
+        </ul>
+</div>
+
+<div class="editor-area">
+    <div class="editor-tabs">
+        <div class="tab">
+            <span class="tab-icon">📝</span>
+            <span id="tabTitle">Question 1</span>
+        </div>
+    </div>
+
+    <div class="question-panel">
+        <div class="q-meta" id="qCategory">HTML STRUCTURE</div>
+        <div class="q-text" id="qText">ここに問題文が表示されます...</div>
+    </div>
+
+    <div class="code-container">
+        <div class="line-numbers">1<br>2<br>3<br>4<br>5</div>
+        <textarea id="codeEditor" class="code-editor" spellcheck="false" placeholder="// ここにコードを入力してください"></textarea>
+        
+        <div id="feedback" class="feedback-overlay">
+            <div id="fbHeader" class="fb-header"></div>
+            <div id="fbBody" class="fb-content"></div>
+        </div>
+    </div>
+
+    <div class="action-bar">
+        <button id="hintBtn" class="btn btn-secondary" onclick="showHint()">💡 HINT</button>
+        <button id="runBtn" class="btn" onclick="runCheck()">▶ RUN & CHECK</button>
+        <button id="nextBtn" class="btn btn-secondary" onclick="nextQuestion()" disabled>NEXT ➡</button>
+    </div>
+
+    <div class="status-bar">
+        <div id="statusMsg">Ready</div>
+        <div style="display:flex; gap:15px;">
+            <span>Ln 1, Col 1</span>
+            <span>UTF-8</span>
+            <span>HTML</span>
+        </div>
+    </div>
+</div>
+
+<script>
+// ==========================================
+// DRILL DATA (FULL 50)
+// ==========================================
+const DB = [
+    // --- 1. HTML ---
+    { id:1, cat:"HTML", title:"DOCTYPE宣言", q:"HTML5の文書型宣言（DOCTYPE）を記述せよ。", a:"<!DOCTYPE html>", exp:"HTML5の標準宣言です。必須です。" },
+    { id:2, cat:"HTML", title:"文字コード指定", q:"日本語文字化け防止のため、UTF-8を指定するmetaタグを書け。", a:"<meta charset=\"UTF-8\">", exp:"headタグ直下に記述します。" },
+    { id:3, cat:"HTML", title:"言語指定", q:"htmlタグに日本語(ja)の言語属性を追加した開始タグを書け。", a:"<html lang=\"ja\">", exp:"アクセシビリティ（読み上げソフト等）に必須です。" },
+    { id:4, cat:"HTML", title:"ページタイトル", q:"ページのタイトルを「試験対策」に設定せよ。", a:"<title>試験対策</title>", exp:"ブラウザタブや検索結果に使われます。" },
+    { id:5, cat:"HTML", title:"大見出し", q:"ページの大見出し（h1）として「株式会社サンプル」と記述せよ。", a:"<h1>株式会社サンプル</h1>", exp:"h1はページ内に原則1回使用します。" },
+    { id:6, cat:"HTML", title:"段落", q:"「ようこそ」というテキストを段落タグで囲め。", a:"<p>ようこそ</p>", exp:"文章のまとまりにはpを使います。" },
+    { id:7, cat:"HTML", title:"強制改行", q:"文中で強制的に改行するためのタグは？", a:"<br>", exp:"レイアウト目的ではなく、住所など意味のある改行に使います。" },
+    { id:8, cat:"HTML", title:"画像表示", q:"imgフォルダのlogo.pngを表示せよ。altは「ロゴ」。", a:"<img src=\"img/logo.png\" alt=\"ロゴ\">", exp:"srcとaltは必須セットです。" },
+    { id:9, cat:"HTML", title:"リンク", q:"index.htmlへのリンクを作成せよ。文言は「トップ」。", a:"<a href=\"index.html\">トップ</a>", exp:"href属性で飛び先を指定します。" },
+    { id:10, cat:"HTML", title:"別タブリンク", q:"外部サイトを新しいタブで開く属性を追加せよ。", a:"target=\"_blank\"", exp:"target=\"_blank\"を使用します。" },
+    { id:11, cat:"HTML", title:"箇条書きリスト", q:"箇条書きリスト（順序なし）の親要素タグは？", a:"<ul></ul>", exp:"Unordered Listです。" },
+    { id:12, cat:"HTML", title:"順序リスト", q:"番号付きリスト（1,2,3...）の親要素タグは？", a:"<ol></ol>", exp:"Ordered Listです。" },
+    { id:13, cat:"HTML", title:"定義リスト", q:"用語と説明のリストの親要素タグは？", a:"<dl></dl>", exp:"Definition Listです。" },
+    { id:14, cat:"HTML", title:"表の見出し", q:"テーブルの見出しセルを表すタグは？", a:"<th></th>", exp:"tdではなくthを使います。" },
+    { id:15, cat:"HTML", title:"フッター", q:"ページ下部を表すHTML5のセマンティックタグは？", a:"<footer></footer>", exp:"div id='footer' ではなく footer タグを使います。" },
+    
+    // --- 2. CSS ---
+    { id:16, cat:"CSS", title:"文字色", q:"文字色を赤(red)にするCSSプロパティは？", a:"color: red;", exp:"font-colorではありません。" },
+    { id:17, cat:"CSS", title:"背景色", q:"背景色を黒(#000)にするCSSプロパティは？", a:"background-color: #000;", exp:"#000は#000000の省略形です。" },
+    { id:18, cat:"CSS", title:"文字サイズ", q:"文字サイズを16pxにするCSSプロパティは？", a:"font-size: 16px;", exp:"単位(px)を忘れずに。" },
+    { id:19, cat:"CSS", title:"太字", q:"文字を太字にするCSSプロパティは？", a:"font-weight: bold;", exp:"数値(700)でも可ですがboldが基本です。" },
+    { id:20, cat:"CSS", title:"テキスト配置", q:"テキストを中央揃えにするCSSプロパティは？", a:"text-align: center;", exp:"ブロック要素内のインライン要素に効きます。" },
+    { id:21, cat:"CSS", title:"下線削除", q:"リンクの下線を消すCSSプロパティは？", a:"text-decoration: none;", exp:"text-decorationを使います。" },
+    { id:22, cat:"CSS", title:"背景画像", q:"imgフォルダのbg.pngを背景画像にするCSSは？", a:"background-image: url('../img/bg.png');", exp:"CSSファイルからの相対パスなので '../' が必要になるケースが多いです。（ここではパス記述のみ判定）" },
+    { id:23, cat:"CSS", title:"背景繰り返し", q:"背景画像の繰り返しを禁止する値は？", a:"background-repeat: no-repeat;", exp:"デフォルトはrepeatです。" },
+    { id:24, cat:"CSS", title:"幅と高さ", q:"幅300px、高さ200pxを指定せよ。", a:"width: 300px; height: 200px;", exp:"ブロック要素のサイズ指定です。" },
+    { id:25, cat:"CSS", title:"内側余白", q:"枠線の内側に10pxの余白を入れるプロパティは？", a:"padding: 10px;", exp:"Padding=緩衝材です。" },
+    { id:26, cat:"CSS", title:"外側余白", q:"枠線の外側に20pxの余白を入れるプロパティは？", a:"margin: 20px;", exp:"Margin=ソーシャルディスタンスです。" },
+    { id:27, cat:"CSS", title:"ブロック中央", q:"ブロック要素を左右中央に配置するmarginの書き方は？", a:"margin: 0 auto;", exp:"左右をautoにすると中央に来ます。" },
+    { id:28, cat:"CSS", title:"枠線", q:"1pxの実線(solid)、黒(#000)の枠線を指定せよ。", a:"border: 1px solid #000;", exp:"太さ、種類、色を一括指定します。" },
+    { id:29, cat:"CSS", title:"リスト記号", q:"リストの・マークを消すプロパティは？", a:"list-style: none;", exp:"メニュー作成時に必須です。" },
+    { id:30, cat:"CSS", title:"行間", q:"行間を文字サイズの1.5倍にするプロパティは？", a:"line-height: 1.5;", exp:"単位なしで指定します。" },
+    { id:31, cat:"CSS", title:"ホバー", q:"マウスオーバー時のスタイルを指定する擬似クラスは？", a:":hover", exp:"a:hover {} のように使います。" },
+    { id:32, cat:"CSS", title:"回り込み", q:"要素を左に寄せるプロパティは？", a:"float: left;", exp:"Float(浮く)です。" },
+    { id:33, cat:"CSS", title:"回り込み解除", q:"Floatを解除するプロパティは？", a:"clear: both;", exp:"Floatしたら必ずClearします。" },
+    { id:34, cat:"CSS", title:"表示形式", q:"インライン要素をブロック要素に変えるプロパティは？", a:"display: block;", exp:"これでwidthなどが効くようになります。" },
+    { id:35, cat:"CSS", title:"外部CSS", q:"style.cssを読み込むlinkタグを書け。", a:"<link rel=\"stylesheet\" href=\"style.css\">", exp:"head内に記述します。" },
+    
+    // --- 3. FILE & ADVANCED ---
+    { id:36, cat:"FILE", title:"親階層パス", q:"一つ上の階層を表すパスの記号は？", a:"../", exp:"「../」で親フォルダに上がれます。" },
+    { id:37, cat:"FILE", title:"CSS画像パス", q:"CSSフォルダ内のCSSから、隣のimgフォルダの画像を参照するパスの書き始めは？", a:"../img/", exp:"一度CSSフォルダを出る必要があります。" },
+    { id:38, cat:"FILE", title:"拡張子", q:"写真に最適な、不可逆圧縮の画像形式は？", a:"jpg", exp:"JPEG (Joint Photographic Experts Group) です。" },
+    { id:39, cat:"FILE", title:"透過画像", q:"背景透過ができる画像形式は？", a:"png", exp:"PNGまたはGIF。写真はJPEG。" },
+    { id:40, cat:"FILE", title:"提出形式", q:"実技試験の最後に提出フォルダに対して行う操作は？", a:"zip圧縮", exp:"右クリック→送る→圧縮フォルダー。" },
+    { id:41, cat:"ADV", title:"表の隙間", q:"テーブルのボーダーを結合させるCSSは？", a:"border-collapse: collapse;", exp:"隙間なく線をつなげます。" },
+    { id:42, cat:"ADV", title:"角丸", q:"要素の角を丸くするCSSは？", a:"border-radius", exp:"50%で丸になります。" },
+    { id:43, cat:"ADV", title:"透明度", q:"要素を半透明(0.5)にするCSSは？", a:"opacity: 0.5;", exp:"0〜1の間で指定します。" },
+    { id:44, cat:"ADV", title:"カーソル", q:"マウスカーソルを指の形にするCSSは？", a:"cursor: pointer;", exp:"ボタンっぽく見せる時に使います。" },
+    { id:45, cat:"ADV", title:"優先順位", q:"スタイルを強制的に適用させるキーワードは？", a:"!important", exp:"color: red !important; のように使います。" },
+    { id:46, cat:"ADV", title:"ボックスサイズ", q:"paddingを幅に含める計算方法は？", a:"box-sizing: border-box;", exp:"レイアウト崩れを防ぐ魔法の言葉です。" },
+    { id:47, cat:"ADV", title:"フォント", q:"ゴシック体を総称するフォントファミリー名は？", a:"sans-serif", exp:"明朝体はserifです。" },
+    { id:48, cat:"HTML", title:"Email入力", q:"スマホでメアド用キーボードを出すinputのtypeは？", a:"type=\"email\"", exp:"UX向上の基本です。" },
+    { id:49, cat:"HTML", title:"ヒント表示", q:"入力欄に薄くヒントを表示する属性は？", a:"placeholder", exp:"例：placeholder=\"名前を入力\"" },
+    { id:50, cat:"HTML", title:"必須入力", q:"フォーム送信時に入力を強制する属性は？", a:"required", exp:"ブラウザ標準のバリデーションが働きます。" }
+];
+
+// ==========================================
+// APP LOGIC
+// ==========================================
+let currentIndex = 0;
+let solvedCount = 0;
+
+// Init Sidebar
+const listEl = document.getElementById('qList');
+DB.forEach((item, index) => {
+    const li = document.createElement('li');
+    li.className = 'file-item';
+    li.id = `file-${index}`;
+    li.innerHTML = `
+        <span class="file-icon">${getIcon(item.cat)}</span>
+        <span>${item.id}. ${item.title}</span>
+        <span class="file-status">✓</span>
+    `;
+    li.onclick = () => loadQuestion(index);
+    listEl.appendChild(li);
+});
+
+function getIcon(cat) {
+    if(cat === 'HTML') return '<span style="color:#e34c26"><></span>';
+    if(cat === 'CSS') return '<span style="color:#264de4">#</span>';
+    return '<span style="color:#f0ad4e">{}</span>';
+}
+
+function loadQuestion(index) {
+    currentIndex = index;
+    const q = DB[currentIndex];
+
+    // UI Update
+    document.querySelectorAll('.file-item').forEach(el => el.classList.remove('active'));
+    document.getElementById(`file-${index}`).classList.add('active');
+    
+    document.getElementById('tabTitle').textContent = `Q${q.id}: ${q.title}`;
+    document.getElementById('qCategory').textContent = `${q.cat} CATEGORY`;
+    document.getElementById('qText').textContent = q.q;
+    document.getElementById('codeEditor').value = "";
+    document.getElementById('codeEditor').focus();
+
+    // Reset Feedback
+    document.getElementById('feedback').style.display = 'none';
+    document.getElementById('nextBtn').disabled = true;
+    document.getElementById('statusMsg').textContent = "Editing...";
+    document.getElementById('statusMsg').style.color = "#fff";
+}
+
+function runCheck() {
+    const q = DB[currentIndex];
+    const userVal = document.getElementById('codeEditor').value.trim();
+    
+    // Normalize for Fuzzy Matching
+    const normalize = (str) => str.toLowerCase().replace(/\s+/g, '').replace(/'/g, '"');
+    const u = normalize(userVal);
+    const a = normalize(q.a);
+
+    // Simple keyword match fallback (for flexibility)
+    // 正解文字列に含まれる重要な単語（3文字以上）がすべて含まれていればOKとする緩和策
+    const keywords = q.a.toLowerCase().split(/[\s<>"':;=]+/).filter(k => k.length > 2);
+    let keywordMatch = 0;
+    keywords.forEach(k => { if(userVal.toLowerCase().includes(k)) keywordMatch++; });
+    const isKeywordOk = (keywords.length > 0 && keywordMatch >= keywords.length);
+
+    const isCorrect = (u === a) || (u.includes(a)) || isKeywordOk;
+
+    showFeedback(isCorrect, q);
+}
+
+function showFeedback(isSuccess, q) {
+    const fb = document.getElementById('feedback');
+    const header = document.getElementById('fbHeader');
+    const body = document.getElementById('fbBody');
+    const status = document.getElementById('statusMsg');
+
+    fb.style.display = 'block';
+    
+    if(isSuccess) {
+        header.textContent = "BUILD SUCCESS ✅";
+        header.className = "fb-header success";
+        body.innerHTML = `Great job! Correct syntax verified.<br><span class="fb-code">${q.a}</span><br>${q.exp}`;
+        status.textContent = "Passed";
+        status.style.color = "var(--success)";
+        
+        // Mark as done
+        document.getElementById(`file-${currentIndex}`).classList.add('done');
+        document.getElementById('nextBtn').disabled = false;
+    } else {
+        header.textContent = "BUILD FAILED ❌";
+        header.className = "fb-header error";
+        body.innerHTML = `Syntax error or mismatch.<br>Expected:<br><span class="fb-code">${q.a}</span>`;
+        status.textContent = "Error";
+        status.style.color = "var(--error)";
+    }
+}
+
+function showHint() {
+    const q = DB[currentIndex];
+    alert(`ヒント: ${q.a.substring(0, 3)}... を使います。\n解説: ${q.exp}`);
+}
+
+function nextQuestion() {
+    if(currentIndex < DB.length - 1) {
+        loadQuestion(currentIndex + 1);
+    } else {
+        alert("All Tests Passed! Congratulations!");
+
+    }
+}
+
+// Start
+loadQuestion(0);
+
+</script>
+</body>
+</html>

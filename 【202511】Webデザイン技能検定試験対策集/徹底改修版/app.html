@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>実技演習シミュレーター | Webデザイン3級 (Complete)</title>
+    <style>
+        /* =========================================
+           THEME: GENTLE PRO (Final Edition)
+           ========================================= */
+        :root {
+            --bg-body: #f4f7f6;       
+            --bg-panel: #ffffff;
+            --text-main: #333;
+            --text-light: #666;
+            --col-primary: #00b894; /* Mint */
+            --col-accent: #0984e3;  /* Blue */
+            --col-warn: #fdcb6e;    /* Yellow */
+            --col-danger: #ff7675;  /* Red */
+            --radius: 12px;
+            --font-ui: "Hiragino Maru Gothic ProN", "Rounded Mplus 1c", sans-serif;
+            --font-code: "Consolas", "Monaco", monospace;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-ui);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-panel);
+            border-right: 1px solid #dfe6e9;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 10;
+        }
+        .brand {
+            padding: 20px;
+            background: var(--col-primary);
+            color: #fff;
+            text-align: center;
+        }
+        .brand h1 { font-size: 1.1rem; margin: 0; font-weight: bold; }
+        
+        .filter-area {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .filter-btn {
+            border: 1px solid #dfe6e9;
+            background: #fff;
+            color: var(--text-light);
+            font-size: 0.7rem;
+            padding: 4px 8px;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        .filter-btn.active { background: var(--col-accent); color: #fff; border-color: var(--col-accent); }
+
+        .q-list { flex: 1; overflow-y: auto; list-style: none; padding: 0; margin: 0; }
+        .q-item {
+            padding: 12px 15px;
+            border-bottom: 1px solid #f1f2f6;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+        }
+        .q-item:hover { background: #f1f8e9; }
+        .q-item.active { background: #e0f2f1; border-left: 5px solid var(--col-primary); font-weight: bold; color: var(--col-primary); }
+        .q-item.done { color: #aaa; }
+        .q-item.done::before { content: "✔"; margin-right: 5px; color: var(--col-primary); }
+
+        .home-link {
+            padding: 15px; text-align: center; text-decoration: none; color: var(--text-light);
+            font-size: 0.9rem; border-top: 1px solid #eee; display: block;
+        }
+
+        /* MAIN AREA */
+        .main-area {
+            flex: 1; display: flex; flex-direction: column; overflow: hidden;
+        }
+        .scroll-container {
+            flex: 1; overflow-y: auto; padding: 30px; display: flex; flex-direction: column; gap: 20px;
+        }
+
+        /* LECTURE BOX */
+        .lecture-box {
+            background: #fff; border-radius: var(--radius); padding: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-top: 5px solid var(--col-accent);
+            display: flex; gap: 20px;
+        }
+        .mentor-icon {
+            font-size: 3rem; background: #e3f2fd; width: 70px; height: 70px;
+            display: flex; align-items: center; justify-content: center; border-radius: 50%; flex-shrink: 0;
+        }
+        .lecture-content h3 { margin: 0 0 10px 0; color: var(--col-accent); font-size: 1.1rem; }
+        .lecture-content p { margin: 0; font-size: 0.95rem; line-height: 1.7; color: #555; }
+        .lecture-hint {
+            margin-top: 10px; background: #f1f8e9; padding: 10px 15px;
+            border-radius: 8px; font-size: 0.9rem; color: #2e7d32; font-weight: bold;
+        }
+
+        /* MISSION & MAP */
+        .mission-box {
+            background: #fff; border-radius: var(--radius); padding: 20px 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.03); border-left: 5px solid var(--col-warn);
+        }
+        .mission-title { font-size: 1rem; font-weight: bold; color: #e67e22; margin-bottom: 5px; }
+        .mission-text { font-size: 1.1rem; font-weight: bold; line-height: 1.5; }
+
+        .map-box {
+            background: #2d3436; border-radius: var(--radius); padding: 20px;
+            color: #dfe6e9; font-family: var(--font-code); font-size: 0.9rem;
+        }
+        .tree-line { line-height: 1.6; white-space: pre; }
+        .hl-you { color: var(--col-warn); font-weight: bold; } 
+        .hl-target { color: var(--col-primary); font-weight: bold; text-decoration: underline; }
+
+        /* EDITOR */
+        .editor-container {
+            background: #fff; border-radius: var(--radius); padding: 5px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); display: flex; flex-direction: column; border: 2px solid #eee;
+        }
+        .editor-header {
+            padding: 10px 15px; background: #f8f9fa; border-bottom: 1px solid #eee;
+            color: #888; font-size: 0.8rem; font-family: var(--font-code);
+        }
+        textarea.code-input {
+            width: 100%; height: 120px; border: none; padding: 20px;
+            font-family: var(--font-code); font-size: 1.1rem; resize: vertical; outline: none;
+        }
+
+        /* FOOTER */
+        .footer-bar {
+            background: #fff; padding: 15px 30px; border-top: 1px solid #eee;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .feedback { font-weight: bold; font-size: 1rem; color: var(--col-primary); }
+        .feedback.error { color: var(--col-danger); }
+        
+        .btn {
+            border: none; padding: 12px 35px; border-radius: 50px; font-weight: bold; cursor: pointer;
+            transition: 0.2s; font-family: var(--font-ui); color: #fff;
+        }
+        .btn-run { background: var(--col-primary); box-shadow: 0 4px 10px rgba(0,184,148,0.3); }
+        .btn-run:hover { transform: translateY(-2px); background: #00a383; }
+        .btn-hint { background: #ffeaa7; color: #d35400; margin-right: 10px; }
+        .btn-next { background: var(--col-accent); display: none; margin-left: 10px; }
+
+        /* Dialog */
+        .dialog-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center; z-index: 100;
+        }
+        .dialog {
+            background: #fff; padding: 30px; border-radius: 20px; max-width: 500px; width: 90%;
+            text-align: center; border-top: 8px solid var(--col-primary);
+        }
+        .dialog-code {
+            background: #333; color: #fff; padding: 10px; border-radius: 5px; font-family: monospace; display: block; margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="sidebar">
+    <div class="brand">
+        <h1>実技特訓ドリル</h1><span>Web Design Gr.3</span>
+    </div>
+    <div class="filter-area">
+        <button class="filter-btn active" onclick="filterList('all')">全50問</button>
+        <button class="filter-btn" onclick="filterList('t1')">画像</button>
+        <button class="filter-btn" onclick="filterList('t2')">リンク</button>
+        <button class="filter-btn" onclick="filterList('t4')">CSS</button>
+        <button class="filter-btn" onclick="filterList('t5')">移動</button>
+    </div>
+    <ul class="q-list" id="qList"></ul>
+    <a href="index.html" class="home-link">🏠 教科書に戻る</a>
+</nav>
+
+<main class="main-area">
+    <div class="scroll-container">
+        <div class="lecture-box">
+            <div class="mentor-icon">👨‍🏫</div>
+            <div class="lecture-content">
+                <h3 id="lecTitle">読み込み中...</h3>
+                <p id="lecText">データを読み込んでいます。</p>
+                <div class="lecture-hint" id="lecHint">準備中</div>
+            </div>
+        </div>
+        <div class="mission-box">
+            <div class="mission-title">MISSION</div>
+            <div class="mission-text" id="qDesc">問題文</div>
+        </div>
+        <div class="map-box">
+            <div style="margin-bottom:10px; opacity:0.7; font-size:0.8rem;">🗺️ 現在のフォルダ状況</div>
+            <div id="treeView" class="tree-line">Tree</div>
+        </div>
+        <div class="editor-container">
+            <div class="editor-header">✍️ 編集中のファイル: <span id="fileName">index.html</span></div>
+            <textarea id="codeEditor" class="code-input" spellcheck="false" placeholder="// ここにコードを書いてね"></textarea>
+        </div>
+        <div style="height:50px;"></div>
+    </div>
+    <div class="footer-bar">
+        <div id="feedback" class="feedback"></div>
+        <div>
+            <button class="btn btn-hint" onclick="showHint()">💡 ヒント</button>
+            <button class="btn btn-run" onclick="runCheck()">▶ 採点する</button>
+            <button class="btn btn-next" id="nextBtn" onclick="nextQuestion()">次へ ➡</button>
+        </div>
+    </div>
+</main>
+
+<div class="dialog-overlay" id="dialogOverlay" onclick="closeDialog()"><div class="dialog" onclick="event.stopPropagation()"><h3>🎉 正解！</h3><div id="dialogContent"></div><button class="btn btn-run" onclick="closeDialog()" style="margin-top:20px;">閉じる</button></div></div>
+
+<script>
+// ==========================================
+// 50 QUESTIONS (RE-WRITTEN & COMPLETE)
+// ==========================================
+const DB = [
+    // --- TASK 1: 画像パス (Image Path) ---
+    { id:"Q01", cat:"t1", title:"基本：子階層", file:"index.html", a:"img/logo.png",
+      desc:"画像が表示されません。<code>img</code> フォルダの中にある <code>logo.png</code> を表示させてください。",
+      tree:"wd\n├── 📄 index.html (あなた)\n└── 📂 img\n    └── 🖼️ logo.png (目標)",
+      lecT:"フォルダの中に入るには？", lecB:"HTMLと同じ場所に画像がない時は、フォルダの名前を指定します。「imgフォルダの中のlogo.png」と丁寧に住所を書きましょう。", lecH:"フォルダ名 / ファイル名" },
+      
+    { id:"Q02", cat:"t1", title:"基本：親階層", file:"about/info.html", a:"../banner.jpg",
+      desc:"<code>about</code> フォルダの中から、外（ルート）にある <code>banner.jpg</code> を表示してください。",
+      tree:"wd\n├── 🖼️ banner.jpg (目標)\n└── 📂 about\n    └── 📄 info.html (あなた)",
+      lecT:"部屋を出る魔法「../」", lecB:"あなたは今「about」という部屋にいます。画像は廊下（外）にあります。部屋を出るには「../」を使います。", lecH:"../ファイル名" },
+
+    { id:"Q03", cat:"t1", title:"2階層上", file:"news/2024/post.html", a:"../../icon.png",
+      desc:"<code>news/2024/post.html</code> から、一番上にある <code>icon.png</code> を呼び出してください。",
+      tree:"wd\n├── 🖼️ icon.png (目標)\n└── 📂 news\n    └── 📂 2024\n        └── 📄 post.html (あなた)",
+      lecT:"2回部屋を出る", lecB:"深い部屋にいますね。外に出るには2回ドアを開ける必要があります。「../」を2回繰り返しましょう。", lecH:"../../ファイル名" },
+
+    { id:"Q04", cat:"t1", title:"拡張子：jpeg", file:"index.html", a:"images/photo.jpeg",
+      desc:"<code>images</code> フォルダの <code>photo.jpeg</code> を表示してください。",
+      tree:"wd\n├── 📄 index.html (あなた)\n└── 📂 images\n    └── 🖼️ photo.jpeg (目標)",
+      lecT:"名前は正確に！", lecB:"パソコンでは同じに見えても、Webでは「.jpg」と「.jpeg」は別物です。ファイル名をよーく見て！", lecH:".jpeg だよ！" },
+
+    { id:"Q05", cat:"t1", title:"大文字小文字", file:"index.html", a:"img/Main.JPG",
+      desc:"<code>img</code> フォルダの <code>Main.JPG</code> を表示してください。",
+      tree:"wd\n├── 📄 index.html (あなた)\n└── 📂 img\n    └── 🖼️ Main.JPG (目標)",
+      lecT:"サーバーは細かいんです", lecB:"「Main.JPG」と「main.jpg」。人間には同じでもコンピュータには別人です。大文字小文字も正確に。", lecH:"Main.JPG" },
+
+    { id:"Q06", cat:"t1", title:"隣のフォルダ", file:"html/index.html", a:"../images/pic.jpg",
+      desc:"<code>html</code> フォルダから、隣の <code>images</code> フォルダの <code>pic.jpg</code> を呼び出して。",
+      tree:"wd\n├── 📂 html\n│   └── 📄 index.html (あなた)\n└── 📂 images\n    └── 🖼️ pic.jpg (目標)",
+      lecT:"一度出てから入る", lecB:"隣の部屋に行くには、壁は抜けられません。一度廊下に出て（../）から、隣の部屋に入ります。", lecH:"../images/pic.jpg" },
+
+    { id:"Q07", cat:"t1", title:"絶対パス禁止", file:"index.html", a:"img/a.jpg",
+      desc:"<code>src='C:\\Users\\admin\\img\\a.jpg'</code> はダメ！正しい書き方に直して。",
+      tree:"wd\n├── 📄 index.html (あなた)\n└── 📂 img\n    └── 🖼️ a.jpg (目標)",
+      lecT:"自分の住所を書かないで", lecB:"「Cドライブの…」という書き方は、あなたのパソコンでしか動きません。誰に渡しても動く相対パスを使おう。", lecH:"img/a.jpg" },
+
+    // --- TASK 2: リンク設定 (Links) ---
+    { id:"Q08", cat:"t2", title: "トップに戻る", file:"company/info.html", a:"../index.html",
+      desc: "ここからトップページ <code>index.html</code> に戻るリンクを書いて。",
+      tree: "wd\n├── 📄 index.html (目標)\n└── 📂 company\n    └── 📄 info.html (あなた)",
+      lecT:"帰り道も同じです", lecB:"リンクも画像と同じルールです。親フォルダに戻るには「../」を使います。", lecH:"href=\"../index.html\"" },
+
+    { id:"Q09", cat:"t2", title: "別タブで開く", file:"link.html", a:"target=\"_blank\"",
+      desc: "外部サイトへのリンクを、別タブで開くようにして。",
+      tree: "-",
+      lecT:"サイトから離脱させない工夫", lecB:"自分のサイトを見てほしいのに、外部サイトに切り替わっちゃうのは残念。新しい窓で開かせよう。", lecH:"target=\"_blank\"" },
+
+    { id:"Q10", cat:"t2", title: "ページ内ジャンプ", file:"index.html", a:"#top",
+      desc: "ページ上部の <code>id='top'</code> へ移動するリンクを記述。",
+      tree: "-",
+      lecT:"同じページ内のジャンプ", lecB:"住所（ファイル名）の代わりに「ID（名札）」を指定します。IDの前には「#」をつけます。", lecH:"href=\"#top\"" },
+
+    { id:"Q11", cat:"t2", title: "メール起動", file:"contact.html", a:"mailto:info@test.com",
+      desc: "<code>info@test.com</code> 宛のメールを起動するリンクにして。",
+      tree: "-",
+      lecT:"メールを送る呪文", lecB:"httpのかわりに「mailto:」を使います。", lecH:"href=\"mailto:メアド\"" },
+
+    { id:"Q12", cat:"t2", title: "画像リンク", file:"index.html", a:"<a href=\"page.html\"><img src=\"btn.jpg\"></a>",
+      desc: "<code>btn.jpg</code> をクリックしたら <code>page.html</code> に飛ぶようにして。",
+      tree: "wd\n├── 📄 index.html (あなた)\n├── 🖼️ btn.jpg\n└── 📄 page.html",
+      lecT:"タグのサンドイッチ", lecB:"画像をリンクにしたい時は、aタグでimgタグを挟みます。", lecH:"<a> <img> </a>" },
+
+    // --- TASK 3: 画像置換 (Replacement) ---
+    { id:"Q13", cat:"t3", title: "画像の選定", file:"index.html", a:"img/nav.jpg",
+      desc: "メニュー画像を表示して。ロールオーバー用（_on）は使わないこと。",
+      tree: "wd\n├── 📂 img\n│   ├── 🖼️ nav.jpg (正解)\n│   └── 🖼️ nav_on.jpg (マウス用)\n└── 📄 index.html (あなた)",
+      lecT:"初期状態はどれ？", lecB:"マウスを乗せる前の状態なので、_onが付いていない方を選びましょう。", lecH:"nav.jpg" },
+
+    { id:"Q14", cat:"t3", title: "alt属性", file:"index.html", a:"alt=\"ボタン\"",
+      desc: "<code>btn.png</code> を表示して、説明文（alt）に「ボタン」と入れて。",
+      tree: "wd\n├── 🖼️ btn.png\n└── 📄 index.html",
+      lecT:"見えない人への配慮", lecB:"画像が表示されない時や、読み上げソフトのためにalt属性は絶対に必要なんだ。", lecH:"alt=\"ボタン\"" },
+
+    // --- TASK 4: CSS背景 (Background) ---
+    { id:"Q15", cat:"t4", title: "CSSからの画像指定", file:"css/style.css", a:"../img/bg.jpg",
+      desc: "<code>css/style.css</code> から <code>img/bg.jpg</code> を背景に設定するパスを書いて。",
+      tree: "wd\n├── 📂 css\n│   └── 🎨 style.css (あなた)\n└── 📂 img\n    └── 🖼️ bg.jpg (目標)",
+      lecT:"【最重要】CSSの落とし穴", lecB:"CSSファイルが「cssフォルダ」の中にいることに注意！そこから画像を見るには「一度外に出る」必要があります。", lecH:"../img/bg.jpg" },
+
+    { id:"Q16", cat:"t4", title: "横だけリピート", file:"style.css", a:"repeat-x",
+      desc: "背景画像を横方向（X軸）のみ繰り返す設定。",
+      tree: "-",
+      lecT:"壁紙の貼り方", lecB:"縦はy、横はx。繰り返さないならno-repeatだよ。", lecH:"repeat-x" },
+
+    { id:"Q17", cat:"t4", title: "背景を固定する", file:"style.css", a:"fixed",
+      desc: "スクロールしても背景が動かないように固定して。",
+      tree: "-",
+      lecT:"背景を釘留めする", lecB:"attachment（アタッチメント）プロパティを使います。", lecH:"background-attachment: fixed;" },
+
+    { id:"Q18", cat:"t4", title: "背景色と画像をセットで", file:"style.css", a:"#fff url(",
+      desc: "背景画像の下に、白(#FFF)を敷くショートハンド。",
+      tree: "-",
+      lecT:"まとめて書く技", lecB:"backgroundプロパティなら、色と画像を一行で書けます。", lecH:"background: #fff url(...)" },
+
+    { id:"Q19", cat:"t4", title: "文字色変更", file:"style.css", a:"color: #000000;",
+      desc: "h1の文字色を黒（#000000）にして。",
+      tree: "-",
+      lecT:"文字のインク", lecB:"font-colorではなく、ただの「color」です。", lecH:"color: #000;" },
+
+    { id:"Q20", cat:"t4", title: "背景色変更", file:"style.css", a:"background-color: #ffffff;",
+      desc: "全体の背景色を白（#FFFFFF）にして。",
+      tree: "-",
+      lecT:"ペンキを塗る", lecB:"background-colorプロパティだね。", lecH:"#ffffff" },
+
+    { id:"Q21", cat:"t4", title: "強制適用", file:"style.css", a:"!important",
+      desc: "スタイルが効かない！ 強制的に適用させて！",
+      tree: "-",
+      lecT:"最終兵器", lecB:"詳細度のルールを無視して、無理やり適用させる魔法の言葉。", lecH:"!important" },
+
+    { id:"Q22", cat:"t4", title: "ボックス計算", file:"style.css", a:"box-sizing: border-box;",
+      desc: "パディングを含めた幅をwidthにしたい。",
+      tree: "-",
+      lecT:"箱のサイズ計算", lecB:"これがないと、パディングの分だけ箱が膨らんでレイアウトが崩れます。", lecH:"box-sizing: border-box;" },
+
+    { id:"Q23", cat:"t4", title: "フォント", file:"style.css", a:"sans-serif",
+      desc: "ゴシック体を指定して（総称ファミリ名）。",
+      tree: "-",
+      lecT:"書体の指定", lecB:"明朝体はserif、ゴシック体はsans-serif（飾りなし）です。", lecH:"sans-serif" },
+
+    { id:"Q24", cat:"t4", title: "中央寄せ", file:"style.css", a:"margin: 0 auto;",
+      desc: "ブロック要素を画面の真ん中に寄せて。",
+      tree: "-",
+      lecT:"左右の余白を自動に", lecB:"上下は0、左右をautoにすると真ん中に来ます。", lecH:"margin: 0 auto;" },
+
+    { id:"Q25", cat:"t4", title: "テキスト中央", file:"style.css", a:"text-align: center;",
+      desc: "文字や画像を真ん中に寄せて。",
+      tree: "-",
+      lecT:"中身を寄せる", lecB:"ブロックの中身（インライン要素）を寄せるプロパティです。", lecH:"text-align: center;" },
+
+    // --- TASK 5: 移動 (Moving) ---
+    { id:"Q26", cat:"t5", title: "ファイル移動1", file:"sub/about.html", a:"../style.css",
+      desc: "<code>about.html</code> を <code>sub</code> フォルダに移動しました。ルートにある <code>style.css</code> へのリンクを直して。",
+      tree: "wd\n├── 🎨 style.css (目標)\n└── 📂 sub\n    └── 📄 about.html (あなた)",
+      lecT:"引越し後の住所変更", lecB:"ファイルが深い階層に行ったので、CSSを呼ぶには親階層を見る必要があります。", lecH:"../style.css" },
+
+    { id:"Q27", cat:"t5", title: "ファイル移動2", file:"html/index.html", a:"../img/pic.jpg",
+      desc: "<code>index.html</code> を <code>html</code> フォルダに移動しました。<code>img</code> フォルダの画像が見えなくなった！",
+      tree: "wd\n├── 📂 html\n│   └── 📄 index.html (あなた)\n└── 📂 img\n    └── 🖼️ pic.jpg (目標)",
+      lecT:"場所が変わればパスも変わる", lecB:"HTMLが移動したら、そこから見た画像の場所も変わります。", lecH:"../img/pic.jpg" },
+
+    { id:"Q28", cat:"t5", title: "CSS移動", file:"css/style.css", a:"../img/bg.png",
+      desc: "<code>style.css</code> を <code>css</code> フォルダに移動しました。<code>img/bg.png</code> へのパスを直して。",
+      tree: "wd\n├── 📂 css\n│   └── 🎨 style.css (あなた)\n└── 📂 img\n    └── 🖼️ bg.png (目標)",
+      lecT:"CSS自体が引越し", lecB:"CSSファイルの位置が変わったので、画像への道のりも変わります。", lecH:"../img/bg.png" },
+
+    { id:"Q29", cat:"t5", title: "深い移動", file:"a/b/page.html", a:"../../style.css",
+      desc: "ページを2階層深いフォルダに移動しました。ルートのCSSを読み込んで。",
+      tree: "wd\n├── 🎨 style.css (目標)\n└── 📂 a\n    └── 📂 b\n        └── 📄 page.html (あなた)",
+      lecT:"どんどん潜る", lecB:"2階層深くなったので、2回戻る必要があります。", lecH:"../../style.css" },
+
+    // --- その他 (HTML5/Form) ---
+    { id:"Q30", cat:"t1", title: "DOCTYPE", file:"index.html", a:"<!DOCTYPE html>",
+      desc: "HTML5の宣言を書いて。",
+      tree: "-",
+      lecT:"最初のおまじない", lecB:"これがないとブラウザが正しく動きません。", lecH:"<!DOCTYPE html>" },
+
+    { id:"Q31", cat:"t1", title: "文字コード", file:"index.html", a:"<meta charset=\"UTF-8\">",
+      desc: "文字化け防止のタグを書いて。",
+      tree: "-",
+      lecT:"日本語を守る", lecB:"headタグの中に書くお守りです。", lecH:"charset=\"UTF-8\"" },
+
+    { id:"Q32", cat:"t1", title: "言語指定", file:"index.html", a:"<html lang=\"ja\">",
+      desc: "日本語のページであることを宣言して。",
+      tree: "-",
+      lecT:"何語のページ？", lecB:"htmlタグにlang属性をつけます。", lecH:"lang=\"ja\"" },
+
+    { id:"Q33", cat:"t1", title: "タイトル", file:"index.html", a:"<title>練習</title>",
+      desc: "ページタイトルを「練習」にして。",
+      tree: "-",
+      lecT:"ブラウザのタブの名前", lecB:"SEOでも大事なタグです。", lecH:"<title>..." },
+
+    { id:"Q34", cat:"t1", title: "大見出し", file:"index.html", a:"<h1>タイトル</h1>",
+      desc: "一番大きな見出しで「タイトル」と書いて。",
+      tree: "-",
+      lecT:"ページの主役", lecB:"h1はページに1回だけ使うのが基本です。", lecH:"<h1>" },
+
+    { id:"Q35", cat:"t1", title: "段落", file:"index.html", a:"<p>文章</p>",
+      desc: "「文章」というテキストを段落にして。",
+      tree: "-",
+      lecT:"文章のカタマリ", lecB:"Paragraph（パラグラフ）のPです。", lecH:"<p>" },
+
+    { id:"Q36", cat:"t1", title: "強制改行", file:"index.html", a:"<br>",
+      desc: "文中で改行するタグは？",
+      tree: "-",
+      lecT:"Break（改行）", lecB:"見た目のためではなく、住所や詩など意味のある改行に使います。", lecH:"<br>" },
+
+    { id:"Q37", cat:"t1", title: "リスト", file:"index.html", a:"<ul></ul>",
+      desc: "箇条書きリストの親タグは？",
+      tree: "-",
+      lecT:"メニューの基本", lecB:"Unordered List（順序なしリスト）です。", lecH:"<ul>" },
+
+    { id:"Q38", cat:"t1", title: "リストの中身", file:"index.html", a:"<li></li>",
+      desc: "リストの項目を表すタグは？",
+      tree: "-",
+      lecT:"List Item", lecB:"ulやolの中で使います。", lecH:"<li>" },
+
+    { id:"Q39", cat:"t1", title: "定義リスト", file:"index.html", a:"<dl></dl>",
+      desc: "用語と説明のリストの親タグは？",
+      tree: "-",
+      lecT:"Definition List", lecB:"dt（用語）とdd（説明）を囲みます。", lecH:"<dl>" },
+
+    { id:"Q40", cat:"t1", title: "表の行", file:"index.html", a:"<tr></tr>",
+      desc: "テーブルの行（横の列）を作るタグは？",
+      tree: "-",
+      lecT:"Table Row", lecB:"行を作らないとセルも作れません。", lecH:"<tr>" },
+
+    { id:"Q41", cat:"t1", title: "表の見出し", file:"index.html", a:"<th></th>",
+      desc: "テーブルの見出しセルを作るタグは？",
+      tree: "-",
+      lecT:"Table Header", lecB:"tdではなくthを使うと、太字になります。", lecH:"<th>" },
+
+    { id:"Q42", cat:"t1", title: "入力欄", file:"index.html", a:"<input type=\"text\">",
+      desc: "1行のテキスト入力欄を作って。",
+      tree: "-",
+      lecT:"フォームの基本", lecB:"inputタグを使います。", lecH:"type=\"text\"" },
+
+    { id:"Q43", cat:"t1", title: "送信ボタン", file:"index.html", a:"<input type=\"submit\">",
+      desc: "フォームの送信ボタンを作って。",
+      tree: "-",
+      lecT:"送るボタン", lecB:"type=\"submit\" です。", lecH:"submit" },
+
+    { id:"Q44", cat:"t1", title: "フッター", file:"index.html", a:"<footer></footer>",
+      desc: "ページ下部を表す意味のあるタグは？",
+      tree: "-",
+      lecT:"HTML5の作法", lecB:"div id='footer' ではなく専用のタグを使います。", lecH:"<footer>" },
+
+    { id:"Q45", cat:"t4", title: "下線消し", file:"style.css", a:"text-decoration: none;",
+      desc: "リンクの下線を消して。",
+      tree: "-",
+      lecT:"装飾をなしにする", lecB:"decoration（デコレーション）をnoneにします。", lecH:"text-decoration: none;" },
+
+    { id:"Q46", cat:"t4", title: "リスト記号消し", file:"style.css", a:"list-style: none;",
+      desc: "リストの黒丸（・）を消して。",
+      tree: "-",
+      lecT:"スタイルのリセット", lecB:"メニューを作る時に必ずやります。", lecH:"list-style: none;" },
+
+    { id:"Q47", cat:"t4", title: "角丸", file:"style.css", a:"border-radius",
+      desc: "画像の角を丸くするプロパティは？",
+      tree: "-",
+      lecT:"角を削る", lecB:"pxや%で指定します。", lecH:"border-radius" },
+
+    { id:"Q48", cat:"t4", title: "透明度", file:"style.css", a:"opacity: 0.5;",
+      desc: "要素を半透明（0.5）にして。",
+      tree: "-",
+      lecT:"透けさせる", lecB:"0〜1の間で指定します。", lecH:"opacity" },
+
+    { id:"Q49", cat:"t4", title: "カーソル", file:"style.css", a:"cursor: pointer;",
+      desc: "マウスカーソルを指の形にして。",
+      tree: "-",
+      lecT:"クリックできる合図", lecB:"ボタンっぽく見せる時に使います。", lecH:"cursor: pointer;" },
+
+    { id:"Q50", cat:"t1", title: "必須入力", file:"index.html", a:"required",
+      desc: "入力しないと送信できないようにする属性は？",
+      tree: "-",
+      lecT:"入力チェック", lecB:"inputタグに書くだけでチェックしてくれます。", lecH:"required" }
+];
+
+// ==========================================
+// APP LOGIC
+// ==========================================
+let currentIndex = 0;
+let currentFilter = 'all';
+
+window.onload = function() {
+    generateList();
+    loadQuestion(0);
+};
+
+function generateList() {
+    const list = document.getElementById('qList');
+    list.innerHTML = "";
+    DB.forEach((item, index) => {
+        if(currentFilter !== 'all' && item.cat !== currentFilter) return;
+        const li = document.createElement('li');
+        li.className = 'q-item';
+        li.id = `q-${index}`;
+        li.innerHTML = `<span style="color:#aaa; font-size:0.8rem; margin-right:10px;">Q${index + 1}</span> ${item.title}`;
+        li.onclick = () => loadQuestion(index);
+        list.appendChild(li);
+    });
+}
+
+function filterList(cat) {
+    currentFilter = cat;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+    generateList();
+}
+
+function loadQuestion(index) {
+    currentIndex = index;
+    const q = DB[index];
+
+    // Highlight
+    document.querySelectorAll('.q-item').forEach(el => el.classList.remove('active'));
+    const activeItem = document.getElementById(`q-${index}`);
+    if(activeItem) {
+        activeItem.classList.add('active');
+        activeItem.scrollIntoView({behavior: "smooth", block: "center"});
+    }
+
+    // Set Content
+    document.getElementById('lecTitle').textContent = q.lecT;
+    document.getElementById('lecText').textContent = q.lecB;
+    document.getElementById('lecHint').textContent = `💡 ヒント: ${q.lecH}`;
+    
+    document.getElementById('qDesc').innerHTML = q.desc;
+    document.getElementById('fileName').textContent = q.file;
+    document.getElementById('codeEditor').value = "";
+    
+    // Tree
+    if(q.tree === "-") {
+        document.getElementById('treeView').innerHTML = "<div style='color:#777; padding:10px;'>この問題にマップはありません</div>";
+    } else {
+        const treeHTML = q.tree.replace("(あなた)", "<span class='hl-you'>👈 あなた(現在地)</span>")
+                               .replace("(目標)", "<span class='hl-target'>🎯 目標(ターゲット)</span>");
+        document.getElementById('treeView').innerHTML = treeHTML;
+    }
+
+    // Reset
+    document.getElementById('feedback').textContent = "";
+    document.getElementById('feedback').className = "feedback";
+    document.getElementById('nextBtn').style.display = "none";
+    
+    // Scroll to top
+    const container = document.querySelector('.scroll-container');
+    if(container) container.scrollTop = 0;
+}
+
+function runCheck() {
+    const q = DB[currentIndex];
+    const userVal = document.getElementById('codeEditor').value.trim();
+    const fb = document.getElementById('feedback');
+
+    // Flexible Check
+    const normalize = str => str.toLowerCase().replace(/['"]/g, "").replace(/\s/g, "");
+    const u = normalize(userVal);
+    const a = normalize(q.a);
+    
+    // Keyword match
+    const keywords = q.a.toLowerCase().split(/[\s<>"':;=]+/).filter(k => k.length > 2);
+    let match = 0;
+    keywords.forEach(k => { if(userVal.toLowerCase().includes(k)) match++; });
+    
+    if (u.includes(a) || (keywords.length > 0 && match >= keywords.length)) {
+        fb.textContent = "🎉 正解！おめでとう！";
+        fb.className = "feedback";
+        
+        // Dialog
+        const dialog = document.getElementById('dialogContent');
+        dialog.innerHTML = `
+            <p style="font-weight:bold;">${q.lecT}</p>
+            <p>${q.lecB}</p>
+            <div class="dialog-code">
+                正解例: ${q.a.replace(/</g,'&lt;')}
+            </div>
+        `;
+        document.getElementById('dialogOverlay').style.display = "flex";
+        
+        const item = document.getElementById(`q-${currentIndex}`);
+        if(item) item.classList.add('done');
+        document.getElementById('nextBtn').style.display = "inline-block";
+    } else {
+        fb.textContent = "🤔 うーん、惜しい！上の解説をもう一度見てみて！";
+        fb.className = "feedback error";
+    }
+}
+
+function showHint() {
+    const q = DB[currentIndex];
+    alert(`【ヒント】\n${q.lecH}\n\n答えの一部: ${q.a.substring(0, 3)}...`);
+}
+
+function nextQuestion() {
+    if (currentIndex < DB.length - 1) {
+        loadQuestion(currentIndex + 1);
+    } else {
+        alert("全問クリア！素晴らしい！免許皆伝です！");
+    }
+}
+
+function closeDialog() {
+    document.getElementById('dialogOverlay').style.display = "none";
+}
+</script>
+</body>
+</html>

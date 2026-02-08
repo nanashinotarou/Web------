@@ -1,0 +1,1342 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ウェブデザイン技能検定3級 統合模擬試験 (学習支援強化版)</title>
+  <style>
+    :root {
+      --bg: #f0f8ff;
+      --card: #ffffff;
+      --accent: #2563eb;
+      --text: #111827;
+      --muted: #6b7280;
+      --ok: #16a34a;
+      --bad: #ef4444;
+      --warn: #f59e0b;
+      --help: #8b5cf6; /* お手上げ機能用の色（紫） */
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Hiragino Kaku Gothic Pro', 'メイリオ', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      line-height: 1.6;
+    }
+    .container {
+      background: var(--card);
+      max-width: 900px;
+      width: 100%;
+      border-radius: 16px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      overflow: hidden;
+    }
+
+    /* メニュー画面 */
+    #menuScreen { text-align: center; }
+    h1 { 
+      color: #ff6347;
+      border-bottom: 4px solid #ff6347; 
+      padding-bottom: 15px; 
+      display: inline-block;
+      margin-bottom: 30px;
+    }
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-top: 30px;
+    }
+    .menu-card {
+      border: 2px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: #fff;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    }
+    .menu-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    .menu-card h3 { margin: 0 0 10px 0; color: #008080; }
+    .menu-card p { margin: 0; font-size: 0.9rem; color: var(--muted); }
+
+    /* クイズ画面 */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .btn {
+      background: linear-gradient(45deg, #42a5f5, #1e88e5);
+      color: white;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      transition: 0.2s;
+    }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; box-shadow: none; }
+    .btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.25); }
+    .btn-ghost { background: transparent; color: var(--muted); border: 1px solid #d1d5db; box-shadow: none; }
+    .btn-hint { background: linear-gradient(45deg, #fca5a5, #ef4444); } 
+    .btn-oteage { background: linear-gradient(45deg, #a78bfa, #7c3aed); } /* お手上げボタン */
+
+    /* 選択肢 */
+    .choices { display: grid; gap: 12px; margin-top: 20px; }
+    .choice {
+      padding: 15px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      background: #f9fafb;
+      cursor: pointer;
+      text-align: left;
+      transition: 0.2s;
+      font-weight: 500;
+    }
+    .choice:hover { background: #e3f2fd; border-color: #2196f3; }
+    .choice.correct { background: #dcfce7; border-color: var(--ok); color: #14532d; }
+    .choice.wrong { background: #fee2e2; border-color: var(--bad); color: #7f1d1d; }
+
+    /* 実技(記述)エディタ */
+    .editor-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      height: 400px;
+      margin-bottom: 20px;
+    }
+    textarea {
+      width: 100%;
+      height: 100%;
+      padding: 15px;
+      font-family: monospace;
+      border: 2px solid #d1d5db;
+      border-radius: 8px;
+      resize: none;
+      font-size: 14px;
+      line-height: 1.5;
+      background: #fafafa;
+    }
+    textarea:focus { outline: none; border-color: var(--accent); }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: 2px solid #e5e7eb;
+      border-radius: 8px;
+      background: #fff;
+    }
+    @media (max-width: 768px) {
+      .editor-layout { grid-template-columns: 1fr; height: auto; }
+      textarea, iframe { height: 250px; }
+    }
+
+    /* 解説・ヒントBOX */
+    .box-base {
+      padding: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+      position: relative;
+      font-size: 0.95em;
+    }
+    .hint-box {
+      background-color: #fffbeb;
+      border: 2px dashed #f59e0b;
+      display: none;
+    }
+    .hint-title {
+      font-weight: bold; color: #b45309; display: block; margin-bottom: 10px;
+    }
+    .hint-title::before { content: '💡'; margin-right: 5px; }
+
+    /* お手上げ（徹底解説）BOX */
+    .oteage-box {
+      background-color: #f5f3ff;
+      border: 3px double #8b5cf6;
+      display: none;
+    }
+    .oteage-title {
+      font-weight: bold; color: #5b21b6; display: block; margin-bottom: 10px; border-bottom: 1px dashed #ddd6fe; padding-bottom: 5px;
+    }
+    .oteage-title::before { content: '🏫'; margin-right: 5px; }
+
+    /* 解説BOX */
+    .explanation {
+      background-color: #e1f5fe;
+      border: 2px solid #0288d1;
+      margin-top: 20px;
+      display: none;
+    }
+    .explanation-title {
+      font-weight: bold; color: #0277bd; display: block; margin-bottom: 10px; border-bottom: 1px dashed #81d4fa; padding-bottom: 5px;
+    }
+    
+    .point-box {
+      background-color: #fff;
+      border: 2px solid #80cbc4;
+      border-radius: 8px;
+      padding: 15px;
+      margin-top: 15px;
+      position: relative;
+    }
+    .point-box::before {
+      content: '✨ ポイント';
+      position: absolute;
+      top: -12px; left: 15px;
+      background: #008080; color: #fff;
+      padding: 2px 10px;
+      border-radius: 10px;
+      font-size: 0.8em;
+      font-weight: bold;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <div id="menuScreen">
+    <h1>ウェブデザイン技能検定3級 統合対策</h1>
+    <p>実技試験の「徹底解説モード」を搭載しました！<br>初心者の方も安心です🔰</p>
+    
+    <div class="menu-grid">
+      <div class="menu-card" onclick="startQuiz('theory1')">
+        <h3>📖 学科：第1回</h3>
+        <p>基礎知識 50問</p>
+      </div>
+      <div class="menu-card" onclick="startQuiz('theory2')">
+        <h3>📖 学科：第2回</h3>
+        <p>基礎知識 50問</p>
+      </div>
+      <div class="menu-card" onclick="startQuiz('random')">
+        <h3>🎲 学科：ランダム</h3>
+        <p>全問からランダム出題</p>
+      </div>
+      <div class="menu-card" onclick="startQuiz('practical_mc')">
+        <h3>💪 実技：知識編</h3>
+        <p>選択式問題</p>
+      </div>
+      <div class="menu-card" onclick="startQuiz('practical_code')" style="border-color: #ff6347; background:#fff5f5;">
+        <h3 style="color:#d32f2f;">💻 実技：記述編</h3>
+        <p>コーディング課題<br><span style="font-size:0.8em; color:#d32f2f;">※お手上げ機能付き</span></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="quizScreen" class="hidden">
+    <div class="header">
+      <div>
+        <h2 id="modeTitle" style="margin:0; font-size:1.2rem; color:#008080;">タイトル</h2>
+        <div id="progress" style="color:var(--muted); font-size:0.9rem;">問題 1 / 50</div>
+      </div>
+      <button class="btn btn-ghost" onclick="showMenu()">メニューに戻る</button>
+    </div>
+
+    <div id="questionArea">
+      <div style="background:#f9fafb; padding:15px; border-radius:8px; border-left:5px solid #4682b4; margin-bottom:20px;">
+        <h3 id="qText" style="font-size:1.1rem; margin:0;">問題文</h3>
+      </div>
+      
+      <div id="mcArea" class="hidden">
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div id="codeArea" class="hidden">
+        <div class="editor-layout">
+          <div>
+            <p style="margin:0 0 5px 0; font-size:0.9rem; color:var(--muted);">👇 ここを編集してください</p>
+            <textarea id="codeEditor" spellcheck="false"></textarea>
+          </div>
+          <div>
+            <p style="margin:0 0 5px 0; font-size:0.9rem; color:var(--muted);">👀 プレビュー</p>
+            <iframe id="previewFrame"></iframe>
+          </div>
+        </div>
+        <div style="text-align:right; margin-bottom:10px; display:flex; justify-content:flex-end; gap:10px;">
+            <button id="hintBtn" class="btn btn-ghost" style="font-size:0.9em;" onclick="showHint()">💡 ヒント</button>
+            <button id="oteageBtn" class="btn btn-oteage" style="font-size:0.9em;" onclick="showOteage()">🤷‍♂️ お手上げ (徹底解説)</button>
+        </div>
+      </div>
+
+      <div id="hintArea" class="box-base hint-box">
+        <span class="hint-title">ヒント</span>
+        <div id="hintText"></div>
+      </div>
+
+      <div id="oteageArea" class="box-base oteage-box">
+        <span class="oteage-title">徹底解説</span>
+        <div id="oteageText"></div>
+      </div>
+
+      <div id="feedbackArea"></div>
+
+      <div style="margin-top:30px; display:flex; gap:10px; justify-content:center;">
+        <button id="checkBtn" class="btn">回答する</button>
+        <button id="nextBtn" class="btn" disabled style="background:#78909c;">次の問題へ</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="resultScreen" class="hidden" style="text-align:center;">
+    <h2 style="color:#008080;">試験終了！お疲れ様でした</h2>
+    <div style="font-size:3rem; font-weight:bold; color:#ff6347; margin:20px 0;" id="finalScore">0点</div>
+    <p id="resultMsg">結果メッセージ</p>
+    <button class="btn" onclick="showMenu()">メニューに戻る</button>
+  </div>
+</div>
+<script>
+// ==========================================
+// 【データエリア】
+// ==========================================
+
+// 1. 学科編①：基礎知識 (50問)
+const DATA_THEORY_1 = [
+  {q: 'Webサイトの著作権に関する記述として、**適切でない**ものはどれか。', choices: ['著作権は、創作された時点で自動的に発生する。', '著作権の保護期間は、著作者の死後50年で満了する。', 'Webサイトのデザインやレイアウトも著作権で保護される場合がある。', '著作権を譲渡する場合でも、著作者人格権は著作者に残る。'], a: 1, explain: '著作権の保護期間は、原則として**著作者の死後70年**で満了します。（一部例外あり）'},
+  {q: 'Webサイトを公開する際、通常、Webサーバーの**公開ディレクトリの直下**に配置し、ブラウザが最初に読み込むファイル名はどれか。', choices: ['`style.css`', '`access.html`', '`index.html`', '`default.php`'], a: 2, explain: '`index.html`は、ディレクトリにアクセスした際に自動的に読み込まれるトップページとして最も一般的に使用されます。'},
+  {q: '特定の情報をユーザーから取得する際に、その**利用目的を明確に示し、同意を得る**ことが義務付けられている日本の法律はどれか。', choices: ['著作権法', '不正アクセス禁止法', '個人情報保護法', '景品表示法'], a: 2, explain: '**個人情報保護法**は、個人情報の適切な取り扱いについて定めており、利用目的の明示や同意取得などを求めています。'},
+  {q: 'WebサーバーとクライアントPC間でファイルを転送する際に最も一般的に使用されるプロトコルはどれか。', choices: ['HTTP', 'FTP', 'SMTP', 'POP3'], a: 1, explain: 'FTP (File Transfer Protocol) は、Webサイトのファイルをサーバーへアップロード・ダウンロードする際に使用されます。'},
+  {q: 'Webデザインにおける**補色（反対色）**の関係を利用した効果として適切なものはどれか。', choices: ['統一感が生まれ、落ち着いた印象になる。', '互いの色を最も際立たせ、強調する効果がある。', '複数の色を調和させ、視覚的な安定感を生む。', '柔らかく、温かい印象を与える。'], a: 1, explain: '補色は、色相環で反対に位置する色であり、組み合わせることで互いの色を最大限に引き立てる、強調効果があります。'},
+  {q: '他人のIDやパスワードを不正に取得・利用することを禁じている法律はどれか。', choices: ['著作権法', '不正アクセス禁止法', '個人情報保護法', '景品表示法'], a: 1, explain: '**不正アクセス禁止法**は、ネットワークを通じて他人の識別符号（IDやパスワード）を不正に利用する行為などを禁じています。'},
+  {q: 'Webサイトのセキュリティ脆弱性の一つで、入力フォームなどに不正なスクリプトを埋め込み、訪問者のブラウザで実行させる攻撃を何と呼ぶか。', choices: ['SQLインジェクション', 'クロスサイトスクリプティング（XSS）', 'DDoS攻撃', 'フィッシング'], a: 1, explain: 'XSSは、悪意のあるスクリプトをWebページに埋め込み、ユーザーのブラウザ上で実行させる攻撃手法です。'},
+  {q: 'Webサイトの**ユーザビリティ（使いやすさ）**を高めるために、サイト内のどこにいても現在地を把握できるようにする工夫を、主に何と呼ぶか。', choices: ['グリッドシステム', 'ブレッドクラムリスト', 'ヒーローイメージ', 'F字パターン'], a: 1, explain: '**ブレッドクラムリスト**（パンくずリスト）は、ユーザーがサイト構造の中でどの階層にいるかを示すナビゲーションです。'},
+  {q: 'インターネットでWebページを閲覧する際に、ブラウザとサーバー間でデータをやり取りするためのプロトコルはどれか。', choices: ['HTTP', 'TCP', 'IP', 'DNS'], a: 0, explain: '**HTTP (HyperText Transfer Protocol)** は、Webクライアント（ブラウザ）とWebサーバー間で通信を行うためのルールです。'},
+  {q: 'Webサイトの色使いで、背景色と文字色の**明度差を大きく**取る理由として最も適切なものはどれか。', choices: ['デザイン性を高めるため。', 'ページの読み込み速度を上げるため。', '可読性を高めるため。', '配色に統一感を出すため。'], a: 2, explain: '明度差が大きいほど、文字が背景から浮き立ち、**可読性**が向上します。（アクセシビリティの基本）'},
+  {q: '**個人情報**に該当しないものはどれか。', choices: ['個人の思想', '氏名、生年月日', '個人が特定されない統計情報', '特定の個人を識別できる情報'], a: 2, explain: '**個人が特定されない統計情報**は、通常、個人情報保護法の対象外です。'},
+  {q: 'Webサイトを公開するために、サーバーに接続する際に必要な情報でないものはどれか。', choices: ['FTPホスト名', 'ユーザー名', 'IPアドレス', '**ブラウザの種類**'], a: 3, explain: 'ブラウザの種類はサーバーへの接続に必須ではありません。ホスト名、ユーザー名、パスワード（またはIPアドレス）が必須です。'},
+  {q: '多数の情報や要素を規則的に配置し、整理された印象を与えるデザイン手法は？', choices: ['F字パターン', 'グリッドシステム', 'Zパターン', 'スケルトン'], a: 1, explain: '**グリッドシステム**は、要素を一定のルールで配置し、デザインの統一感と秩序を生み出します。'},
+  {q: 'HTTPS通信において、データを暗号化し、通信相手の**正当性を証明**するために利用されるものは何か。', choices: ['IPアドレス', 'CSSファイル', 'SSL/TLSサーバー証明書', 'クッキー'], a: 2, explain: '**SSL/TLSサーバー証明書**は、サイトの運営者が実在することや、通信の暗号化を保証します。'},
+  {q: 'Webサイトが対応すべき国際的な標準規格を策定している団体はどこか。', choices: ['ISO', 'W3C', 'JIS', 'IEEE'], a: 1, explain: '**W3C (World Wide Web Consortium)** は、HTMLやCSSなどのWeb技術の標準化を進める国際的な非営利団体です。'},
+  {q: 'ユーザーの視線がWebページの左上から右下へ、アルファベットの「F」の形に動くという研究結果を何と呼ぶか。', choices: ['Zパターン', 'F字パターン', 'グリッドパターン', 'T字パターン'], a: 1, explain: '**F字パターン**は、Webページの読み込み方に関する、ユーザーの行動傾向を示すものです。'},
+  {q: 'Webサイトで他人の著作物を利用する場合、原則として必要となる行為は？', choices: ['著作権者への報告', '著作権者の許諾', '著作権料の支払い', '著作物の購入'], a: 1, explain: '著作権法に基づき、著作物を利用するには**著作権者の許諾**（許可）が原則必要です。'},
+  {q: 'WebブラウザがWebサーバーへリクエストを送り、Webページの内容を受け取る際に使用されるプロトコルは？', choices: ['FTP', 'SMTP', 'HTTP', 'POP3'], a: 2, explain: 'HTTP/HTTPSが、Webページの送受信に使用されます。'},
+  {q: 'Webサイトを閲覧しにくい状況にある人にも、情報がきちんと伝わるように配慮することを何と呼ぶか。', choices: ['ユーザビリティ', 'ユニバーサルデザイン', 'アクセシビリティ', 'インターフェイス'], a: 2, explain: '**アクセシビリティ**は、年齢や身体能力に関係なく、誰でも情報にアクセス・利用できるようにすることです。'},
+  {q: 'Webサーバーがブラウザに一時的に保存させる情報で、ユーザーのログイン状態や設定などを保持するために使われる小さなデータは？', choices: ['キャッシュ', 'クッキー（Cookie）', 'セッション', 'スクリプト'], a: 1, explain: '**クッキー（Cookie）** は、サーバーから送られ、ユーザーのブラウザに保存される小さなデータです。'},
+  {q: 'Webサイトを公開した情報発信者の氏名、住所、連絡先などを明確にすることが求められる法律はどれか。', choices: ['不正競争防止法', '特定商取引法', '著作権法', '景品表示法'], a: 1, explain: '**特定商取引法**では、インターネット販売などで、運営者の情報開示（氏名、住所、連絡先など）が義務付けられています。'},
+  {q: '**赤、青、黄色**の3色のように、混ぜ合わせても作れない基本的な色を何と呼ぶか。', choices: ['補色', '対照色', '原色（三原色）', '中間色'], a: 2, explain: '**原色**は、他の色を混ぜても作れない、色の基本となる色です。'},
+  {q: 'コンピュータ上でWebページを閲覧するためのソフトウェアを何と呼ぶか。', choices: ['Webサーバー', 'FTPクライアント', 'Webブラウザ', 'OS'], a: 2, explain: '**Webブラウザ**（Chrome, Safariなど）は、HTMLファイルを解釈・表示するためのソフトウェアです。'},
+  {q: '著作権のうち、**著作者が自分の作品について持つ人格的な権利**で、譲渡できないものはどれか。', choices: ['複製権', '公衆送信権', '著作者人格権', '財産権'], a: 2, explain: '**著作者人格権**は、著作者固有の名誉や感情を守る権利で、他人に譲渡することはできません。'},
+  {q: 'Webサイトのデザインにおいて、要素を揃えたり、視線の流れを誘導したりする力学的な要素を何と呼ぶか。', choices: ['タイポグラフィ', '視線誘導', 'カラーパレット', 'レイアウト'], a: 1, explain: '**視線誘導**は、ユーザーが見てほしい情報へ自然と目が向くように、要素を配置することです。'},
+  {q: 'Webサイトの運営者が、災害などでサイトが利用できなくなった場合に備えて行うべき対策は？', choices: ['アクセシビリティの確保', 'バックアップの取得', '広告の停止', 'OSのアップデート'], a: 1, explain: 'データ消失に備え、定期的に**バックアップ**を取得することが重要です。'},
+  {q: '企業や商品の不当な表示（誇大広告など）を規制し、消費者の利益を守るための日本の法律はどれか。', choices: ['著作権法', '不正アクセス禁止法', '個人情報保護法', '景品表示法'], a: 3, explain: '**景品表示法**（景表法）は、商品やサービスに関する不当な表示や過大な景品を規制します。'},
+  {q: 'ウェブサイトのアクセス状況を分析し、改善点を見つけるためのツールを一般に何と呼ぶか。', choices: ['CMS', 'FTPクライアント', 'アクセス解析ツール', 'IDE'], a: 2, explain: 'アクセス解析ツール（Google Analyticsなど）は、ユーザーの行動やトラフィックを分析します。'},
+  {q: 'Webサイトのデザインで、ユーザーが操作しやすいように、ボタンやリンクの大きさ、配置を工夫することを何と呼ぶか。', choices: ['タイポグラフィ', 'マイクロコピー', 'インターフェースデザイン', 'カラースキーム'], a: 2, explain: 'インターフェースデザインは、ユーザーとシステムの間をつなぐ部分（ボタン、メニューなど）の設計です。'},
+  {q: 'Webサイトの企画・設計段階で、ページごとの構成要素や配置を視覚的に示したシンプルな図を何と呼ぶか。', choices: ['ワイヤーフレーム', 'プロトタイプ', 'ユーザーストーリー', 'ペルソナ'], a: 0, explain: '**ワイヤーフレーム**は、デザインや色を付けず、情報配置の骨組みだけを示す図です。'},
+  {q: 'Webサイト公開後も、コンテンツを最新の状態に保ち、技術的な問題がないかチェックすることを何と呼ぶか。', choices: ['SEO対策', 'インフォメーションアーキテクチャ', 'サイトメンテナンス', 'リターゲティング'], a: 2, explain: 'サイトメンテナンスは、Webサイトの継続的な運用管理に関わる活動です。'},
+  {q: 'ウェブサイトが様々なデバイス（PC、スマホ、タブレット）で最適に表示されるように設計する手法は？', choices: ['ピクセルパーフェクト', 'リキッドレイアウト', 'レスポンシブWebデザイン', '固定レイアウト'], a: 2, explain: '**レスポンシブWebデザイン**は、CSSのメディアクエリなどを用い、画面幅に応じてレイアウトを変化させる手法です。'},
+  {q: 'Webサイトのドメイン名とIPアドレスを結びつける仕組みを何と呼ぶか。', choices: ['FTP', 'HTTP', 'DNS', 'SSL'], a: 2, explain: '**DNS (Domain Name System)** は、人間が読むドメイン名を、コンピュータが認識するIPアドレスに変換します。'},
+  {q: 'Webサイトの制作において、著作権者の許可なく、他者の作品を自分のものとして公開する行為は、**どの権利の侵害**にあたるか。', choices: ['公衆送信権', '複製権', '同一性保持権', '財産権'], a: 1, explain: '複製権（コピーする権利）の侵害にあたります。'},
+  {q: 'ユーザーのブラウザに一時的にデータを保存させ、ページの表示速度を向上させる仕組みは？', choices: ['クッキー', 'キャッシュ', 'セッション', 'プロキシ'], a: 1, explain: 'キャッシュは、画像などのデータを一時的にブラウザに保存し、次回アクセス時の読み込み時間を短縮します。'},
+  {q: 'Webデザインにおいて、**ゴールデン比率**（約1:1.618）や**三分割法**などの法則が使われる主な目的は？', choices: ['サイトの読み込み速度を上げるため', '情報の構造を複雑にするため', '視覚的に心地よい、美しいレイアウトを作るため', 'SEOの評価を高めるため'], a: 2, explain: 'これらの比率や法則は、人間が美しく感じるレイアウトを作るための指針となります。'},
+  {q: 'Webサイトがターゲットとするユーザー像を具体的に設定し、そのユーザーの属性や行動を仮想的に定義したものを何と呼ぶか。', choices: ['ターゲット層', 'ペルソナ', 'ユーザーフロー', 'カスタマージャーニー'], a: 1, explain: '**ペルソナ**は、ユーザーのニーズや行動を深く理解するために作成される、架空の具体的なユーザー像です。'},
+  {q: '情報提供者が、訪問者の年齢や性別などの属性に応じて、表示する広告やコンテンツを変化させる手法は？', choices: ['バナー広告', 'リスティング広告', 'ターゲティング広告', 'アフィリエイト広告'], a: 2, explain: 'ターゲティング広告は、ユーザーの属性や過去の行動に基づいて、最も関心の高い広告を表示します。'},
+  {q: 'Webページのデザインにおいて、**テキスト情報の階層構造**を分かりやすく表現するための工夫を何と呼ぶか。', choices: ['カラーマネジメント', 'タイポグラフィ', '配色計画', 'ブランディング'], a: 1, explain: '**タイポグラフィ**は、フォントの種類、サイズ、行間、文字間などを調整し、テキストを読みやすく美しく見せる技術です。'},
+  {q: 'Webサイトで使用する画像形式で、**写真のように多くの色数**を必要とし、**非可逆圧縮**（元の画質に戻せない圧縮）でファイルサイズを小さくできる形式は？', choices: ['PNG', 'GIF', 'JPEG', 'SVG'], a: 2, explain: '**JPEG**は、写真などのフルカラー画像を扱うのに適しており、非可逆圧縮（多少画質は劣化するが、大幅にファイルサイズを小さくできる）を用います。'},
+  {q: 'Webサイトの**情報構造**を設計し、ユーザーが必要な情報にスムーズにたどり着けるように整理することを何と呼ぶか。', choices: ['UI設計', 'インフォメーションアーキテクチャ', 'ユーザビリティ', 'アクセシビリティ'], a: 1, explain: '**インフォメーションアーキテクチャ (IA)** は、サイトのコンテンツの構造、分類、ナビゲーションの設計を行うことです。'},
+  {q: 'Webサイトの運用において、悪意のある攻撃者からシステムを守るための行為は、主にどの分野の対策か。', choices: ['Webマーケティング', 'Webデザイン', 'Webセキュリティ', 'Webビジネス'], a: 2, explain: '不正アクセスや情報漏洩を防ぐ活動は、**Webセキュリティ**に含まれます。'},
+  {q: '他者のサイトのコンテンツをそのままコピーし、自分のサイトで公開する行為は、著作権法上、主にどの権利を侵害するか。', choices: ['頒布権', '同一性保持権', '公衆送信権', '二次的著作物創作権'], a: 2, explain: 'インターネットを通じて他者に提供する権利である**公衆送信権**の侵害にあたります。'},
+  {q: 'Webサイトの目的が達成されているか（例: 商品が購入されたか）を数値で測る指標を何と呼ぶか。', choices: ['PV (ページビュー)', 'UU (ユニークユーザー)', 'CV (コンバージョン)', 'CTR (クリック率)'], a: 2, explain: '**CV (コンバージョン)** は、サイトの目標達成（購入、資料請求など）を意味します。'},
+  {q: 'Webサイトのデザインにおいて、**色の調和**や組み合わせのルールを定める計画を何と呼ぶか。', choices: ['レイアウト', '配色計画', 'ワイヤーフレーム', 'タイポグラフィ'], a: 1, explain: '配色計画は、ブランドイメージやユーザーの感情に訴えかけるための色の使い方を定義します。'},
+  {q: 'ユーザーがWebサイトで目的を達成するまでの道のりを示した図を何と呼ぶか。', choices: ['サイトマップ', 'ユーザージャーニーマップ', 'ペルソナ', 'ワイヤーフレーム'], a: 1, explain: '**ユーザージャーニーマップ**は、ユーザーがサイト内で体験するプロセスを可視化します。'},
+  {q: 'Webサイトのファイル構成で、画像を保存するために通常作成されるディレクトリ名として一般的なものは？', choices: ['`styles`', '`scripts`', '`htmls`', '`images`'], a: 3, explain: '画像を保存するためのフォルダ名は、一般的に`images`や`img`が使われます。'},
+  {q: 'WebブラウザでページのURLを入力すると、ブラウザがWebサーバーに「このページがほしい」と要求するメッセージを何と呼ぶか。', choices: ['レスポンス', 'リクエスト', 'ハンドシェイク', 'エラーコード'], a: 1, explain: 'クライアント（ブラウザ）からサーバーへの要求が**リクエスト**です。'},
+  {q: 'Webサイトの信頼性を高めるため、外部の公的な認証機関から取得できる証明書は？', choices: ['運転免許証', 'SSL/TLSサーバー証明書', '品質管理システム認証', '電子署名'], a: 1, explain: 'サーバー証明書は、サイトの暗号化と運営者の実在性を証明します。'},
+  {q: 'Webサイトの利用者が、情報を提供する際の責任と、情報の取り扱いについて定めた文書は？', choices: ['著作権表示', 'プライバシーポリシー', '免責事項', '特定商取引法に基づく表記'], a: 1, explain: '**プライバシーポリシー**は、個人情報の収集、利用、管理について定めた文書です。'},
+  {q: 'Webサイトのコンテンツを、検索エンジンに正しく理解させ、検索結果の上位に表示させるための施策を何と呼ぶか。', choices: ['アフィリエイト', 'リスティング広告', 'SEO', 'PPC'], a: 2, explain: '**SEO (Search Engine Optimization)** は、検索エンジン最適化のことです。'},
+  {q: 'Webサイトのデザインで、すべてのページで共通して使用される、サイトの顔となる大きな画像や要素を何と呼ぶか。', choices: ['ファビコン', 'ヒーローイメージ', 'アイキャッチ', 'フッター'], a: 1, explain: 'ページの最上部などに配置される、ユーザーの目を引く大きな画像を**ヒーローイメージ**と呼びます。'}
+];
+
+// 2. 学科編②：応用知識 (50問)
+const DATA_THEORY_2 = [
+  {q: 'Webコンテンツの企画において、高齢者や障がい者を含む多様な人々がWebサイトを利用できるように配慮する概念を何というか。', choices: ['ユーザビリティ', 'インフォマティクス', 'アクセシビリティ', 'リテラシー'], a: 2, explain: 'アクセシビリティ（Web Accessibility）は、障害の有無や年齢、利用環境に関わらず、誰もがWebサイトにアクセスし、利用できることを意味します。'},
+  {q: '特定のウェブサイトが**著作権法**の保護対象となるのは、どのような条件を満たしている場合か。', choices: ['公開日から10年以上経過している', '著作権登録を済ませている', '著作者の思想または感情を創作的に表現したもの', 'Webサイトの規模が10ページ以上である'], a: 2, explain: '著作権法において、著作物は「思想又は感情を創作的に表現したものであって、文芸、学術、美術又は音楽の範囲に属するもの」と定義されています。'},
+  {q: 'CSSで、レイアウトを組む際に要素を**横並び**にするために最もよく用いられる`display`プロパティの値は、現在主流となっているものを除くとどれか。', choices: ['`block`', '`inline`', '`inline-block`', '`none`'], a: 2, explain: '幅と高さを指定しつつ、要素を横並びにできる`inline-block`が、過去にレイアウトによく用いられました。'},
+  {q: '「インターネットを利用した通信販売」を行う事業者が、ウェブサイト上に必ず表示しなければならない項目を定めている日本の法律はどれか。', choices: ['個人情報保護法', '特定商取引法', '景品表示法', '不正アクセス禁止法'], a: 1, explain: '特定商取引法は、通信販売事業者に対して、氏名、住所、連絡先、販売価格などを明記することを義務付けています。'},
+  {q: 'Webサイトの**サーバー証明書**と、ブラウザとサーバー間の**通信暗号化**を実現するプロトコルはどれか。', choices: ['FTP', 'HTTP', 'SMTP', 'HTTPS'], a: 3, explain: 'HTTPSはHTTP通信をSSL/TLSで暗号化したもので、サーバー証明書（TLS証明書）を利用します。'},
+  {q: 'Webサイトの**情報構造**を設計する専門分野であり、コンテンツをわかりやすく分類・整理・配置する活動を何というか。', choices: ['SEO (Search Engine Optimization)', 'LPO (Landing Page Optimization)', 'IA (Information Architecture)', 'UI (User Interface)'], a: 2, explain: 'IA（情報アーキテクチャ）は、Webサイトやアプリなどの情報構造を設計し、ユーザーが目的の情報に容易に辿り着けるようにする活動です。'},
+  {q: '写真やグラデーションなどの**色数の多い画像**に適しており、**非可逆圧縮**を用いる画像形式はどれか。', choices: ['PNG', 'GIF', 'SVG', 'JPEG'], a: 3, explain: 'JPEG（Joint Photographic Experts Group）は、非可逆圧縮を用いて高い圧縮率を実現するため、色数の多い写真に最適です。'},
+  {q: 'HTML5で、Webページの**主要なコンテンツ**を示すために使用されるセマンティック要素はどれか。', choices: ['`<section>`', '`<article>`', '`<main>`', '`<div>`'], a: 2, explain: '`<main>`要素は、文書のbody内にある主要なコンテンツをマークアップするために使用され、文書内で一つだけ使用すべき要素です。'},
+  {q: 'CSSにおいて、要素の**外側**に空ける余白を設定するプロパティはどれか。', choices: ['`padding`', '`border`', '`margin`', '`outline`'], a: 2, explain: '`margin`は要素の境界線の外側（他の要素との間）に空ける余白を設定します。'},
+  {q: 'Webサイトの**コンテンツの鮮度**を示す指標の一つで、公開から経過した時間によって情報価値が薄れていく現象を何というか。', choices: ['ドメインエイジ', 'キュレーション', 'コンテンツマイグレーション', '情報の半減期 (Half-life of information)'], a: 3, explain: '情報の半減期は、情報がその価値の半分を失うまでに要する時間を指し、コンテンツの鮮度を表す指標の一つです。'},
+  {q: 'Webマーケティングにおいて、ユーザーが最初に訪問するページ（広告の飛び先など）を最適化することを何というか。', choices: ['SEM (Search Engine Marketing)', 'LPO (Landing Page Optimization)', 'EFO (Entry Form Optimization)', 'CTA (Call To Action)'], a: 1, explain: 'LPOは、ランディングページ（Landing Page: ユーザーが最初に訪れるページ）の離脱率を下げるなど、最適化を行う活動です。'},
+  {q: 'HTML文書の文字コードとして推奨されており、絵文字などを含む**あらゆる文字**を表現できるエンコーディング方式はどれか。', choices: ['Shift_JIS', 'EUC-JP', 'ASCII', 'UTF-8'], a: 3, explain: 'UTF-8はUnicodeの符号化方式の一つで、世界中のほとんどの文字を表現でき、現在のWebの標準です。'},
+  {q: 'Webサイトの配色において、**「色相」「明度」「彩度」**の3つの要素を用いて色を表現するモデルを何というか。', choices: ['RGBモデル', 'CMYKモデル', 'HSV/HSBモデル', 'CIEモデル'], a: 2, explain: 'HSV（Hue, Saturation, Value）またはHSB（Hue, Saturation, Brightness）は、色相、彩度、明度（輝度）で色を表現するモデルです。'},
+  {q: 'ユーザーがWebサイトを訪問してから離脱するまでの間に閲覧したページ数を、総アクセス数で割って算出する指標はどれか。', choices: ['UU (ユニークユーザー数)', 'PV (ページビュー数)', 'セッション数', '平均ページビュー（PV/セッション）'], a: 3, explain: '総PV数をセッション数（訪問回数）で割ることで、一回の訪問あたりの平均閲覧ページ数を算出します。'},
+  {q: 'Webサイトのドメイン名とIPアドレスを結びつける（名前解決を行う）インターネットの仕組みは何か。', choices: ['HTTP', 'FTP', 'DNS', 'TCP/IP'], a: 2, explain: 'DNS（Domain Name System）は、ドメイン名（例: example.com）をコンピュータが認識できるIPアドレスに変換するシステムです。'},
+  {q: 'HTML5の規格策定をW3Cと共同で行い、特にHTMLとDOMの仕様策定を推進しているコミュニティはどこか。', choices: ['IETF (Internet Engineering Task Force)', 'ISO (International Organization for Standardization)', 'WHATWG (Web Hypertext Application Technology Working Group)', 'Mozilla Foundation'], a: 2, explain: 'WHATWGは、ブラウザベンダーが中心となってHTML5やDOM Living Standardなどの仕様策定を継続的に行っているコミュニティです。'},
+  {q: 'ウェブサイトの**ユニバーサルデザイン**において、色が識別しにくい人々のために、文字と背景のコントラストを十分に確保することは、3つの原則のうちどれに該当するか。', choices: ['知覚可能（Perceivable）', '操作可能（Operable）', '理解可能（Understandable）', '堅牢（Robust）'], a: 0, explain: '知覚可能とは、情報やUIコンポーネントが、ユーザーが利用できる感覚器官で認識できることを意味します。コントラストの確保は視覚で知覚するための必須要件です。'},
+  {q: 'CSSの`@media`ルールを使用して、画面の幅に応じてレイアウトを変更するレスポンシブWebデザインの手法を何というか。', choices: ['Fixed Layout', 'Fluid Layout', 'Media Query', 'Adaptive Design'], a: 2, explain: '`@media`ルール自体をメディアクエリと呼び、レスポンシブデザインの核となる技術です。'},
+  {q: '企業のWebサイトにおいて、サイトの信頼性を高め、ユーザーに安心感を与えるために、運営者情報、プライバシーポリシー、利用規約などをまとめたページを置くべき場所はどこか。', choices: ['Webサイトのトップページのみ', 'すべてのページの最下部（フッター）からリンクさせる', 'サイトマップのみ', 'お問い合わせフォームと同じページ'], a: 1, explain: 'フッターはページを問わず常に表示されるため、これらの重要情報へのリンクを配置するのに最も適切な場所とされています。'},
+  {q: 'Webサイトのセキュリティにおいて、多数のコンピュータから一斉にWebサーバーにアクセスを集中させ、サービスを機能停止に追い込む攻撃手法はどれか。', choices: ['フィッシング', 'DoS/DDoS攻撃', 'SQLインジェクション', 'クロスサイトスクリプティング (XSS)'], a: 1, explain: 'DoS（Denial of Service）/DDoS（Distributed DoS）攻撃は、サーバーに過負荷を与え、サービス提供を妨害する行為です。'},
+  {q: 'ユーザーのブラウザに保存され、ログイン状態の維持やショッピングカートの内容記憶などに利用されるデータは何か。', choices: ['キャッシュ', 'Cookie', 'セッション', '履歴'], a: 1, explain: 'Cookie（クッキー）は、Webサーバーがユーザーのブラウザに送信し、保存させる小さなデータファイルです。セッション管理や状態保持に利用されます。'},
+  {q: 'CSSで、フォントサイズを**ルート要素**（`<html>`タグ）のフォントサイズを基準にして指定する相対単位はどれか。', choices: ['`em`', '`px`', '`rem`', '`%`'], a: 2, explain: '`rem`（root em）は、HTMLのルート要素（`<html>`）のフォントサイズを基準とするため、一元管理しやすい相対単位です。'},
+  {q: 'ウェブサイト制作の工程で、コンテンツの配置や動線を定義するために作成される、シンプルな設計図は何か。', choices: ['ワイヤーフレーム', 'モックアップ', 'プロトタイプ', 'サイトマップ'], a: 0, explain: 'ワイヤーフレームは、Webサイトのレイアウト、要素の配置、ナビゲーションといった骨格（ワイヤー）を示す設計図です。'},
+  {q: '動画ファイル形式の一つで、**Google**が開発したオープンソースの形式であり、Web上での利用が推奨されているものはどれか。', choices: ['MP4', 'WMV', 'WebM', 'MOV'], a: 2, explain: 'WebMはGoogleが開発したオープンな動画形式であり、HTML5の`<video>`要素での利用が推奨されています。'},
+  {q: 'ブラウザにHTML文書を読み込ませる際に、文書の先頭に記述すべき、HTML5の文書タイプ宣言（DTD）はどれか。', choices: ['`<DOCTYPE html>`', '`<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">`', '`<!DOCTYPE html>`', '`<html>`'], a: 2, explain: 'HTML5の文書タイプ宣言の正しい記述です。大文字・小文字は区別されません。'},
+  {q: 'CSSで、Webフォントなど**外部のフォントファイル**を読み込む際に使用するルールはどれか。', choices: ['`@import`', '`@font-face`', '`@media`', '`@charset`'], a: 2, explain: '`@font-face`ルールは、Webフォントファイルを指定し、CSS内で使用できるように定義します。'},
+  {q: 'Webサイトの色彩設計において、**色相環**で正反対の位置にある色を組み合わせる配色方法を何というか。', choices: ['ドミナントカラー', 'アナロジー配色（類似色相）', 'コンプレメンタリー配色（補色）', 'トーンオントーン'], a: 2, explain: '補色（Complementary Color）は色相環の正反対の色であり、組み合わせると強いコントラストとインパクトが生まれます。'},
+  {q: 'HTMLフォームにおいて、ユーザーに**複数の選択肢**を選ばせるために使用する`<input>`要素の`type`属性の値はどれか。', choices: ['`radio`', '`submit`', '`checkbox`', '`select`'], a: 2, explain: '`checkbox`は、複数ある選択肢の中から、複数または一つも選択しない自由な選択を可能にするものです。'},
+  {q: 'CSSにおいて、要素を**コンテンツの大きさや配置に合わせて柔軟に伸縮**させるためのレイアウトシステムはどれか。', choices: ['Table Layout', 'Position Absolute', 'Flexbox', 'Float Clearfix'], a: 2, explain: 'Flexbox（Flexible Box Layout）は、主に一方向（行または列）に沿って要素を配置し、伸縮や間隔調整を簡単に行えるシステムです。'},
+  {q: 'Webサイトの公開前に、HTMLやCSSの記述がW3Cなどの**標準規格に準拠しているか**をチェックするために使用するツールは何か。', choices: ['サイトマップジェネレーター', 'バリデーター', 'Lighthouse', 'FTPクライアント'], a: 1, explain: 'バリデーター（Validator）は、HTMLやCSSのコードが文法的に正しく、Web標準に準拠しているかを検証するツールです。'},
+  {q: 'インターネット通信の基本構造を定めている、複数のプロトコル群の総称はどれか。', choices: ['HTTP', 'SMTP', 'TCP/IP', 'FTP'], a: 2, explain: 'TCP/IPは、インターネット通信の基盤をなす、複数のプロトコル（Transmission Control Protocol / Internet Protocol）の集合体です。'},
+  {q: 'CSSにおいて、要素の重なり順序（Z軸方向）を指定する際に使用するプロパティはどれか。', choices: ['`z-value`', '`z-index`', '`position`', '`layer`'], a: 1, explain: '`z-index`プロパティは、`position`プロパティの値が`static`以外に設定されている要素の重なり順序を指定します。値が大きいほど手前に表示されます。'},
+  {q: 'Webサイトのレイアウトで、本文から独立した、補足情報や広告などのサイドバーコンテンツを示すために使用されるHTML5要素はどれか。', choices: ['`<section>`', '`<article>`', '`<aside>`', '`<footer>`'], a: 2, explain: '`<aside>`要素は、メインコンテンツと関連するものの、独立したセクションであり、補足情報（サイドバー）などに用いられます。'},
+  {q: 'WebブラウザがWebサーバーに対してWebページのデータを要求する際に用いるプロトコルはどれか。', choices: ['DNS', 'HTTP', 'DHCP', 'ARP'], a: 1, explain: 'HTTP（HyperText Transfer Protocol）は、Webクライアント（ブラウザ）とWebサーバー間でWebコンテンツを送受信するために用いられるプロトコルです。'},
+  {q: 'Webサイトのアクセス解析において、ユーザーがページを読み込んだ後、**何も操作せずにそのページを離脱した割合**を示す指標はどれか。', choices: ['CVR (コンバージョン率)', '回遊率', '離脱率', '直帰率'], a: 3, explain: '直帰率（Bounce Rate）は、ユーザーが最初のページだけを見て、サイト内の他のページを閲覧せずにセッションを終了した割合です。'},
+  {q: 'HTMLで、画像に**キャプション（説明文）**を付けるために、`<img>`要素を囲むべき要素の組み合わせとして最も適切なものはどれか。', choices: ['`<div>`と`<span>`', '`<figure>`と`<figcaption>`', '`<section>`と`<p>`', '`<a>`と`<title>`'], a: 1, explain: '`<figure>`要素は図表を囲み、`<figcaption>`要素はそれに対するキャプションを提供します。'},
+  {q: 'Webサイトの配色において、光の三原色（R:赤、G:緑、B:青）を混ぜて色を表現するモデルを何というか。', choices: ['CMYKモデル', 'HSV/HSBモデル', 'RGBモデル', 'NCSモデル'], a: 2, explain: 'RGBモデルは、Webサイトのディスプレイ表示の基本となる、光の三原色を混ぜ合わせる加法混色モデルです。'},
+  {q: 'Webサイトのパフォーマンス向上を目的として、ブラウザが一度アクセスしたWebページの画像ファイルなどを保存しておく仕組みは何か。', choices: ['Cookie', 'キャッシュ', 'セッション', '履歴'], a: 1, explain: 'キャッシュは、Webサイトのデータを一時的に保存しておき、再アクセス時の表示速度を向上させるための仕組みです。'},
+  {q: 'Webサイトのテスト手法の一つで、**二つの異なるデザイン（AとB）**を同時に公開し、どちらがより高い効果（コンバージョンなど）を得られるかを検証する手法は何か。', choices: ['ユーザビリティテスト', 'ヒューリスティック評価', 'ペルソナ分析', 'A/Bテスト'], a: 3, explain: 'A/Bテストは、複数のバージョンを比較し、より良い結果をもたらすデザインやコンテンツを特定する手法です。'},
+  {q: 'Webフォントとして利用される主なファイル形式のうち、Web用途に最適化されており、ファイルサイズが小さく、読み込み速度に優れている形式はどれか。', choices: ['TTF', 'OTF', 'WOFF', 'EOT'], a: 2, explain: 'WOFF（Web Open Font Format）はWebでの使用のために特別に設計された、圧縮されたフォント形式で、現在最も推奨されています。'},
+  {q: 'CSSでスタイルを適用する際の**「詳細度（Specificity）」**において、IDセレクタ（例：`#main`）とクラスセレクタ（例：`.box`）を比較した場合、優先順位が高いのはどちらか。', choices: ['IDセレクタ', 'クラスセレクタ', '同じ優先順位である', 'スタイルシートの記述順による'], a: 0, explain: 'CSSの詳細度は「ID > クラス > 要素」の順で高くなります。IDセレクタが最も優先されます。'},
+  {q: 'Webサイトの閲覧者が、入力フォームなどに誤って個人情報を入力しないように配慮するなど、**個人情報の取り扱いに関するルール**を定めた日本の法律はどれか。', choices: ['特定商取引法', '景品表示法', '個人情報保護法', '不正競争防止法'], a: 2, explain: '個人情報保護法は、個人情報を取り扱う事業者の義務等を定める法律です。'},
+  {q: 'Webサーバーがリクエストを受け取った際、**「ページが恒久的に別のURLへ移動した」**ことをブラウザに伝えるHTTPステータスコードはどれか。', choices: ['200 OK', '404 Not Found', '301 Moved Permanently', '500 Internal Server Error'], a: 2, explain: '301は恒久的な転送（リダイレクト）を示し、検索エンジンに対してもURLの変更を伝えます。'},
+  {q: 'Webサイトで使用するフォントの分類で、**文字のストロークの端に装飾（セリフ）**がある書体はどれか。', choices: ['ゴシック体', 'サンセリフ体', 'セリフ体', '明朝体'], a: 2, explain: 'セリフ体（Serif）は、欧文書体において文字の端に「ひげ」や「飾り」がある書体です。日本語の明朝体はセリフ体に分類されます。'},
+  {q: 'ウェブサイトの企画・制作・運用のガイドラインを策定し、Web技術の標準化を主導している国際的な非営利団体はどこか。', choices: ['IETF', 'W3C', 'ICANN', 'ISO'], a: 1, explain: 'W3C（World Wide Web Consortium）は、HTML、CSSなどのWeb技術の仕様（標準）を策定・勧告している組織です。'},
+  {q: 'Webサーバーにファイルをアップロードしたり、ダウンロードしたりする際に利用されるファイル転送プロトコルはどれか。', choices: ['HTTP', 'SMTP', 'POP3', 'FTP'], a: 3, explain: 'FTP（File Transfer Protocol）は、クライアントとサーバー間でファイルを転送するために広く利用されています。'},
+  {q: 'Webサイトの画像を、ピクセル数ではなく、**XML形式のテキスト**で定義し、拡大・縮小しても劣化しない特徴を持つ画像形式はどれか。', choices: ['JPEG', 'PNG', 'GIF', 'SVG'], a: 3, explain: 'SVG（Scalable Vector Graphics）は、ベクター形式であり、Web上でのアイコンやロゴなどに適しています。'},
+  {q: 'HTMLの`<head>`要素内に記述するメタ情報で、スマートフォンなどのモバイル端末でWebサイトを表示する際の**表示領域（ビューポート）の幅やスケール**を指定するタグはどれか。', choices: ['`<meta name="author">`', '`<meta name="keywords">`', '`<meta name="viewport" content="...">`', '`<meta name="generator">`'], a: 2, explain: '`<meta name="viewport">`タグは、レスポンシブWebデザインにおいて、端末の画面サイズに合わせて適切に表示させるために必須です。'},
+  {q: '企業のウェブサイトにおいて、**サイト全体の構成や階層構造**を分かりやすく図示したもので、ユーザーのナビゲーションやSEO対策にも役立つ文書は何か。', choices: ['ワイヤーフレーム', 'サイトマップ', 'ユーザーストーリー', 'ペルソナ'], a: 1, explain: 'サイトマップは、ウェブサイトのページ間の関係性を示す図であり、通常、HTML版と検索エンジン用のXML版の両方が作成されます。'},
+  {q: 'Webサイトを構成する際に、ユーザーに直接公開するサーバーとは別に、ソースコードやリソースを管理・開発するための環境を何と呼ぶか。', choices: ['本番環境（Production）', 'ステージング環境（Staging）', 'テスト環境（Test）', 'ローカル環境（Local）'], a: 1, explain: 'ステージング環境は、本番公開直前の最終確認やクライアントの承認のために用意される、本番とほぼ同じ構成の環境です。'},
+  {q: 'CSSのプロパティで、要素の背景を固定し、スクロールしても動かないようにする設定はどれか。', choices: ['`background-attachment: scroll;`', '`background-repeat: no-repeat;`', '`background-position: center;`', '`background-attachment: fixed;`'], a: 3, explain: '`background-attachment: fixed;`を設定することで、背景画像がビューポートに固定され、コンテンツがスクロールしても動きません。'},
+];
+// 3. 実技編(知識)：選択式 (50問)
+const DATA_PRACTICAL_MC = [
+  {q: 'HTML5で、Webサイトの閲覧者が視覚障碍者や検索エンジンなど、**非視覚的環境**で画像の内容を理解するために記述すべき属性はどれか。', choices: ['`title`', '`alt`', '`src`', '`width`'], a: 1, explain: '`alt`属性（代替テキスト）は、画像が表示できない場合や非視覚的環境で、画像の内容を伝えるために必須です。'},
+  {q: 'CSSにおいて、**文字の色**を指定するプロパティはどれか。', choices: ['`background-color`', '`font-style`', '`color`', '`text-decoration`'], a: 2, explain: '`color`プロパティは文字の色（前景色）を指定します。`background-color`は背景色です。'},
+  {q: 'HTML5で、Webページに**ハイパーリンク**を作成するために使用する要素はどれか。', choices: ['`<img>`', '`<a>`', '`<p>`', '`<h1>`'], a: 1, explain: '`<a>`要素（アンカー要素）は、他のページやファイルへのリンクを作成するために使用されます。'},
+  {q: 'CSSで「黒」を色コードで指定する場合、最も**短い記述**で表現できるものはどれか。', choices: ['`#000000`', '`#FFF`', '`#000`', '`black`'], a: 2, explain: '16進数カラーコードでは、RRGGBBの各桁が同じ数字（例：`#000000`）の場合、`#000`のように3桁に短縮できます。'},
+  {q: 'HTML5において、Webページの**主要なナビゲーションリンク**のグループ化に最もセマンティック（意味的）に適切な要素はどれか。', choices: ['`<div>`', '`<nav>`', '`<section>`', '`<header>`'], a: 1, explain: '`<nav>`要素は、ナビゲーションリンクのセクションであることを示します。'},
+  {q: '要素の**横幅を300ピクセル**に指定するCSSプロパティと値の記述として、[ ] に入る適切な値は？<br>`width: [ ] ;`', choices: ['300px', '300', '300%', '300pt'], a: 0, explain: 'CSSでピクセル指定をする場合は、単位の`px`が必要です。'},
+  {q: 'CSSの**ボックスモデル**において、要素の境界線（`border`）の**外側**にある、他の要素との間に空けるスペースを設定するプロパティはどれか。', choices: ['`padding`', '`margin`', '`width`', '`outline`'], a: 1, explain: '`margin`は境界線の外側の余白、`padding`は境界線の内側（内容との間）の余白です。'},
+  {q: 'HTML5で、Webサイト上で**独立した一つの完結したコンテンツ**を示すために最も適切な要素はどれか。', choices: ['`<section>`', '`<aside>`', '`<article>`', '`<footer>`'], a: 2, explain: '`<article>`要素は、それだけで独立して意味を成すコンテンツを表すために使用されます。'},
+  {q: 'CSSにおいて、最も高い**セレクタの優先順位（詳細度）**を持つものはどれか。', choices: ['要素名セレクタ（例：`p`）', 'クラスセレクタ（例：`.box`）', 'IDセレクタ（例：`#main`）', '`style`属性を用いたインラインスタイル'], a: 3, explain: 'インラインスタイル（HTMLタグ内の`style=""`属性）が最も優先されます。'},
+  {q: 'ユーザーが入力した情報をサーバーに送信するための**送信ボタン**を作成するために、`<input>`要素に指定する`type`属性の値はどれか。', choices: ['`type="button"`', '`type="reset"`', '`type="submit"`', '`type="text"`'], a: 2, explain: '`type="submit"`が、フォームの内容をサーバーに送信する役割を持つボタンを作成します。'},
+  {q: '要素をブロックレベル要素のように、幅や高さを指定でき、かつテキストを流し込めるようにする`display`プロパティの値はどれか。', choices: ['`inline`', '`block`', '`none`', '`inline-block`'], a: 3, explain: '`inline-block`は、`width/height`を指定でき、要素が横に並ぶように振る舞います。'},
+  {q: 'Webページで**表（テーブル）**を作成する際に、必ず使用する要素は？', choices: ['`<ul>`', '`<td>`', '`<table>`', '`<section>`'], a: 2, explain: '表を定義する最も基本的な要素です。'},
+  {q: 'CSSで、要素にマウスカーソルを合わせたときのスタイルを指定する**擬似クラス**はどれか。', choices: ['`:focus`', '`:active`', '`:visited`', '`:hover`'], a: 3, explain: '`:hover`は、要素にカーソルが乗った状態を指定します。'},
+  {q: 'HTML5で、Webページの**文書構造の区切り**として汎用的に使用される要素はどれか。', choices: ['`<span>`', '`<div>`', '`blockquote`', '`<main>`'], a: 1, explain: '`<div>`（ディビジョン）は、特定の意味を持たず、レイアウトの区切りとして広く使用されます。'},
+  {q: 'ボックスモデルにおいて、内容（コンテンツ）と境界線（`border`）の間にあるスペースを設定するプロパティはどれか。', choices: ['`margin`', '`padding`', '`width`', '`outline`'], a: 1, explain: '`padding`は、要素の内容（テキストや画像）と枠線の間の余白（内側の余白）です。'},
+  {q: 'リンクを設定する際に、別ウィンドウ（タブ）で開くように指定する`target`属性の値はどれか。', choices: ['`_self`', '`_parent`', '`_top`', '`_blank`'], a: 3, explain: '`target="_blank"`でリンク先を新しいウィンドウまたはタブで開きます。'},
+  {q: 'CSSファイルをHTML文書に適用する最も一般的な方法はどれか。', choices: ['`<body>`タグ内に`<style>`要素を記述する', '`<head>`タグ内に`<link>`要素を記述する', '`<footer>`タグ内に`<script>`要素を記述する', '外部CSSファイルをコピー＆ペーストする'], a: 1, explain: '**`<link>`要素**を`<head>`内に記述し、外部CSSファイルを読み込むのが標準的な方法です。'},
+  {q: 'HTMLの基本構造において、CSSやJavaScriptの読み込み、ページのタイトルなど、**ユーザーに表示されない情報**を記述するエリアを示す要素は？', choices: ['`<body>`', '`<head>`', '`<footer>`', '`<section>`'], a: 1, explain: '**`<head>`要素**には、文書のメタデータ（タイトル、文字コードなど）を記述します。'},
+  {q: '特定の要素に**クラス属性**（例：`<div class="main">`）でスタイルを適用する際のCSSセレクタの記法はどれか。', choices: ['`#main`', '`.main`', '`main`', '`[main]`'], a: 1, explain: 'クラスセレクタは、要素名の前に**ドット（`.`）**を付けて記述します。'},
+  {q: 'ページのメインコンテンツを記述する領域を示すために最も適切な要素はどれか。', choices: ['`<section>`', '`<aside>`', '`<article>`', '`<main>`'], a: 3, explain: '**`<main>`要素**は、文書の主要なコンテンツ（各ページで固有な内容）を示すために使用されます。'},
+  {q: '以下のCSS記述で、指定した要素を**非表示**にするプロパティと値の組み合わせはどれか。', choices: ['`visibility: hidden;`', '`opacity: 0;`', '`display: none;`', '`z-index: -1;`'], a: 2, explain: '**`display: none;`** は、要素を非表示にし、かつその要素が占めていた空間も取り除きます。'},
+  {q: 'HTML文書の冒頭に記述し、使用するHTMLのバージョン（規格）をブラウザに伝えるための記述はどれか。', choices: ['`<title>`', '`<meta>`', '`<!DOCTYPE html>`', '`<html>`'], a: 2, explain: '**`<!DOCTYPE html>`** は、HTML5文書であることを宣言するための記述です。'},
+  {q: 'CSSで要素の**背景画像**を指定するプロパティは？', choices: ['`image-src`', '`background-image`', '`src-image`', '`content-image`'], a: 1, explain: '要素の背景画像を指定するには、`background-image`プロパティを使用します。'},
+  {q: 'Webサイトのリンクテキストの色を、訪問済みの状態（クリックした後）に変更するためのCSSの**擬似クラス**は？', choices: ['`:hover`', '`:active`', '`:link`', '`:visited`'], a: 3, explain: '`:visited`は、ユーザーがすでにアクセスしたリンクにスタイルを適用する擬似クラスです。'},
+  {q: 'HTMLで、文章を段落としてマークアップするために使用される要素は？', choices: ['`<span>`', '`<br>`', '`<p>`', '`<div>`'], a: 2, explain: '`<p>`要素は、一つの段落（パラグラフ）を表します。'},
+  {q: 'Webサイトで使用する画像形式で、**透過性**（透明な背景）と**可逆圧縮**（画質の劣化がない圧縮）に対応しており、ロゴやアイコンに適している形式は？', choices: ['JPEG', 'GIF', 'PNG', 'SVG'], a: 2, explain: '**PNG**は、高い透過性と可逆圧縮を特徴とし、ロゴやイラストに適しています。'},
+  {q: 'CSSで要素を**中央揃え**にするために、ブロックレベル要素に設定するプロパティと値の組み合わせは？', choices: ['`text-align: center;`', '`margin: auto;`', '`align-items: center;`', '`position: center;`'], a: 1, explain: 'ブロックレベル要素を水平方向の中央に配置するには、`margin: auto;`（左右のマージンを自動調整）を設定します。'},
+  {q: 'HTMLのフォーム要素で、ユーザーに**複数行のテキスト**を入力させるために使用する要素は？', choices: ['`<input type="text">`', '`<textarea>`', '`<select>`', '`<label>`'], a: 1, explain: '`<textarea>`要素は、複数行にわたる長いテキストの入力を受け付けます。'},
+  {q: 'CSSのプロパティで、テキストの行と行の間のスペース（行間）を設定するものは？', choices: ['`text-spacing`', '`line-height`', '`font-space`', '`letter-spacing`'], a: 1, explain: '`line-height`は、行の高さを指定し、行間を調整します。'},
+  {q: 'HTMLで、箇条書きのリスト（順序なしリスト）を作成するために使用する要素は？', choices: ['`<ol>`', '`<ul>`', '`<li>`', '`<dl>`'], a: 1, explain: '`<ul>`要素（Unordered List）は、順序のない箇条書きのリストを定義します。'},
+  {q: 'CSSで要素に**影**を付けるためのプロパティは？', choices: ['`box-shadow`', '`element-shadow`', '`text-shadow`', '`filter: drop-shadow`'], a: 0, explain: 'ブロック要素に影を付けるには`box-shadow`を、テキストに影を付けるには`text-shadow`を使用します。'},
+  {q: 'CSSで、要素を他の要素の上に重ねて表示するためのプロパティは？', choices: ['`opacity`', '`display`', '`z-index`', '`position`'], a: 2, explain: '`z-index`プロパティは、要素の重なり順（Z軸方向）を指定します。'},
+  {q: 'HTML5で、文章中の**特に重要なテキスト**を強調するために使用される要素は？', choices: ['`<b>`', '`<i>`', '`<strong>`', '`<mark>`'], a: 2, explain: '`<strong>`要素は、その内容が**重要**であることを意味的に強調します。`<b>`は単に見た目を太字にする要素です。'},
+  {q: 'CSSの`position`プロパティで、親要素を基準として位置を決める値は？', choices: ['`static`', '`fixed`', '`absolute`', '`relative`'], a: 3, explain: '`position: relative;`にすると、要素自身を基準として、他のプロパティ（top, leftなど）で位置を微調整できます。'},
+  {q: 'Webサイトで使用する画像形式で、**アニメーション**に対応しており、色数が256色までに制限される形式は？', choices: ['JPEG', 'GIF', 'PNG', 'WebP'], a: 1, explain: '**GIF**は、アニメーションと透明度（2値）に対応しますが、表現できる色数が少ないです。'},
+  {q: 'CSSで要素の**外枠線**（境界線）を設定するプロパティは？', choices: ['`outline`', '`border`', '`shadow`', '`line`'], a: 1, explain: '`border`プロパティは、要素の幅や色、スタイルなど、外枠線の詳細を設定します。'},
+  {q: 'HTMLで、ページのタイトルをブラウザのタブなどに表示させるために、`<head>`内に記述する要素は？', choices: ['`<h1>`', '`<meta>`', '`<title>`', '`<body>`'], a: 2, explain: '`<title>`要素は、Webページのタイトルを定義します。'},
+  {q: 'CSSで、要素が**画面をスクロールしても常に同じ位置**に留まるように設定する`position`の値は？', choices: ['`static`', '`relative`', '`absolute`', '`fixed`'], a: 3, explain: '`position: fixed;`は、要素をビューポート（画面）の特定の場所に固定します。'},
+  {q: 'HTMLのフォームで、ユーザーに**一つの選択肢だけ**を選ばせるために使用する`<input>`の`type`属性の値は？', choices: ['`checkbox`', '`radio`', '`select`', '`submit`'], a: 1, explain: '`type="radio"`は、同じ`name`属性を持つグループ内で、一つだけ選択できるボタンを作成します。'},
+  {q: 'CSSで、要素の**文字サイズ**を指定するプロパティは？', choices: ['`text-size`', '`font-family`', '`font-weight`', '`font-size`'], a: 3, explain: '`font-size`プロパティは、テキストの大きさを指定します。'},
+  {q: 'HTML5で、Webページ上の**フッター（著作権情報、連絡先など）**を示すために使用される要素は？', choices: ['`<section>`', '`<nav>`', '`<footer>`', '`<details>`'], a: 2, explain: '`<footer>`要素は、最も近いセクショニングルート（ページやセクション）のフッターを表します。'},
+  {q: 'CSSで**複数のクラス**（例: `.box .small`）を指定した場合、適用される要素は？', choices: ['`.box`の子要素である`.small`', '`.box`と`.small`の両方のクラスを持つ要素', '`.box`または`.small`のいずれかのクラスを持つ要素', '`.small`の子要素である`.box`'], a: 1, explain: 'セレクタをスペースで区切らずに連続して記述すると、**両方のクラス**を持つ要素にのみスタイルが適用されます。'},
+  {q: 'HTMLで、画像に**キャプション**（図の説明文）を関連付けて表示するために使用する要素の組み合わせは？', choices: ['`<img>`と`<p>`', '`<figure>`と`<figcaption>`', '`<div>`と`<span>`', '`<table>`と`<th>`'], a: 1, explain: '`<figure>`で画像（`<img>`）を囲み、`<figcaption>`でキャプションを提供します。'},
+  {q: 'CSSの`background-repeat`プロパティで、背景画像を**繰り返し表示しない**ようにする値は？', choices: ['`repeat`', '`repeat-x`', '`no-repeat`', '`space`'], a: 2, explain: '`no-repeat`は、背景画像を一度だけ表示し、繰り返しません。'},
+  {q: 'HTMLの属性で、要素に**一意の識別名**を付け、CSSやJavaScriptからその要素を特定するために使用されるものは？', choices: ['`class`', '`name`', '`type`', '`id`'], a: 3, explain: '`id`属性は、文書内で**一つだけ**の要素を一意に識別するために使われます。'},
+  {q: 'CSSで、要素の**不透明度（透明度）**を設定するプロパティは？', choices: ['`visibility`', '`display`', '`opacity`', '`alpha`'], a: 2, explain: '`opacity`プロパティは、値0（完全透明）から1（完全不透明）で要素の不透明度を調整します。'},
+  {q: 'HTMLで、**順序付きのリスト**（番号付きリスト）を作成するために使用する要素は？', choices: ['`<ul>`', '`<dl>`', '`<ol>`', '`<li>`'], a: 2, explain: '`<ol>`要素（Ordered List）は、番号やアルファベットで順序を示すリストを定義します。'},
+  {q: 'CSSの**単位**で、親要素の文字サイズ（`font-size`）を基準にした相対的なサイズを表すものは？', choices: ['`px`', '`em`', '`rem`', '`%`'], a: 1, explain: '`em`は、その要素が継承した親要素のフォントサイズを基準（1em = 100%）とする相対単位です。'},
+  {q: 'Webサイトで使用する画像形式で、**ベクター画像**（拡大縮小しても画質が劣化しない）を作成するために使用されるものは？', choices: ['JPEG', 'PNG', 'GIF', 'SVG'], a: 3, explain: '**SVG (Scalable Vector Graphics)** は、XMLベースのベクター画像フォーマットです。'},
+  {q: 'HTMLで、フォーム内の入力項目（`<input>`など）に対して、**説明文**を関連付けるために使用する要素は？', choices: ['`<figcaption>`', '`<legend>`', '`<label>`', '`<header>`'], a: 2, explain: '`<label>`要素は、フォーム部品と説明文を結びつけ、アクセシビリティを高めます。'},
+  {q: 'CSSで、テキストを**中央揃え**にするために使用するプロパティと値の組み合わせは？', choices: ['`align-content: center;`', '`text-align: center;`', '`vertical-align: middle;`', '`display: center;`'], a: 1, explain: '要素内のテキストを中央揃えにするには`text-align: center;`を使用します。'}
+];
+// 4. 実技編(記述)：コーディング (30問) ★ヒント・徹底解説強化版★
+const DATA_PRACTICAL_CODE = [
+    // ----------------------------------------------------
+    // フェーズ1: パス/リンク/レイアウトの基本 (ID 1-4)
+    // ----------------------------------------------------
+    {
+        id: 1,
+        q: 'dataフォルダ内のindex.htmlで正しく表示できない画像を、正常に表示できるようにソースを修正しなさい。（ファイル構造を考慮し「img/img001.jpg」を適切な相対パスに修正）',
+        initialCode: 
+`<body>
+<h1>横浜の最新情報</h1>
+<h2>春の横浜お勧め観光スポット</h2>
+<img src="img/img001.jpg" alt="時計台の画像" class="watch" >
+<p>4月、横浜の春には恒例になった、大道芸イベントが開催されます。</p>
+</body>`,
+        solution: 
+`<body>
+<h1>横浜の最新情報</h1>
+<h2>春の横浜お勧め観光スポット</h2>
+<img src="images/img001.jpg" alt="時計台の画像" class="watch" >
+<p>4月、横浜の春には恒例になった、大道芸イベントが開催されます。</p>
+</body>`,
+        explanation: '画像が表示されない原因は、ファイルパスの誤りです。フォルダ名が`img`ではなく`images`である場合、パスを修正する必要があります。',
+        hint: 'フォルダ名を確認しましょう。<br>コードには <code>img/</code> と書かれていますが、実際のフォルダ名は <code>images</code> かもしれません。',
+        oteage: 'パソコンはとても真面目なので、「imgフォルダにあるよ」と言われたら、一文字も違わず「img」という名前の部屋を探しに行きます。<br>でも、実際の部屋の名前が「images」だったら？<br>「そんな部屋ないよ！」とパニックになって画像が表示されません。<br>正解は、コードの中の住所を「img」から「images」に書き換えてあげることです。',
+        point: '相対パスの指定ミスは一番多いエラーです！<br>フォルダ名が一文字でも違うと表示されません。'
+    },
+    {
+        id: 2,
+        q: 'h2要素の下部にある3つのテキストから各ページへのリンクが正常に行われるようにしなさい。その際、HOMEはindex.htmlに、ニュースはnews.htmlに、交通案内はaccess.htmlに、それぞれリンクを設定しなさい。',
+        initialCode: 
+`<body>
+<h1>横浜の最新情報</h1>
+<h2>春の横浜お勧め観光スポット</h2>
+<p>HOME | ニュース | 交通案内</p>
+<img src="images/clock_tower.jpg" alt="時計台の画像" class="watch">
+<p>4月、横浜の春には恒例になった、大道芸イベントが開催されます。</p>
+</body>`,
+        solution: 
+`<body>
+<h1>横浜の最新情報</h1>
+<h2>春の横浜お勧め観光スポット</h2>
+<p><a href="index.html">HOME</a> | <a href="news.html">ニュース</a> | <a href="access.html">交通案内</a></p>
+<img src="images/clock_tower.jpg" alt="時計台の画像" class="watch">
+<p>4月、横浜の春には恒例になった、大道芸イベントが開催されます。</p>
+</body>`,
+        explanation: 'テキストにリンクを設定するには、アンカー要素（`<a>`）を使用し、`href`属性にリンク先のファイル名を指定します。',
+        hint: 'リンクを作るタグは <code>&lt;a&gt;</code> です。<br>飛び先を指定する属性は <code>href="ファイル名"</code> ですよ！',
+        oteage: 'Webページ同士をつなぐ橋、それが「リンク」です。<br>リンクを作るには <code>&lt;a&gt;</code>（アンカー）タグを使います。<br>書き方のルールはこうです。<br><code>&lt;a href="行きたい場所"&gt;クリックする文字&lt;/a&gt;</code><br>HOMEという文字を、index.htmlに行けるように挟んであげましょう！',
+        point: '<code>&lt;a href="URL"&gt;リンク文字&lt;/a&gt;</code><br>これがWebの基本中の基本です！'
+    },
+    {
+        id: 3,
+        q: 'index.htmlのnav要素内のグローバルナビゲーションにある「ホーム」「協会情報」「試験概要」「お問い合わせ」に対し、それぞれ対応するページ（index.html、info.html、skilltest.html、form.html）へのリンクが正常に行われるように**HTMLコードを修正**しなさい。',
+        initialCode: 
+`<nav>
+    <ul>
+        <li>ホーム</li>
+        <li>協会情報</li>
+        <li>試験概要</li>
+        <li>お問い合わせ</li>
+    </ul>
+</nav>`,
+        solution: 
+`<nav>
+    <ul>
+        <li><a href="index.html">ホーム</a></li>
+        <li><a href="info.html">協会情報</a></li>
+        <li><a href="skilltest.html">試験概要</a></li>
+        <li><a href="form.html">お問い合わせ</a></li>
+    </ul>
+</nav>`,
+        explanation: 'リスト項目（`<li>`）の中にあるテキストを`<a>`タグで囲み、適切な`href`属性を設定します。',
+        hint: '<code>&lt;li&gt;</code> の <strong>中</strong> に <code>&lt;a&gt;</code> タグを入れます。<br>順番を間違えないように注意！',
+        oteage: 'これは「マトリョーシカ」みたいな入れ子構造の問題です。<br>一番外側が <code>&lt;ul&gt;</code>（リスト全体）、その中身が <code>&lt;li&gt;</code>（項目）、さらにその中の文字を <code>&lt;a&gt;</code>（リンク）にします。<br>つまり、<code>&lt;li&gt;</code> と <code>&lt;/li&gt;</code> の間に、さっき練習した <code>&lt;a href="..."&gt;文字&lt;/a&gt;</code> をすっぽり入れてあげればOKです！',
+        point: 'ナビゲーションメニューは<br><code>&lt;nav&gt; &gt; &lt;ul&gt; &gt; &lt;li&gt; &gt; &lt;a&gt;</code><br>という入れ子構造が鉄板です。'
+    },
+    {
+        id: 4,
+        q: 'スタイルシートを編集し、コンテンツ全体を囲む`#wrap`要素が、横方向で**常に中央に表示される**ように**CSSコードを修正**しなさい。',
+        initialCode: 
+`#wrap {
+    width: 800px;
+    /* ここに中央寄せのCSSを追記する */
+    border: 1px solid #ccc;
+    padding: 20px;
+}`,
+        solution: 
+`#wrap {
+    width: 800px;
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    padding: 20px;
+}`,
+        explanation: 'ブロックレベル要素（幅が決まっているもの）を中央寄せするには、`margin`の左右を`auto`に設定します。通常、`margin: 0 auto;`（上下0、左右自動）と記述します。',
+        hint: '「外側の余白」を調整するプロパティを使います。<br>左右の余白を「自動」にすると…？',
+        oteage: '箱（要素）を画面の真ん中に置きたいとき、手で動かすのではなく「余白」を使います。<br><code>margin</code> は箱の外側の余白です。<br><code>0 auto</code> と書くと、「上下の余白は0、左右の余白は自動（auto）」という意味になります。<br>左右の余白が自動で均等になれば、結果として箱は真ん中に来ますよね！',
+        point: 'ブロック要素の中央寄せは<br><b>margin: 0 auto;</b><br>テキストの中央寄せ（text-align: center）と混同しないように！'
+    },
+    // ----------------------------------------------------
+    // フェーズ2: 色・構造化・フォームの基本 (ID 5-8)
+    // ----------------------------------------------------
+    {
+        id: 5,
+        q: 'スタイルシートを編集して、`h1`要素の**背景の色を#002244**に、**文字の色を#ffffff**に、それぞれ変更しなさい。',
+        initialCode: 
+`h1 {
+    font-size: 24px;
+    padding: 10px;
+    /* ここに背景色と文字色を設定する */
+}`,
+        solution: 
+`h1 {
+    font-size: 24px;
+    padding: 10px;
+    background-color: #002244;
+    color: #ffffff; 
+}`,
+        explanation: '背景色は`background-color`、文字色は`color`プロパティで指定します。16進数カラーコードは`#`から始まります。',
+        hint: '背景は <code>background-color</code><br>文字は <code>color</code><br>（font-colorというプロパティはありませんよ！）',
+        oteage: 'CSSで色を塗る命令は2つあります。<br>画用紙の色を変えるのが <code>background-color</code>。<br>ペンのインクの色を変えるのが <code>color</code> です。<br>「#ffffff」みたいな暗号はカラーコードといって、Web上の色見本番号です。そのままコピペして使いましょう！',
+        point: '色の指定方法は<br><b>プロパティ: #カラーコード;</b><br>セミコロン（;）を忘れずに！'
+    },
+    {
+        id: 6,
+        q: '指定されたテキストを、**h1要素、h2要素、p要素、ol要素、ul要素**のすべてをもれなく使用し、ウェブページを適切に構造化しなさい。（初期コードの`<main>`内に、模範解答の構造を記述すること）',
+        initialCode: 
+`<main>
+ウェブデザイン技能検定の概要
+ウェブデザインに関する知識・技能、実務能力を問う検定です。
+試験には学科試験と実技試験があり、それぞれがマークシート方式と実技作業で実施されます。
+合格ライン
+学科・実技ともに100点満点中70点以上で合格となります。
+ただし、3級は実技試験の免除がありません。
+受検資格
+年齢、学歴、実務経験等に関係なく受検可能です。
+試験対策
+推奨される学習方法
+1. 学科は過去問を解く
+2. 実技は模範解答を元に手を動かす
+3. 知識を体系的に整理する
+注意事項
+・学科と実技は同時受検が原則です。
+・試験時間はそれぞれ60分です。
+</main>`,
+        solution: 
+`<main>
+    <h1>ウェブデザイン技能検定の概要</h1>
+    <p>ウェブデザインに関する知識・技能、実務能力を問う検定です。</p>
+    <p>試験には学科試験と実技試験があり、それぞれがマークシート方式と実技作業で実施されます。</p>
+
+    <h2>合格ライン</h2>
+    <p>学科・実技ともに100点満点中70点以上で合格となります。</p>
+    <p>ただし、3級は実技試験の免除がありません。</p>
+
+    <h2>受検資格</h2>
+    <p>年齢、学歴、実務経験等に関係なく受検可能です。</p>
+
+    <h2>試験対策</h2>
+    <h3>推奨される学習方法</h3>
+    <ol>
+        <li>学科は過去問を解く</li>
+        <li>実技は模範解答を元に手を動かす</li>
+        <li>知識を体系的に整理する</li>
+    </ol>
+    <h3>注意事項</h3>
+    <ul>
+        <li>学科と実技は同時受検が原則です。</li>
+        <li>試験時間はそれぞれ60分です。</li>
+    </ul>
+</main>`,
+        explanation: '見出し（`h1-h6`）、段落（`p`）、順序付きリスト（`ol`）、順序なしリスト（`ul`）を使って文書の意味構造を定義します。',
+        hint: '一番大きな見出しは <code>h1</code>。<br>「1. 2. 3.」と番号があるのは <code>ol</code>。<br>「・」の箇条書きは <code>ul</code> です。',
+        oteage: 'これは文章の「役職決め」です。<br>一番偉いタイトルには <code>&lt;h1&gt;</code> 社長。<br>次に偉い見出しには <code>&lt;h2&gt;</code> 部長。<br>普通の文章には <code>&lt;p&gt;</code> 平社員。<br>そしてリストには、「番号あり」なら <code>&lt;ol&gt;</code>、「番号なし（・）」なら <code>&lt;ul&gt;</code> というグループ名を付け、中身の項目一つ一つに <code>&lt;li&gt;</code> という名札を付けます。',
+        point: 'リストを作るときは<br>必ず <b>ul（またはol）</b> で囲んで、中身を <b>li</b> にする！<br>li単独では使えません。'
+    },
+    {
+        id: 7,
+        q: 'お問い合わせフォームの「メールアドレス」入力欄（`<input>`要素）に、**HTML5で推奨される適切な`type`**を設定し、かつ、テキスト「メールアドレス」と**紐づけるための`<label>`要素**を修正しなさい。',
+        initialCode: 
+`<div>
+    メールアドレス
+    <input name="email" id="userEmail" value="">
+</div>`,
+        solution: 
+`<div>
+    <label for="userEmail">メールアドレス</label>
+    <input type="email" name="email" id="userEmail" value="">
+</div>`,
+        explanation: 'メールアドレス用の入力欄には`type="email"`を指定します。また、アクセシビリティ向上のため、テキストを`<label>`で囲み、`for`属性でinputの`id`と紐付けます。',
+        hint: 'inputのタイプはそのまま <code>email</code>。<br>ラベルの紐付けは、labelの <code>for</code> と inputの <code>id</code> を同じ名前にします。',
+        oteage: 'スマホでメアドを入力するとき、キーボードに「@」が勝手に出てくると便利ですよね？<br>それを実現するのが <code>type="email"</code> です。<br>そして「ラベルの紐付け」とは、文字をクリックしても入力欄にカーソルが行くようにする親切機能。<br><code>label for="名前"</code> と <code>input id="名前"</code> を同じ名前にすることで、「この文字はこの入力欄の相棒だよ」と教えてあげるのです。',
+        point: '<b>&lt;label for="A"&gt;...&lt;/label&gt;</b><br><b>&lt;input id="A"&gt;</b><br>この「IDでの紐付け」はテストでよく出ます！'
+    },
+    {
+        id: 8,
+        q: 'スタイルシートを編集し、ナビゲーションメニューの各項目（`nav li`）について、**上下に5px、左右に10pxの余白（内側の余白）**を設定しなさい。',
+        initialCode: 
+`nav li {
+    display: inline-block;
+    /* ここにpaddingを設定する */
+    border: 1px solid #ddd;
+}`,
+        solution: 
+`nav li {
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #ddd;
+}`,
+        explanation: '内側の余白は`padding`プロパティです。値を2つ指定すると、1つ目が「上下」、2つ目が「左右」に適用されます。',
+        hint: '内側の余白は「P」から始まるプロパティ。<br><code>プロパティ: 上下 左右;</code> の順で書きます。',
+        oteage: '箱の内側にクッション材（プチプチ）を詰めるイメージです。<br><code>padding</code> がそのクッション材です。<br>数字を2つ書くときは、1つ目が「上下の厚み」、2つ目が「左右の厚み」になります。<br><code>padding: 5px 10px;</code> と書けば、上下5px、左右10pxの隙間が内側に生まれます。',
+        point: '<b>margin</b> = 外側の余白<br><b>padding</b> = 内側の余白<br>この違いは絶対覚えましょう！'
+    },
+    // ----------------------------------------------------
+    // フェーズ3: テーブル/リスト装飾/セレクタ (ID 9-16)
+    // ----------------------------------------------------
+    {
+        id: 9,
+        q: '以下の表の情報を含むHTMLテーブル（表）を作成しなさい。ヘッダー（<th>）は「項目」「内容」とし、適切なHTMLコードを記述しなさい。',
+        initialCode: 
+`<div>
+    項目 内容
+    開催日 2025年10月1日
+    会場 東京ビッグサイト
+</div>`,
+        solution: 
+`<table>
+    <tr>
+        <th>項目</th>
+        <th>内容</th>
+    </tr>
+    <tr>
+        <td>開催日</td>
+        <td>2025年10月1日</td>
+    </tr>
+    <tr>
+        <td>会場</td>
+        <td>東京ビッグサイト</td>
+    </tr>
+</table>`,
+        explanation: '表全体を`<table>`、行を`<tr>`、見出しセルを`<th>`、データセルを`<td>`でマークアップします。',
+        hint: '表を作るタグは4種類使います。<br>外枠：table、行：tr、見出し：th、データ：td。',
+        oteage: '表を作るときは、まず <code>&lt;table&gt;</code> という大きな箱を用意します。<br>その中に「1行」を表す <code>&lt;tr&gt;</code> の箱を入れます。<br>さらにその中に、マスの内容を入れます。<br>最初の行は見出しなので <code>&lt;th&gt;</code>（Heading）、2行目以降はデータなので <code>&lt;td&gt;</code>（Data）を使います。<br>箱の中に箱を入れる作業です！',
+        point: '<b>tr</b> (Table Row) が「行」です。<br>その中にセル（th/td）が入ります。入れ子構造を間違えないように！'
+    },
+    {
+        id: 10,
+        q: 'スタイルシートを編集し、ナビゲーションメニューの`ul`要素のリスト項目について、**行頭の記号（点や数字）が表示されない**ように**CSSコードを修正**しなさい。',
+        initialCode: 
+`nav ul {
+    /* ここにリストの行頭記号を消すCSSを追記する */
+    margin: 0;
+    padding: 0;
+}`,
+        solution: 
+`nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}`,
+        explanation: 'リストのマーカー（黒点など）を消すには、`list-style-type`プロパティを`none`に設定します。',
+        hint: 'リストのスタイル（List Style）を「無し（none）」にします。',
+        oteage: '箇条書きリスト（ul）を作ると、勝手に黒い点（・）がつきますよね。<br>メニューを作るとき、この点は邪魔です。<br>「リストのスタイル（見た目）はいらないよ！」と命令するのが <code>list-style-type: none;</code> です。<br>これでお化粧なしのスッピンリストになります。',
+        point: 'ナビゲーションメニューを作るときは<br><b>list-style-type: none;</b><br>が定型文です！'
+    },
+    {
+        id: 11,
+        q: '外部CSSファイル（`style.css`）を、HTML文書に正しくリンクさせなさい。',
+        initialCode: 
+`<head>
+  <meta charset="utf-8" />
+  <title>タイトル</title>
+  </head>`,
+        solution: 
+`<head>
+  <meta charset="utf-8" />
+  <title>タイトル</title>
+  <link rel="stylesheet" href="style.css">
+</head>`,
+        explanation: 'CSSファイルを読み込むには、`<head>`内に`<link>`要素を記述し、`rel="stylesheet"`属性と`href`属性を指定します。',
+        hint: 'リンクさせるタグを使います（aタグではありません）。<br>関係性（rel）は stylesheet です。',
+        oteage: 'HTML（骨組み）にCSS（服）を着せるには、「この服を着てね」という指示書が必要です。<br>それが <code>&lt;link&gt;</code> タグです。<br>「これはスタイルシートだよ（rel="stylesheet"）」「ファイルはここにあるよ（href="style.css"）」と教えてあげましょう。',
+        point: '<b>&lt;link rel="stylesheet" href="..."&gt;</b><br>閉じタグ（&lt;/link&gt;）は不要です！'
+    },
+    {
+        id: 12,
+        q: '`alt`属性が設定されていない画像に、その内容を表す適切な代替テキスト「会社のロゴ」を設定しなさい。',
+        initialCode: 
+`<img src="logo.png">`,
+        solution: 
+`<img src="logo.png" alt="会社のロゴ">`,
+        explanation: '画像には必ず`alt`属性を設定し、画像が表示されない場合やスクリーンリーダー向けに説明を記述します。',
+        hint: '属性名は <code>alt</code> です。<br>値に「会社のロゴ」と入れましょう。',
+        oteage: '画像が表示されなかったときや、目の見えない人が音声読み上げを使うときのために、「これは〇〇の画像ですよ」という説明文（名札）をつける必要があります。<br>それが <code>alt</code>（オルト）属性です。<br><code>alt="説明文"</code> をimgタグの中に書き足すだけです！',
+        point: '<b>alt属性</b>は必須です！<br>空にする場合（装飾用画像）でも <code>alt=""</code> と書くのがルールです。'
+    },
+    {
+        id: 13,
+        q: 'IDが`#main-img`の画像の幅を**400px**に設定し、高さを**自動調整**しなさい。',
+        initialCode: 
+`#main-img {
+    /* ここに幅と高さを設定する */
+}`,
+        solution: 
+`#main-img {
+    width: 400px;
+    height: auto;
+}`,
+        explanation: '幅は`width`、高さは`height`です。比率を崩さないために、片方を指定したらもう片方は`auto`にするのが一般的です。',
+        hint: '幅：width、高さ：height。<br>自動：auto。単位（px）を忘れずに！',
+        oteage: '画像のサイズを変えるとき、幅（width）だけを400pxに変えると、高さが変わらないので画像が横に伸びて潰れてしまいます。<br>「幅に合わせて高さもいい感じにして！」と頼むのが <code>height: auto;</code> です。<br>これで比率を保ったままサイズ変更ができます。',
+        point: '<b>height: auto;</b> を指定しないと、<br>画像が歪んでしまうことがあるので注意！'
+    },
+    {
+        id: 14,
+        q: 'クラス名が`.highlight`のテキストの**文字色を赤（`#ff0000`）**に変更するCSSルールを記述しなさい。',
+        initialCode: 
+`/* ここに.highlightのスタイルを定義する */`,
+        solution: 
+`.highlight {
+    color: #ff0000;
+}`,
+        explanation: 'クラスセレクタは`.`（ドット）で始めます。文字色は`color`プロパティです。',
+        hint: 'クラスなのでドットから書き始めます。<br>文字の色を変えるプロパティは？（font-colorではありません）',
+        oteage: 'CSSで「誰に」命令するかを指定するとき、クラス名の場合は先頭に「.（ドット）」を付けます。<br>「.highlightさん、文字色（color）を赤にして！」という命令を書けばOK。<br>ドットを忘れると「highlightというタグ」を探してしまい、命令が届きません。',
+        point: '<b>.クラス名 { ... }</b><br>ドットを忘れると、タグ（要素）セレクタになってしまいます。'
+    },
+    {
+        id: 15,
+        q: 'ID名が`#footer`の要素の**文字サイズを12px**にするCSSルールを記述しなさい。',
+        initialCode: 
+`/* ここに#footerのスタイルを定義する */`,
+        solution: 
+`#footer {
+    font-size: 12px;
+}`,
+        explanation: 'IDセレクタは`#`（シャープ）で始めます。文字サイズは`font-size`プロパティです。',
+        hint: 'IDなのでシャープから書き始めます。<br>フォントのサイズを変えるプロパティを使います。',
+        oteage: 'さっきはクラス（.）でしたが、今回はID（#）です。<br>IDへの命令は先頭に「#（シャープ）」を付けます。<br>「#footerさん、文字サイズ（font-size）を12pxにして！」と書きましょう。<br>フォントのサイズなのでそのまま <code>font-size</code> です。',
+        point: '<b>#ID名 { ... }</b><br>IDはページ内に1回しか使えない要素に使います。'
+    },
+    {
+        id: 16,
+        q: 'ページ内のすべてのリンク（`a`要素）の**下線（アンダーライン）を消す**ようにCSSを記述しなさい。',
+        initialCode: 
+`a {
+    /* ここに下線を消すCSSを追記する */
+}`,
+        solution: 
+`a {
+    text-decoration: none;
+}`,
+        explanation: 'テキストの装飾（下線など）を制御するのは`text-decoration`プロパティです。`none`で打ち消します。',
+        hint: 'テキスト（text）の装飾（decoration）を<br>無し（none）にします。',
+        oteage: 'リンク（aタグ）は、デフォルトだと青くて下線が引かれていますよね。<br>この下線は「テキストのデコレーション（装飾）」の一種です。<br>これを消したいので、<code>text-decoration</code> を <code>none</code>（なし）に設定します。<br>これでおしゃれなリンクボタンが作れます！',
+        point: 'リンクの下線を消す<br><b>text-decoration: none;</b><br>これもWebデザインの定番コードです！'
+    },
+    // ----------------------------------------------------
+    // フェーズ4: HTML5セマンティクスとフォームの応用 (ID 17-20)
+    // ----------------------------------------------------
+    {
+        id: 17,
+        q: '記事のコンテンツが終了した場所に、「記事コンテンツ終了」とブラウザに表示されないように**コメント**を挿入しなさい。',
+        initialCode: 
+`</article>
+`,
+        solution: 
+`</article>
+`,
+        explanation: 'HTMLのコメントアウトは``で終わります。',
+        hint: '<code>&lt;!--</code> と <code>--&gt;</code> で囲みます。',
+        oteage: 'Webページには表示させたくないけど、制作スタッフへのメモを残したい。<br>そんな時は「透明人間マント」を使います。<br>HTMLでは <code>&lt;!--</code> と <code>--&gt;</code> で囲んだ部分は、ブラウザ上で透明になって見えなくなります。<br>これをコメントアウトと呼びます。',
+        point: 'コメントは自分やチームのためのメモです。<br>ブラウザには表示されませんが、ソースコードを見ると誰でも見えます。'
+    },
+    {
+        id: 18,
+        q: 'サイトの著作権情報を含む`<div>`を、より意味（セマンティック）のある**HTML5の新しい要素（`footer`）**に修正しなさい。',
+        initialCode: 
+`<div id="copyright">
+    &copy; 2025 Company Name
+</div>`,
+        solution: 
+`<footer id="copyright">
+    &copy; 2025 Company Name
+</footer>`,
+        explanation: 'ページやセクションのフッター情報には、`<div>`ではなく`<footer>`要素を使用します。',
+        hint: '<code>div</code> タグを <code>footer</code> タグに書き換えるだけです。<br>IDなどはそのままでOK！',
+        oteage: '昔はなんでもかんでも <code>&lt;div&gt;</code> という箱に入れていました。<br>でもHTML5からは「ここはフッターだよ！」と自己主張できる専用の箱 <code>&lt;footer&gt;</code> ができました。<br>中身やIDはそのままで、箱の種類（タグ名）だけ書き換えてあげればOKです！',
+        point: 'HTML5では <b>div</b> よりも<br><b>header, main, footer, section</b><br>などの意味のあるタグを使うのが推奨されています。'
+    },
+    {
+        id: 19,
+        q: 'フォーム内のラジオボタン「男性」「女性」に対し、**どちらか一方しか選択できない**ように**HTMLコードを修正**しなさい。',
+        initialCode: 
+`<input type="radio" value="male">男性
+<input type="radio" value="female">女性`,
+        solution: 
+`<input type="radio" name="gender" value="male">男性
+<input type="radio" name="gender" value="female">女性`,
+        explanation: 'ラジオボタンをグループ化するには、同じ`name`属性（例：name="gender"）を付与します。',
+        hint: 'グループ化するための属性 <code>name</code> を追加します。<br>値は両方とも同じ（例："gender"）にしてください。',
+        oteage: 'ラジオボタンは、そのままだと「男性」も「女性」も両方押せてしまいます。<br>「君たちは同じチームだよ、どっちか一人しか出ちゃダメだよ」と教えるために、同じ「チーム名（name）」を付けます。<br><code>name="gender"</code> を両方に書き足せば、片方を選ぶともう片方が外れるようになります。',
+        point: 'ラジオボタンは <b>name属性が同じもの</b> が1つのグループになります。<br>名前が違うと、両方選択できてしまいます。'
+    },
+    {
+        id: 20,
+        q: '画面幅が**768px以下**の場合に、`#wrap`要素の`width`を**100%**に変更する**メディアクエリ**を、`#wrap`の定義の後に記述しなさい。',
+        initialCode: 
+`#wrap {
+    width: 800px;
+    margin: 0 auto;
+}
+
+/* ここにメディアクエリを記述する */`,
+        solution: 
+`#wrap {
+    width: 800px;
+    margin: 0 auto;
+}
+
+@media screen and (max-width: 768px) {
+    #wrap {
+        width: 100%;
+    }
+}`,
+        explanation: 'レスポンシブ対応には`@media`ルールを使用します。`max-width: 768px`は「幅が768px以下の場合」という意味です。',
+        hint: '<code>@media screen and (max-width: 768px) { ... }</code><br>というブロックの中に、新しいCSSを書きます。',
+        oteage: 'スマホ対応の切り札、メディアクエリです！<br>「もし画面幅が768px以下（max-width: 768px）だったら、このルールを使ってね」という条件分岐を書きます。<br><code>@media ... { }</code> という大きなカッコの中に、通常と同じように <code>#wrap { width: 100%; }</code> を書きます。<br>カッコの中にカッコが入る形になりますよ！',
+        point: '<b>@media (...) { セレクタ { ... } }</b><br>波カッコ <code>{}</code> が二重になる構造に注意しましょう！'
+    },
+    // ----------------------------------------------------
+    // フェーズ5: 応用的なCSS/HTMLタグ/メタ情報 (ID 21-30)
+    // ----------------------------------------------------
+    {
+        id: 21,
+        q: '外部サイトへのリンク（`<a>`要素）をクリックしたときに、**新しいタブでページが開く**ようにHTMLコードを修正しなさい。',
+        initialCode: 
+`<a href="https://example.com/external">外部サイトはこちら</a>`,
+        solution: 
+`<a href="https://example.com/external" target="_blank">外部サイトはこちら</a>`,
+        explanation: 'リンクを別タブ（ウィンドウ）で開くには、`target`属性に`_blank`を指定します。',
+        hint: 'ターゲット（target）属性を使います。<br>値はアンダースコアから始まる <code>_blank</code> です。',
+        oteage: '今のページを残したまま、新しいタブでリンク先を開きたい。<br>そんな時は、リンク（aタグ）に「ターゲットは空白（blank）のページだよ」と教えてあげます。<br><code>target="_blank"</code> というおまじないを追加するだけです。<br>アンダーバー（_）を忘れずに！',
+        point: '<b>target="_blank"</b><br>自分のサイトから離脱させたくない時によく使います。'
+    },
+    {
+        id: 22,
+        q: 'お問い合わせフォームに、複数行の意見を記述できる**テキストエリア**（`textarea`要素）を設置しなさい。',
+        initialCode: 
+`<div>
+    ご意見・ご要望
+    </div>`,
+        solution: 
+`<div>
+    ご意見・ご要望
+    <textarea name="comment" rows="5" cols="50"></textarea>
+</div>`,
+        explanation: '複数行のテキスト入力には`<textarea>`要素を使用します。閉じタグが必要です。',
+        hint: 'テキストエリアを作るタグ <code>&lt;textarea&gt;</code> を使います。<br>空でも閉じタグ <code>&lt;/textarea&gt;</code> が必要です！',
+        oteage: '一行だけの入力なら <code>&lt;input&gt;</code> ですが、感想文のような長い文章を書いてもらうには <code>&lt;textarea&gt;</code>（テキストエリア）を使います。<br>このタグは、中身が空っぽでも <code>&lt;textarea&gt;&lt;/textarea&gt;</code> と、閉じタグまで書く必要があります。',
+        point: '<b>input type="text"</b> = 1行だけ<br><b>textarea</b> = 複数行OK<br>この使い分けは重要です。'
+    },
+    {
+        id: 23,
+        q: 'クラス名`.box`の要素に、**幅1px、実線、灰色（`#ccc`）**の枠線（`border`）を**一括指定**で設定しなさい。',
+        initialCode: 
+`.box {
+    padding: 10px;
+    /* ここに枠線を設定する */
+}`,
+        solution: 
+`.box {
+    padding: 10px;
+    border: 1px solid #ccc;
+}`,
+        explanation: '枠線は`border`プロパティで一括指定できます。順序は「太さ 種類 色」が一般的です（順不同可）。',
+        hint: '<code>border: 太さ 種類 色;</code> の順で書きます。<br>実線は <code>solid</code> です。',
+        oteage: '枠線を引くには、3つの情報が必要です。<br>1. 太さ（1px）<br>2. 種類（実線=solid）<br>3. 色（#ccc）<br>これをバラバラに書くと大変なので、<code>border: 1px solid #ccc;</code> とまとめて書くのがプロの流儀です！',
+        point: '<b>border: 1px solid red;</b><br>この書き方はCSSの中で最もよく使うショートハンドの一つです。'
+    },
+    {
+        id: 24,
+        q: '段落（`p`要素）内のテキストを**太字**にするCSSルールを記述しなさい。',
+        initialCode: 
+`p {
+    font-size: 16px;
+    /* ここに太字にするCSSを追記する */
+}`,
+        solution: 
+`p {
+    font-size: 16px;
+    font-weight: bold;
+}`,
+        explanation: '文字の太さは`font-weight`プロパティです。太字にする値は`bold`です。',
+        hint: 'フォントの重さ（weight）をボールド（bold）にします。',
+        oteage: '文字を太くしたい＝文字に重み（weight）を持たせる、と考えます。<br>プロパティは <code>font-weight</code>。<br>値は「太く！」という意味の <code>bold</code> です。<br>これで力強い文字になります！',
+        point: '<b>font-weight: bold;</b><br>見出しタグ(h1など)は最初からboldになっています。'
+    },
+    {
+        id: 25,
+        q: '独立した記事コンテンツを囲む`<div>`要素を、HTML5で推奨される**適切なセクショニング要素**に修正しなさい。',
+        initialCode: 
+`<div id="article-section">
+    <h2>最新ニュース</h2>
+    <p>記事の内容...</p>
+</div>`,
+        solution: 
+`<section id="article-section">
+    <h2>最新ニュース</h2>
+    <p>記事の内容...</p>
+</section>`,
+        explanation: '見出しを含む一般的なコンテンツのまとまりには、`<div>`ではなく`<section>`を使用します。',
+        hint: '<code>div</code> タグを <code>section</code> タグに書き換えます。',
+        oteage: '前の問題でもやりましたが、HTML5は「意味」を大切にします。<br>ただの箱（div）ではなく、「ここはひとつの章（セクション）ですよ」と教えてあげるために、<code>&lt;section&gt;</code> タグを使います。<br>タグの名前を変えるだけで、検索エンジンにも親切なページになります。',
+        point: '<b>section</b> は「章」や「節」のような意味的まとまりを表します。<br>divはただの「入れ物」です。'
+    },
+    {
+        id: 26,
+        q: '性別を選択する**ドロップダウンリスト**（初期値は「選択してください」）を、`<select>`と`<option>`要素を使って作成しなさい。',
+        initialCode: 
+``,
+        solution: 
+`<select name="gender">
+    <option value="">選択してください</option>
+    <option value="male">男性</option>
+    <option value="female">女性</option>
+</select>`,
+        explanation: '親要素に`<select>`、選択肢に`<option>`を使用します。初期値（未選択）の`value`は空にするのが一般的です。',
+        hint: '<code>select</code> の中に <code>option</code> を入れます。<br>最初の選択肢（選択してください）も option で作ります。',
+        oteage: 'クリックするとビヨーンと伸びて選択肢が出るアレです。<br>全体を囲むのが <code>&lt;select&gt;</code>（セレクト）。<br>中の選択肢ひとつひとつが <code>&lt;option&gt;</code>（オプション）です。<br>「選択してください」という項目も、選択肢の一つとして作ってあげる必要があります。',
+        point: '<b>&lt;select&gt;</b> が外箱、<b>&lt;option&gt;</b> が中身。<br>これもセットで覚えましょう。'
+    },
+    {
+        id: 27,
+        q: 'IDが`#main-content`の要素を**左に寄せ**（`float`）、その後に続くIDが`#clear-fix`の要素で**回り込みを解除**（`clear`）するCSSを記述しなさい。',
+        initialCode: 
+`#main-content {
+    width: 60%;
+    /* ここにフロートを設定する */
+}
+#clear-fix {
+    /* ここに回り込み解除を設定する */
+}`,
+        solution: 
+`#main-content {
+    width: 60%;
+    float: left;
+}
+#clear-fix {
+    clear: both;
+}`,
+        explanation: '左寄せには`float: left;`、回り込み解除には`clear: both;`を使用します。',
+        hint: '浮動化（float）させて、クリア（clear）します。<br>解除の値は「両方（both）」が便利です。',
+        oteage: '要素を横並びにする古いけど重要な技術です。<br><code>float: left;</code> で要素を左に「浮かせ」ます。<br>でも浮かせっぱなしだと、下の要素が潜り込んで崩れてしまいます。<br>なので、次の要素で「浮遊終了！」と宣言する必要があります。<br>それが <code>clear: both;</code>（左右両方の浮遊を解除）です。',
+        point: '<b>float</b> を使ったら必ず <b>clear</b> する！<br>これを忘れると、下のレイアウトが崩れて大変なことになります😱'
+    },
+    {
+        id: 28,
+        q: 'ナビゲーション内のリンク（`nav a`）にマウスカーソルを乗せたとき（`:hover`）、**文字色を`#ff9900`**に変更するCSSルールを記述しなさい。',
+        initialCode: 
+`/* ここに:hoverのスタイルを定義する */`,
+        solution: 
+`nav a:hover {
+    color: #ff9900;
+}`,
+        explanation: 'マウスオーバー時のスタイルは`:hover`擬似クラスを使って定義します。',
+        hint: 'セレクタの後ろに <code>:hover</code> をつけます。<br><code>nav a:hover</code> という書き方になります。',
+        oteage: 'マウスが乗った瞬間だけデザインを変えたい。<br>そんな時は、名前の後ろに <code>:hover</code>（ホバー）を付けます。<br><code>nav a</code>（ナビの中のリンク）に対して、<code>nav a:hover</code> というルールを作れば、「マウスが乗った時専用のスタイル」になります。',
+        point: '<b>:hover</b> はスマホ（タッチ操作）では効きにくいですが、<br>PCサイトでは必須のインタラクションです🖱️'
+    },
+    {
+        id: 29,
+        q: '検索エンジン向けに、ページの概要（`description`）を**「ウェブデザイン技能検定3級の模擬試験です。」**として、`<head>`内に設定しなさい。',
+        initialCode: 
+`<head>
+  <meta charset="utf-8" />
+  <title>タイトル</title>
+  </head>`,
+        solution: 
+`<head>
+  <meta charset="utf-8" />
+  <title>タイトル</title>
+  <meta name="description" content="ウェブデザイン技能検定3級の模擬試験です。">
+</head>`,
+        explanation: 'ページの概要は`<meta name="description" content="...">`タグで指定します。',
+        hint: 'メタタグを使います。<br>名前（name）は description、中身（content）に文章を書きます。',
+        oteage: 'Google検索の結果画面に出る、タイトルの下の「説明文」。あれを設定するのがこの問題です。<br><code>&lt;meta&gt;</code> タグを使います。<br>「このタグの名前（name）は description（説明）です」「中身（content）はこれです」という風に書きます。<br>ユーザーには見えませんが、検索エンジンへの大事な手紙です💌',
+        point: 'この <b>description</b> は、Google検索結果の下に出る<br>「説明文」として使われます！SEOで超重要です✨'
+    },
+    {
+        id: 30,
+        q: 'HTML文書の文字コードが**「UTF-8」**であることを、`<head>`の最初のほうで正しく指定しなさい。',
+        initialCode: 
+`<head>
+  <title>タイトル</title>
+  <link rel="stylesheet" href="style.css">
+</head>`,
+        solution: 
+`<head>
+  <meta charset="utf-8" />
+  <title>タイトル</title>
+  <link rel="stylesheet" href="style.css">
+</head>`,
+        explanation: '文字コードの指定は`<meta charset="utf-8">`を使用します。文字化けを防ぐため、`<head>`内のなるべく早い位置に記述します。',
+        hint: 'メタタグで、キャラクターセット（charset）を指定します。',
+        oteage: 'これを忘れると、日本語が「」みたいに文字化けして読めなくなります！<br>「このページはUTF-8というルールで文字を書いてるよ」とブラウザに教えてあげる必要があります。<br><code>&lt;meta charset="utf-8"&gt;</code><br>呪文のように覚えて、必ず最初に書きましょう！',
+        point: 'これを書き忘れると、日本語が「文字化け」して読めなくなります😱<br>おまじないとして必ず書きましょう！'
+    }
+];
+// ==========================================
+// システムロジック (ここがアプリの脳みそです！)
+// ==========================================
+
+let currentMode = '';
+let currentQuestions = [];
+let currentIndex = 0;
+let score = 0;
+let isAnswered = false;
+
+const menuScreen = document.getElementById('menuScreen');
+const quizScreen = document.getElementById('quizScreen');
+const resultScreen = document.getElementById('resultScreen');
+
+// メニュー画面の表示
+function showMenu() {
+  menuScreen.classList.remove('hidden');
+  quizScreen.classList.add('hidden');
+  resultScreen.classList.add('hidden');
+}
+
+// クイズ開始処理
+function startQuiz(mode) {
+  currentMode = mode;
+  currentIndex = 0;
+  score = 0;
+  isAnswered = false;
+  
+  // データの読み込みチェック
+  if (mode === 'theory1') {
+    if(typeof DATA_THEORY_1 === 'undefined' || DATA_THEORY_1.length === 0) return alert('データ(DATA_THEORY_1)が読み込まれていません。');
+    currentQuestions = [...DATA_THEORY_1];
+    document.getElementById('modeTitle').textContent = '学科試験：第1回';
+  } else if (mode === 'theory2') {
+    if(typeof DATA_THEORY_2 === 'undefined' || DATA_THEORY_2.length === 0) return alert('データ(DATA_THEORY_2)が読み込まれていません。');
+    currentQuestions = [...DATA_THEORY_2];
+    document.getElementById('modeTitle').textContent = '学科試験：第2回';
+  } else if (mode === 'random') {
+    if(typeof DATA_THEORY_1 === 'undefined' || typeof DATA_THEORY_2 === 'undefined') return alert('データが足りません。');
+    const all = [...DATA_THEORY_1, ...DATA_THEORY_2];
+    // ランダムシャッフル
+    for(let i = all.length - 1; i > 0; i--){
+      const r = Math.floor(Math.random() * (i + 1));
+      [all[i], all[r]] = [all[r], all[i]];
+    }
+    currentQuestions = all.slice(0, 50);
+    document.getElementById('modeTitle').textContent = '学科試験：ランダム';
+  } else if (mode === 'practical_mc') {
+    if(typeof DATA_PRACTICAL_MC === 'undefined' || DATA_PRACTICAL_MC.length === 0) return alert('データ(DATA_PRACTICAL_MC)が読み込まれていません。');
+    currentQuestions = [...DATA_PRACTICAL_MC];
+    document.getElementById('modeTitle').textContent = '実技試験：知識編';
+  } else if (mode === 'practical_code') {
+    if(typeof DATA_PRACTICAL_CODE === 'undefined' || DATA_PRACTICAL_CODE.length === 0) return alert('データ(DATA_PRACTICAL_CODE)が読み込まれていません。');
+    currentQuestions = [...DATA_PRACTICAL_CODE];
+    document.getElementById('modeTitle').textContent = '実技試験：記述編';
+  }
+
+  menuScreen.classList.add('hidden');
+  quizScreen.classList.remove('hidden');
+  renderQuestion();
+}
+
+// 問題の描画
+function renderQuestion() {
+  const q = currentQuestions[currentIndex];
+  document.getElementById('progress').textContent = `問題 ${currentIndex + 1} / ${currentQuestions.length}`;
+  
+  // 問題文のセット
+  // ※問題文には太字(**)や改行(<br>)を含みたいので innerHTML のままにします
+  document.getElementById('qText').innerHTML = q.q || q.instruction || '問題文がありません';
+  
+  // エリアのリセット
+  document.getElementById('feedbackArea').innerHTML = '';
+  document.getElementById('feedbackArea').style.display = 'none';
+  document.getElementById('hintArea').style.display = 'none';
+  document.getElementById('oteageArea').style.display = 'none'; // お手上げエリアを隠す
+  document.getElementById('nextBtn').disabled = true;
+  document.getElementById('checkBtn').classList.remove('hidden');
+  document.getElementById('checkBtn').disabled = false;
+  isAnswered = false;
+
+  // モードによる画面切り替え
+  if (currentMode === 'practical_code') {
+    // --- 記述式（実技）モード ---
+    document.getElementById('mcArea').classList.add('hidden');
+    document.getElementById('codeArea').classList.remove('hidden');
+    
+    // ヒントボタンの表示制御
+    const hintBtn = document.getElementById('hintBtn');
+    if (q.hint) {
+        hintBtn.classList.remove('hidden');
+        document.getElementById('hintText').innerHTML = q.hint;
+    } else {
+        hintBtn.classList.add('hidden');
+    }
+
+    // お手上げボタンの表示制御
+    const oteageBtn = document.getElementById('oteageBtn');
+    if (q.oteage) {
+        oteageBtn.classList.remove('hidden');
+        document.getElementById('oteageText').innerHTML = q.oteage;
+    } else {
+        oteageBtn.classList.add('hidden');
+    }
+
+    const editor = document.getElementById('codeEditor');
+    editor.value = q.initialCode || '';
+    updatePreview(editor.value);
+    
+    // 入力時にプレビュー更新
+    editor.oninput = () => updatePreview(editor.value);
+
+  } else {
+    // --- 選択式（学科・知識）モード ---
+    document.getElementById('codeArea').classList.add('hidden');
+    document.getElementById('mcArea').classList.remove('hidden');
+    document.getElementById('checkBtn').classList.add('hidden'); // 選択式はボタン不要
+    
+    const choicesDiv = document.getElementById('choices');
+    choicesDiv.innerHTML = '';
+    q.choices.forEach((c, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'choice';
+      
+      // 【修正箇所】innerHTML ではなく textContent を使用
+      // これにより <main> などのタグも文字として正しく表示されます！
+      btn.textContent = c; 
+      
+      btn.onclick = () => checkMCAnswer(i, btn);
+      choicesDiv.appendChild(btn);
+    });
+  }
+}
+
+// プレビュー画面の更新（実技用）
+function updatePreview(code) {
+  const doc = document.getElementById('previewFrame').contentWindow.document;
+  doc.open();
+  doc.write(code);
+  doc.close();
+}
+
+// ヒント表示
+function showHint() {
+    document.getElementById('hintArea').style.display = 'block';
+}
+
+// お手上げ（徹底解説）表示
+function showOteage() {
+    document.getElementById('oteageArea').style.display = 'block';
+}
+
+// 選択式の正誤判定
+function checkMCAnswer(selectedIndex, btnElement) {
+  if (isAnswered) return;
+  isAnswered = true;
+  const q = currentQuestions[currentIndex];
+  
+  let isCorrect = (selectedIndex === q.a);
+
+  if (isCorrect) {
+    btnElement.classList.add('correct');
+    score++;
+    showFeedback(true, q.explain || q.explanation, q.point);
+  } else {
+    btnElement.classList.add('wrong');
+    const buttons = document.querySelectorAll('.choice');
+    if(buttons[q.a]) buttons[q.a].classList.add('correct');
+    showFeedback(false, q.explain || q.explanation, q.point);
+  }
+  document.getElementById('nextBtn').disabled = false;
+}
+
+// 記述式の正誤判定（ボタンクリック時）
+document.getElementById('checkBtn').onclick = () => {
+  if (isAnswered) return;
+  isAnswered = true;
+  const q = currentQuestions[currentIndex];
+  
+  // 正規化関数（空白・改行を削除して小文字化）
+  const normalize = (str) => str.replace(/\s+/g, '').toLowerCase();
+  
+  const userCode = normalize(document.getElementById('codeEditor').value);
+  const correctCode = normalize(q.solution || ''); 
+
+  let isCorrect = false;
+  
+  // 1. 完全一致判定（正規化後）
+  if (userCode === correctCode) {
+      isCorrect = true;
+  } 
+  // 2. キーワード部分一致判定（予備）
+  else if (q.keywords && Array.isArray(q.keywords)) {
+      isCorrect = q.keywords.every(k => userCode.includes(normalize(k)));
+  }
+  // 3. 実技データ特有の判定（solutionKeyがある場合など）
+  else if (q.solutionKey) {
+      isCorrect = userCode.includes(normalize(q.solutionKey));
+  }
+
+  const explanationText = q.explanation || q.explain;
+  
+  if (isCorrect) {
+    score++;
+    showFeedback(true, explanationText, q.point);
+  } else {
+    showFeedback(false, explanationText, q.point);
+  }
+  
+  document.getElementById('checkBtn').disabled = true;
+  document.getElementById('nextBtn').disabled = false;
+};
+
+// 解説表示（デザインリッチ版）
+function showFeedback(isCorrect, explainText, pointText) {
+  const div = document.getElementById('feedbackArea');
+  div.style.display = 'block';
+  div.className = 'box-base explanation';
+  div.style.borderColor = isCorrect ? 'var(--ok)' : 'var(--bad)';
+  div.style.backgroundColor = isCorrect ? '#f0fdf4' : '#fef2f2';
+  
+  const titleColor = isCorrect ? 'var(--ok)' : 'var(--bad)';
+  const titleText = isCorrect ? '🎉 正解です！' : '❌ 不正解...';
+
+  let html = `<span class="explanation-title" style="color:${titleColor}; border-color:${titleColor}">${titleText}</span>`;
+  html += `<div>${explainText || '（解説準備中）'}</div>`;
+
+  // ポイント解説がある場合のみ表示
+  if (pointText) {
+      html += `<div class="point-box">${pointText}</div>`;
+  }
+
+  div.innerHTML = html;
+}
+
+// 「次へ」ボタン
+document.getElementById('nextBtn').onclick = () => {
+  currentIndex++;
+  if (currentIndex >= currentQuestions.length) {
+    finishQuiz();
+  } else {
+    renderQuestion();
+  }
+};
+
+// 終了画面
+function finishQuiz() {
+  quizScreen.classList.add('hidden');
+  resultScreen.classList.remove('hidden');
+  document.getElementById('finalScore').textContent = `${score} / ${currentQuestions.length}`;
+  
+  const rate = (score / currentQuestions.length) * 100;
+  let msg = '';
+  if (rate >= 80) msg = '素晴らしい！合格レベルです！🎉';
+  else if (rate >= 60) msg = 'あと少し！復習して苦手を潰そう💪';
+  else msg = 'まずは基本からおさらいしましょう🔰';
+  document.getElementById('resultMsg').textContent = msg;
+}
+</script>
+</body>
+</html>

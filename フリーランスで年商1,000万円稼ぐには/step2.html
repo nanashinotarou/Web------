@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【2年目】自立準備 - お金と会話のプロへ</title>
+    <style>
+        /* 共通設定 */
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --primary: #00b894; /* Money Green */
+            --accent: #fdcb6e;
+            --text: #2d3436;
+            --danger: #d63031;
+        }
+        body { font-family: "Helvetica Neue", Arial, sans-serif; background-color: var(--bg-color); color: var(--text); margin: 0; padding: 20px; line-height: 1.6; }
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        .nav-back { display: inline-block; margin-bottom: 20px; color: var(--primary); text-decoration: none; font-weight: bold; }
+        
+        .header-section { background: var(--primary); color: white; padding: 30px; border-radius: 15px; margin-bottom: 30px; }
+        .header-section h1 { margin: 0 0 10px 0; }
+
+        .timeline-card { background: var(--card-bg); border-radius: 15px; padding: 25px; margin-bottom: 25px; border-left: 6px solid #ccc; }
+        .timeline-card.active { border-left-color: var(--primary); }
+        .timeline-card h3 { margin-top: 0; display: flex; justify-content: space-between; align-items: center; }
+        .period-badge { background: #eee; color: #555; font-size: 0.8em; padding: 4px 10px; border-radius: 10px; }
+
+        .task-list { list-style: none; padding: 0; margin: 15px 0; }
+        .task-list li { background: #f8f9fa; border-bottom: 1px solid #eee; padding: 10px 15px; margin-bottom: 5px; border-radius: 5px; display: flex; align-items: center; }
+        .task-list li::before { content: "⬜"; margin-right: 10px; }
+        
+        /* Specific for Step 2 */
+        .alert-box {
+            background-color: #ffeaa7;
+            border: 2px solid #fdcb6e;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            font-weight: bold;
+            color: #d35400;
+        }
+        .money-talk {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            background: #2d3436;
+            padding: 15px;
+            border-radius: 10px;
+            color: white;
+        }
+        .money-talk div { flex: 1; text-align: center; }
+        .money-talk h4 { margin: 0 0 5px 0; color: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="nav-back">← 全体マップに戻る</a>
+
+    <div class="header-section">
+        <div style="font-size: 0.9em; opacity: 0.9;">STEP 2</div>
+        <h1>2年目：ビジネス基礎構築</h1>
+        <p>目標：奥様（社長）の保護下を離れ、<br><strong>「一人のプロ」として他者と契約・交渉できる能力</strong>を持つ。</p>
+    </div>
+
+    <div class="timeline-card active">
+        <h3>
+            <span>💸 上半期：税金と契約の防具</span>
+            <span class="period-badge">防御力を上げる</span>
+        </h3>
+        <p>フリーランスは「税金」を知らないと死にます。稼いだお金を守る術を学びます。</p>
+        
+        <div class="alert-box">
+            ⚠️ 警告：<br>
+            「請求書の書き方」「確定申告」「契約書」を知らないデザイナーは、カモにされます。<br>
+            未払いトラブルを防ぐのは、デザイン力ではなく契約力です。
+        </div>
+
+        <h4>✅ この時期のクエスト</h4>
+        <ul class="task-list">
+            <li>クラウド会計ソフト（freeeやマネーフォワード）を導入する</li>
+            <li>「見積書」「請求書」「領収書」の役割を理解し、発行できるようになる</li>
+            <li>業務委託契約書を読み、不利な条項（修正無制限など）がないかチェックできるようになる</li>
+        </ul>
+    </div>
+
+    <div class="timeline-card active">
+        <h3>
+            <span>👂 下半期：ヒアリング能力</span>
+            <span class="period-badge">攻撃力を上げる</span>
+        </h3>
+        <p>「カッコいいサイト作って」と言われて、すぐに作り始めてはいけません。<br>相手の頭の中にある「本当のゴール」を聞き出す訓練です。</p>
+
+        <div class="money-talk">
+            <div>
+                <h4>三流</h4>
+                「言われた通り作りました」<br>（修正地獄へ...）
+            </div>
+            <div style="font-size: 2em;">➡</div>
+            <div>
+                <h4>一流</h4>
+                「御社の目的は売上UPですよね？<br>なら、このデザインが正解です」
+            </div>
+        </div>
+
+        <h4>✅ この時期のクエスト</h4>
+        <ul class="task-list">
+            <li>お客様の話を遮らず、メモを取りながら聞く練習</li>
+            <li>「なぜ？」「具体的には？」を使って、相手の曖昧な要望を具体化する</li>
+            <li>デザインの理由を「なんとなく」ではなく「ロジック（理由）」で説明する</li>
+        </ul>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; margin-bottom: 20px;">
+        <a href="index.html" class="nav-back" style="background: #ccc; padding: 10px 20px; border-radius: 5px; color: #333;">TOPへ戻る</a>
+    </div>
+</div>
+
+</body>
+</html>

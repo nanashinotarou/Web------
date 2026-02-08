@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>【1年目】修行時代 - スピードの鬼になれ</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --primary: #0984e3;
+            --accent: #fdcb6e;
+            --text: #2d3436;
+        }
+        body {
+            font-family: "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        
+        /* Navigation */
+        .nav-back {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Header */
+        .header-section {
+            background: var(--primary);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+        .header-section h1 { margin: 0 0 10px 0; }
+
+        /* Timeline Card */
+        .timeline-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 6px solid #ccc;
+        }
+        .timeline-card.active { border-left-color: var(--primary); }
+        .timeline-card h3 { margin-top: 0; display: flex; justify-content: space-between; align-items: center; }
+        .period-badge {
+            background: #eee; color: #555; font-size: 0.8em; padding: 4px 10px; border-radius: 10px;
+        }
+
+        /* Task List */
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin: 15px 0;
+        }
+        .task-list li {
+            background: #f8f9fa;
+            border-bottom: 1px solid #eee;
+            padding: 10px 15px;
+            margin-bottom: 5px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .task-list li::before {
+            content: "⬜";
+            margin-right: 10px;
+        }
+        
+        /* Daily Routine */
+        .routine-box {
+            background: #2d3436;
+            color: #dfe6e9;
+            padding: 20px;
+            border-radius: 10px;
+            font-family: monospace;
+        }
+        .time-slot { display: flex; margin-bottom: 8px; border-bottom: 1px solid #444; padding-bottom: 8px;}
+        .time { width: 80px; color: var(--accent); font-weight: bold; }
+        .action { flex: 1; }
+
+        /* Metaphor Box */
+        .metaphor {
+            background: #fff8e1;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        .metaphor strong { color: #d35400; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <a href="index.html" class="nav-back">← 全体マップに戻る</a>
+
+    <div class="header-section">
+        <div style="font-size: 0.9em; opacity: 0.9;">STEP 1</div>
+        <h1>1年目：基礎体力づくり</h1>
+        <p>目標：自分の頭の中にある「カッコいいデザイン」を、<br>
+        <strong>100%そのまま画面に表示できる技術</strong>を身につける。</p>
+    </div>
+
+    <div class="timeline-card active">
+        <h3>
+            <span>🌱 1〜3ヶ月目：模写（もしゃ）</span>
+            <span class="period-badge">最初の90日</span>
+        </h3>
+        <p>オリジナルのデザインは一切しなくていいです。プロが作ったサイトを「一字一句、1ピクセルもズレずに」真似して作ってください。</p>
+        
+        <div class="metaphor">
+            <strong>💡 たとえ話：</strong><br>
+            ギターで言う「コード練習」です。Fコードが押さえられないのに、オリジナル曲は作れませんよね？<br>
+            徹底的に「パクる（構造を理解する）」時期です。
+        </div>
+
+        <h4>✅ この時期のクエスト</h4>
+        <ul class="task-list">
+            <li>HTML/CSSの基礎本を1冊やりきる（Progateやドットインストールでも可）</li>
+            <li>好きなブランドのLP（縦長のページ）を画像として保存する</li>
+            <li>その画像を下敷きにして、コードを書いて<strong>「見た目そっくり」</strong>に再現する</li>
+            <li>これを3サイト分やる（最初は1サイトに1週間かかってもOK）</li>
+        </ul>
+    </div>
+
+    <div class="timeline-card active">
+        <h3>
+            <span>🔨 4〜6ヶ月目：道具のマスター</span>
+            <span class="period-badge">慣れてきた頃</span>
+        </h3>
+        <p>デザインツール（Figma, Photoshop）を「無意識」で使えるようにします。</p>
+
+        <div class="metaphor">
+            <strong>💡 たとえ話：</strong><br>
+            料理人が包丁を見ずに千切りできるように。<br>
+            「画像の切り抜きどうやるんだっけ？」とググっている時間は、プロの世界では「遅刻」と同じです。
+        </div>
+
+        <h4>✅ この時期のクエスト</h4>
+        <ul class="task-list">
+            <li>ショートカットキーを覚える（マウスの使用頻度を減らす）</li>
+            <li>バナー（広告画像）を1日3個作る練習をする</li>
+            <li>奥様（社長）から振られた雑用作業を、言われた期限の<strong>「半分」</strong>で提出する</li>
+        </ul>
+    </div>
+
+    <div class="timeline-card active">
+        <h3>
+            <span>🚀 7〜12ヶ月目：実戦投入</span>
+            <span class="period-badge">プロデビュー</span>
+        </h3>
+        <p>実際の案件に触れます。ここでの失敗は許されます（社長がカバーしてくれます）。</p>
+
+        <h4>✅ この時期のクエスト</h4>
+        <ul class="task-list">
+            <li>実案件のLPコーディングを担当する</li>
+            <li>修正指示（赤入れ）をもらったら、<strong>「なぜ修正されたか」</strong>をノートに書く</li>
+            <li>1ページを「朝から作り始めて、夕方にはほぼ完成」させるスピードを目指す</li>
+        </ul>
+    </div>
+
+    <div style="margin-top: 40px;">
+        <h2>📅 勝てるデザイナーの1日（理想）</h2>
+        <p>才能があっても、ダラダラやったら伸びません。このスケジュールを守れますか？</p>
+        
+        <div class="routine-box">
+            <div class="time-slot">
+                <div class="time">09:00</div>
+                <div class="action">デザイン・コーディング学習（午前中は脳が元気なので新しい技術を）</div>
+            </div>
+            <div class="time-slot">
+                <div class="time">12:00</div>
+                <div class="action">昼食（好きなサイトを見て「なぜこれがいいのか」考える）</div>
+            </div>
+            <div class="time-slot">
+                <div class="time">13:00</div>
+                <div class="action">実務・作業（奥様からの依頼など、手を動かす作業）</div>
+            </div>
+            <div class="time-slot">
+                <div class="time">17:00</div>
+                <div class="action">日報作成（今日できるようになったこと、できなかったことを記録）</div>
+            </div>
+            <div class="time-slot">
+                <div class="time">18:00</div>
+                <div class="action">業務終了（ここからは自由！映画や雑誌でセンスを磨く）</div>
+            </div>
+        </div>
+        <p style="font-size:0.8em; color:#666; text-align:right;">※これを1年間続けられたら、あなたは上位10%に入れます。</p>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px; margin-bottom: 20px;">
+        <a href="index.html" class="nav-back" style="background: #ccc; padding: 10px 20px; border-radius: 5px; color: #333;">TOPへ戻る</a>
+    </div>
+</div>
+
+</body>
+</html>

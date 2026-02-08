@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>デザイナーのためのiPad選び：2026決断ガイド</title>
+    <style>
+        :root {
+            --bg-color: #f4f4f9;
+            --text-color: #333;
+            --accent-air: #4facfe; /* Air Blue */
+            --accent-std: #f6d365; /* Standard Yellow */
+            --danger: #ff6b6b;
+            --success: #51cf66;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", "Hiragino Sans", Meiryo, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1, h2, h3 {
+            text-align: center;
+            color: #2c3e50;
+        }
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 20px;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+        .hero h1 { color: white; margin-bottom: 10px; font-size: 2.5em; }
+        
+        /* Section Cards */
+        .section-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        /* Chart/Flow Styles */
+        .flow-chart {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin: 30px 0;
+        }
+        .flow-box {
+            flex: 1;
+            min-width: 280px;
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #eee;
+            text-align: center;
+        }
+        .flow-box.stop {
+            border-color: var(--danger);
+            background-color: #fff0f0;
+        }
+        .flow-box.go {
+            border-color: var(--success);
+            background-color: #f0fff4;
+        }
+        .emoji-icon { font-size: 3em; display: block; margin-bottom: 10px; }
+
+        /* Model Comparison */
+        .comparison {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .model {
+            flex: 1;
+            padding: 20px;
+            border-radius: 12px;
+            position: relative;
+        }
+        .model.air {
+            background: linear-gradient(to bottom right, #eef7ff, #ffffff);
+            border: 2px solid var(--accent-air);
+        }
+        .model.std {
+            background: linear-gradient(to bottom right, #fffdf0, #ffffff);
+            border: 2px solid var(--accent-std);
+        }
+        .badge {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #333;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .model.air .badge { background: var(--accent-air); }
+        .model.std .badge { background: var(--accent-std); color: #444; }
+
+        /* Storage Meter */
+        .storage-bar-container {
+            margin: 20px 0;
+        }
+        .bar-label { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 5px;}
+        .bar-track {
+            background: #e9ecef;
+            height: 25px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+        .bar-fill {
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        .fill-sys { background: #adb5bd; width: 15%; } /* System */
+        .fill-apps { background: #ff922b; width: 30%; } /* Apps */
+        .fill-free { background: #51cf66; width: 55%; } /* Free */
+        .fill-risk { background: #fa5252; width: 95%; } /* Full */
+
+        /* App Grid */
+        .app-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        .app-item {
+            text-align: center;
+            font-size: 0.9em;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .warning-box {
+            background-color: #fff5f5;
+            border-left: 5px solid var(--danger);
+            padding: 15px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .comparison { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="hero">
+        <h1>iPad選び 2026決断ガイド</h1>
+        <p>「仕事道具」として選ぶか、「憧れ」で選ぶか。<br>あなたの現在地に合わせて最適なルートを案内します。</p>
+    </div>
+
+    <div class="section-card">
+        <h2>🛠️ そもそも、今買うべき？</h2>
+        <p>「イラストも描きたい」という気持ちがある方へ。以下のチェックを通過できますか？</p>
+        
+        <div class="flow-chart">
+            <div class="flow-box stop">
+                <span class="emoji-icon">🛑</span>
+                <h3>まずは「板タブ」ルート</h3>
+                <p><strong>PCでペンタブを使って、思い通りの線が引けますか？</strong></p>
+                <hr>
+                <p>まだ慣れていないなら、高いiPadは「宝の持ち腐れ」になりがち。<br>まずは数千円のペンタブで練習し、<strong>「稼げる」ようになってから</strong>iPadを買っても遅くありません。</p>
+            </div>
+
+            <div class="flow-box go">
+                <span class="emoji-icon">✅</span>
+                <h3>「Air」導入ルート</h3>
+                <p><strong>客先でのプレゼンや、時短ツールとして明確な用途がある。</strong></p>
+                <hr>
+                <p>仕事の効率をお金で買うフェーズです。<br>ストレスのない道具（iPad Air）を選び、サクサク仕事を回しましょう。</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2>📱 機種の選び方：ストレスの差</h2>
+        <p>性能の差ではありません。<strong>「毎日の小さなイライラ」</strong>をお金で消すかどうかの差です。</p>
+
+        <div class="comparison">
+            <div class="model std">
+                <div class="badge">予算重視</div>
+                <h3>iPad（無印）</h3>
+                <p><span style="font-size:2em">🔌</span><br><strong>充電が面倒</strong></p>
+                <ul>
+                    <li>ペンを使うたびに、キャップを外してケーブル接続が必要。</li>
+                    <li>画面のガラスに厚みがあり、ペン先が少し浮いて見える。</li>
+                </ul>
+                <p style="font-size:0.9em; color:#666;">※「とりあえず見れればいい」人向け</p>
+            </div>
+
+            <div class="model air">
+                <div class="badge">★仕事道具として推奨</div>
+                <h3>iPad Air (M2)</h3>
+                <p><span style="font-size:2em">🧲</span><br><strong>パチッと充電</strong></p>
+                <ul>
+                    <li>本体にくっつけるだけで充電・ペアリング完了。</li>
+                    <li>画面とペン先がピタッと吸い付く描き心地。</li>
+                    <li>反射防止でカフェやオフィスでも見やすい。</li>
+                    <li>色味が正確で、iPadで見たものと印刷物の差が少ない</li>
+                </ul>
+                <p style="font-size:0.9em; color:#0056b3;">※「道具に気を遣いたくない」人向け</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <h2>📦 容量（ストレージ）の選び方</h2>
+        <p>iPadの容量は「カバン」の大きさと同じです。後から大きくできません。</p>
+
+        <div class="app-grid">
+            <div class="app-item">📸 Photoshop<br>(激重)</div>
+            <div class="app-item">🎨 Illustrator<br>(重い)</div>
+            <div class="app-item">💠 Figma<br>(快適)</div>
+            <div class="app-item">🖼️ Canva<br>(快適)</div>
+        </div>
+
+        <div class="warning-box">
+            <strong>⚠️ 注意：Adobe InDesignについて</strong><br>
+            iPad版のInDesignアプリはありません！<br>
+            組版作業はPC必須です。iPadはあくまで「下書き・プレビュー用」となります。
+        </div>
+
+        <h3 style="margin-top:30px;">容量シミュレーション</h3>
+
+        <div class="storage-bar-container">
+            <div class="bar-label">
+                <span>128GB モデル（無印 / Air 最小構成）</span>
+                <span>残り：ギリギリ</span>
+            </div>
+            <div class="bar-track">
+                <div style="display:flex; width:100%; height:100%;">
+                    <div class="fill-sys" style="width:20%">システム</div>
+                    <div class="fill-apps" style="width:50%">Adobe & 素材</div>
+                    <div class="fill-free" style="background:#ddd; color:#555; width:30%">空き</div>
+                </div>
+            </div>
+            <p style="font-size:0.8em; color:#666;">
+                OSと必須アプリを入れると、半分以上埋まります。<br>
+                仕事のデータを入れると、1年後には「空き容量がありません」と戦うことに…。
+            </p>
+        </div>
+
+        <div class="storage-bar-container">
+            <div class="bar-label">
+                <span>256GB モデル（推奨）</span>
+                <span>残り：余裕あり</span>
+            </div>
+            <div class="bar-track">
+                <div style="display:flex; width:100%; height:100%;">
+                    <div class="fill-sys" style="width:10%">システム</div>
+                    <div class="fill-apps" style="width:25%">Adobe & 素材</div>
+                    <div class="fill-free" style="width:65%">自由スペース</div>
+                </div>
+            </div>
+            <p style="font-size:0.8em; color:#666;">
+                ポートフォリオ、フォント、重たいPSDデータを入れても余裕があります。<br>
+                <strong>「客先で見せたいデータが入らない！」という事故を防げます。</strong>
+            </p>
+        </div>
+    </div>
+
+    <div class="section-card" style="text-align: center; background: #ebf8ff;">
+        <h2>💡 結論：先輩からのアドバイス</h2>
+        <p><strong>【しまさん】</strong><br>
+        今はiPadを買わず、PCとペンタブ(板)でスキルを磨こう。<br>
+        稼いだお金で買うiPadが、一番かっこいい。</p>
+        <hr style="border:none; border-top:1px dashed #ccc; margin:20px 0;">
+        <p><strong>【あかさん】</strong><br>
+        <strong>iPad Air (M2) の 256GB</strong> を選ぼう。<br>
+        「充電の手間」と「容量不足の不安」を消して、<br>クリエイティブな時間にお金を使いましょう。</p>
+    </div>
+
+</div>
+
+</body>
+</html>

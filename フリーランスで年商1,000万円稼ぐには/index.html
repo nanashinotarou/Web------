@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ガレージハウスへの道：フリーランス生存戦略図</title>
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --card-bg: #ffffff;
+            --text-main: #2d3436;
+            --text-sub: #636e72;
+            --brand-color: #0984e3;
+            --money-color: #00b894;
+            --danger-color: #d63031;
+            --dream-color: #e17055;
+        }
+        body {
+            font-family: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        /* Header */
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #2d3436 0%, #000000 100%);
+            color: white;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        .header h1 { margin: 0; font-size: 2.2em; }
+        .header p { opacity: 0.8; margin-top: 10px; }
+        .dream-badge {
+            background: var(--dream-color);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9em;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        /* Card Styles */
+        .card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        h2 {
+            border-bottom: 3px solid var(--brand-color);
+            display: inline-block;
+            padding-bottom: 5px;
+            margin-top: 0;
+        }
+
+        /* Money Visualization */
+        .money-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .money-bar {
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            color: white;
+            font-weight: bold;
+            padding: 0 15px;
+        }
+        .bar-total { background: var(--text-main); width: 100%; justify-content: space-between;}
+        .bar-tax { background: var(--danger-color); width: 40%; font-size: 0.8em; justify-content: center;}
+        .bar-profit { background: var(--money-color); width: 60%; justify-content: center;}
+        
+        .annotation { font-size: 0.85em; color: var(--text-sub); margin-top: -10px; margin-bottom: 20px; }
+
+        /* Work Volume (添付画像のスタイル) */
+        .work-volume {
+            background: #fff8e1;
+            border-left: 8px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .calc-box {
+            font-family: monospace;
+            background: #2d3436;
+            color: #55efc4; /* Matrix Green */
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            margin-bottom: 20px;
+            line-height: 1.8;
+        }
+        .calc-title { color: #00b894; font-weight: bold; margin-bottom: 5px; display: block; }
+        .calc-hr { border-top: 1px dashed #55efc4; opacity: 0.5; margin: 10px 0; }
+        .punch-line { font-weight: bold; color: var(--text-main); margin-top: 15px; }
+
+        /* Roadmap Steps */
+        .step {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 30px;
+            align-items: flex-start;
+            padding-bottom: 20px;
+            border-bottom: 1px dashed #eee;
+        }
+        .step-num {
+            background: var(--brand-color);
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .step-content h3 { margin: 0 0 10px 0; }
+        .skill-tags span {
+            background: #dfe6e9;
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            margin-right: 5px;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        /* Buttons */
+        .btn-link {
+            display: inline-block;
+            background: var(--brand-color);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 15px;
+            transition: background 0.3s;
+            font-size: 0.9em;
+        }
+        .btn-link:hover { background: #0769b5; }
+        .btn-locked { background-color: #b2bec3; pointer-events: none; }
+
+        @media (max-width: 600px) {
+            .money-bar { font-size: 0.8em; }
+            .step { flex-direction: column; gap: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+
+    <div class="header">
+        <div class="dream-badge">目標：ガレージハウス建築</div>
+        <h1>Webデザイナー生存戦略</h1>
+        <p>夢を現実に変えるための「数字」と「覚悟」の地図</p>
+    </div>
+
+    <div class="card">
+        <h2>💰 年収600万円の正体</h2>
+        <p>会社員とは違い、フリーランスの売上がそのまま手取りになるわけではありません。<br>
+        <strong>「手取り600万（ガレージを建てる信用）」</strong>を得るには、これだけ稼ぐ必要があります。</p>
+
+        <div class="money-flow">
+            <div>
+                <div class="money-bar bar-total">
+                    <span>売上（年商）</span>
+                    <span>1,000万円</span>
+                </div>
+            </div>
+            <div style="text-align: center; font-size: 1.5em; line-height: 1;">⬇</div>
+            <div style="display:flex; width: 100%; gap: 5px;">
+                <div class="money-bar bar-tax">
+                    税金・経費<br>(約400万)
+                </div>
+                <div class="money-bar bar-profit">
+                    <strong>手取り<br>(約600万)</strong>
+                </div>
+            </div>
+        </div>
+        <p class="annotation">
+            ※ここから消費税、所得税、住民税、国保、年金、PC・ソフト代、家賃按分などが引かれます。<br>
+            <strong>結論：1,000万円売り上げて、やっと一人前です。</strong>
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>⚡ 1,000万稼ぐための仕事量</h2>
+        <p>では、1,000万円を稼ぐには、どれくらい手を動かせばいいのでしょうか？</p>
+        
+        <div class="work-volume">
+            月間の必要売上：約84万円
+        </div>
+
+        <p>今のあなたのスキル（未経験〜初心者）で計算してみましょう。</p>
+
+        <div class="calc-box">
+            <span class="calc-title">【現在地：下請けレベル】</span>
+            単価：LP 1本 10万円（相場）
+            <div class="calc-hr"></div>
+            必要本数：毎月 8.4本<br>
+            ＝ 3日に1本納品（休みなし）
+        </div>
+        
+        <div class="punch-line">
+            <p><strong>無理です。死んでしまいます。</strong></p>
+            <p>技術力と営業力がないまま独立すると、この「薄利多売の地獄」に落ちます。<br>
+            これを回避するには、<strong>単価を上げる（＝価値を上げる）</strong> しかありません。</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🗺️ 3年間の完全攻略チャート</h2>
+        <p>今のあなたは「レベル1」です。いきなりボス（年商1,000万）には勝てません。<br>各ステップをクリックして、今日やるべき特訓を確認してください。</p>
+
+        <div class="step">
+            <div class="step-num">1</div>
+            <div class="step-content">
+                <h3>修行時代：スピードの鬼になる</h3>
+                <p>まずは「言われたものを、プロの品質で、爆速で作る」こと。<br>基礎体力がなければ、センスも発揮できません。</p>
+                <div class="skill-tags">
+                    <span>コーディング基礎</span><span>Adobe操作</span><span>模写100本ノック</span>
+                </div>
+                <br>
+                <a href="step1.html" class="btn-link">👉 1年目の詳細メニューを見る</a>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">2</div>
+            <div class="step-content">
+                <h3>自立準備：お金と会話のプロになる</h3>
+                <p>奥様（社長）以外のお客様と会話できますか？<br>見積もり、税金、スケジュールの管理を学びます。</p>
+                <br>
+                <a href="step2.html" class="btn-link">👉 2年目の詳細メニューを見る</a>
+            </div>
+        </div>
+
+        <div class="step">
+            <div class="step-num">3</div>
+            <div class="step-content">
+                <h3>1,000万の壁：価値提案者になる</h3>
+                <p>あなたの武器「コスメ・ファッション」への適性を全開放します。<br>単価を上げて、選ばれるデザイナーへ。</p>
+                <br>
+                <a href="step3.html" class="btn-link">👉 3年目の詳細メニューを見る</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="card" style="text-align: center; background: #e3f2fd; border: 2px solid #2196f3;">
+        <h3>🏁 スタートラインは「今」</h3>
+        <p>ガレージハウスを建てる夢、最高ですね。<br>
+        でもそれは、サラリーマンのように「待っていれば給料が入る」生活の先にはありません。</p>
+        <p>まずは<strong>「道具（PC）」への投資</strong>と、<br>
+        <strong>「技術（毎日手を動かす）」への投資</strong>から始めましょう。</p>
+    </div>
+
+</div>
+
+</body>
+</html>

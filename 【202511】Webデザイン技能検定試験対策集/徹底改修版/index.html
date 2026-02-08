@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webデザイン3級 | やさしい実務入門</title>
+    <style>
+        /* =========================================
+           THEME: MODERN CAFE (Hybrid Style)
+           「絵本」の優しさと「実用書」の知性を両立。
+           清潔感のある白ベースに、温かみのあるアクセント。
+           ========================================= */
+        :root {
+            --bg-body: #f7f9fc;       /* クリーンな薄い青グレー */
+            --bg-paper: #ffffff;
+            --text-main: #2d3436;     /* 読みやすいダークグレー */
+            --text-light: #636e72;
+            
+            /* Gentle Accent Colors */
+            --color-primary: #00b894; /* 落ち着いたミントグリーン (安心感) */
+            --color-secondary: #0984e3; /* 知的なブルー */
+            --color-accent: #fdcb6e;  /* 柔らかいイエロー */
+            --color-alert: #ff7675;   /* きつくないレッド */
+            
+            --border-radius: 12px;
+            --font-base: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+            --font-mono: "Consolas", "Monaco", monospace;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-base);
+            color: var(--text-main);
+            background-color: var(--bg-body);
+            margin: 0;
+            padding: 0;
+            line-height: 1.9;
+            font-size: 16px;
+        }
+
+        /* Container */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        /* -------------------------------------------
+           HEADER: 親しみやすい導入
+           ------------------------------------------- */
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+            padding: 40px;
+            background: var(--bg-paper);
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            border-top: 5px solid var(--color-primary);
+        }
+        .tag {
+            display: inline-block;
+            background: #e0f2f1;
+            color: #00695c;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        h1 {
+            font-size: 2rem;
+            margin: 0 0 10px 0;
+            color: var(--text-main);
+        }
+        .subtitle {
+            color: var(--text-light);
+            font-size: 1.1rem;
+        }
+
+        /* -------------------------------------------
+           SECTIONS: カード型レイアウト
+           ------------------------------------------- */
+        section {
+            background: var(--bg-paper);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        h2 {
+            font-size: 1.6rem;
+            color: var(--color-secondary);
+            border-bottom: 2px solid #dfe6e9;
+            padding-bottom: 10px;
+            margin-top: 0;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+        }
+        .icon { font-size: 1.8rem; margin-right: 10px; }
+
+        h3 {
+            font-size: 1.3rem;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            padding-left: 15px;
+            border-left: 5px solid var(--color-accent);
+        }
+
+        p { margin-bottom: 1.5rem; text-align: justify; }
+
+        /* -------------------------------------------
+           VISUAL AIDS: 「わかる！」を生む図解
+           ------------------------------------------- */
+        
+        /* Mentor Chat (ほどよい距離感) */
+        .mentor-box {
+            display: flex;
+            gap: 20px;
+            background: #f1f8e9;
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin: 25px 0;
+            align-items: flex-start;
+        }
+        .mentor-face {
+            font-size: 2.5rem;
+            background: #fff;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        .mentor-text { font-size: 0.95rem; line-height: 1.7; }
+        .mentor-text strong { color: #2e7d32; background: linear-gradient(transparent 70%, #ccff90 70%); }
+
+        /* Metaphor Card */
+        .metaphor {
+            text-align: center;
+            background: #e3f2fd;
+            padding: 25px;
+            border-radius: var(--border-radius);
+            margin: 25px 0;
+            border: 2px dashed #90caf9;
+        }
+        .metaphor-title { font-weight: bold; color: #1565c0; display: block; margin-bottom: 10px; }
+
+        /* Code Block (Easy to Read) */
+        .code-easy {
+            background: #2d3436;
+            color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: var(--font-mono);
+            margin: 20px 0;
+            position: relative;
+            overflow-x: auto;
+            border-left: 5px solid var(--color-primary);
+        }
+        .code-label {
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(255,255,255,0.2);
+            padding: 3px 10px;
+            font-size: 0.8rem;
+            border-bottom-left-radius: 8px;
+        }
+        .tag { color: #ff7675; }
+        .attr { color: #74b9ff; }
+        .val { color: #ffeaa7; }
+        .com { color: #b2bec3; }
+
+        /* Box Model Visualizer */
+        .box-viz {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            font-size: 0.9rem;
+        }
+        .b-margin {
+            background: #ffccbc; padding: 25px; border: 1px dashed #d84315; border-radius: 8px; position: relative;
+        }
+        .b-border {
+            background: #fff9c4; padding: 5px; border: 2px solid #fbc02d; border-radius: 4px;
+        }
+        .b-padding {
+            background: #c8e6c9; padding: 25px; border-radius: 2px;
+        }
+        .b-content {
+            background: #b3e5fc; padding: 15px 30px; font-weight: bold; color: #0277bd;
+        }
+        .viz-lbl { position: absolute; font-size: 0.75rem; font-weight:bold; }
+
+        /* Button */
+        .btn-area {
+            text-align: center;
+            margin-top: 60px;
+        }
+        .btn-start {
+            display: inline-block;
+            background: var(--color-primary);
+            color: #fff;
+            font-size: 1.3rem;
+            font-weight: bold;
+            text-decoration: none;
+            padding: 20px 50px;
+            border-radius: 50px;
+            box-shadow: 0 5px 15px rgba(0,184,148,0.4);
+            transition: transform 0.2s;
+        }
+        .btn-start:hover { transform: translateY(-3px); background: #00a383; }
+
+    </style>
+</head>
+<body>
+
+<div class="container">
+    
+    <header>
+        <span class="tag">初心者サポート版</span>
+        <h1>Webデザイン3級<br>やさしい実務入門</h1>
+        <div class="subtitle">むずかしい専門用語を使わずに、<br>合格に必要な知識だけをギュッと凝縮しました。</div>
+    </header>
+
+    <section>
+        <h2><span class="icon">🔰</span> 0. Webサイトって、どうなってるの？</h2>
+        
+        <div class="mentor-box">
+            <div class="mentor-face">👨‍💻</div>
+            <div class="mentor-text">
+                Webサイト作りは、よく<strong>「家づくり」</strong>に例えられます。<br>
+                いきなり全部覚えようとしなくて大丈夫。「骨組み」を作って、「壁紙」を貼る。たったこれだけの作業なんです。
+            </div>
+        </div>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px; margin-top:30px;">
+            <div style="background:#f9f9f9; padding:20px; border-radius:10px; border-top:4px solid #0984e3;">
+                <strong style="color:#0984e3; font-size:1.1rem;">🏗️ HTML (構造)</strong>
+                <p style="margin-top:10px; font-size:0.95rem;">
+                    家の「柱」や「壁」です。<br>
+                    「ここが見出し！」「ここが画像！」とハンコを押していく作業です。
+                </p>
+            </div>
+            <div style="background:#f9f9f9; padding:20px; border-radius:10px; border-top:4px solid #e17055;">
+                <strong style="color:#e17055; font-size:1.1rem;">🎨 CSS (装飾)</strong>
+                <p style="margin-top:10px; font-size:0.95rem;">
+                    家の「壁紙」や「インテリア」です。<br>
+                    骨組みに色を塗ったり、配置を整えたりして綺麗にします。
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2><span class="icon">🏗️</span> 1. HTML：骨組みを作ろう</h2>
+        <p>HTMLは、真っ白なページに<strong>「タグ（目印）」</strong>をつけていく作業です。<br>
+        3級の試験では、以下のタグさえ覚えておけば合格ラインに届きます。</p>
+
+        <h3>① 基本の3点セット</h3>
+        <ul>
+            <li><strong>&lt;h1&gt;（見出し）</strong>：新聞のタイトルです。一番目立つ文字。</li>
+            <li><strong>&lt;p&gt;（段落）</strong>：普通の文章です。長い話はこれで囲みます。</li>
+            <li><strong>&lt;img&gt;（画像）</strong>：写真を貼り付けます。これだけは「囲まない」特別なタグです。</li>
+        </ul>
+
+        <div class="code-easy">
+<span class="code-label">index.html</span>
+<span class="tag">&lt;h1&gt;</span>株式会社ウェブデザイン<span class="tag">&lt;/h1&gt;</span>
+<span class="tag">&lt;p&gt;</span>
+  ここに会社の説明文が入ります。<br>
+  ようこそ！
+<span class="tag">&lt;/p&gt;</span>
+<span class="tag">&lt;img</span> <span class="attr">src</span>=<span class="val">"logo.png"</span> <span class="attr">alt</span>=<span class="val">"ロゴ"</span><span class="tag">&gt;</span>
+        </div>
+
+        <h3>② メニューリストを作ろう (ul / li)</h3>
+        <p>Webサイトにある「メニューボタン」は、実は<strong>「箇条書きリスト」</strong>で作られています。</p>
+        <div class="code-easy">
+<span class="com">&lt;!-- ul = Unordered List（順番のないリスト） --&gt;</span>
+<span class="tag">&lt;ul&gt;</span>
+  <span class="tag">&lt;li&gt;</span>ホーム<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>会社概要<span class="tag">&lt;/li&gt;</span>
+  <span class="tag">&lt;li&gt;</span>お問い合わせ<span class="tag">&lt;/li&gt;</span>
+<span class="tag">&lt;/ul&gt;</span>
+        </div>
+    </section>
+
+    <section>
+        <h2><span class="icon">🎨</span> 2. CSS：おしゃれにデザイン</h2>
+        <p>骨組みができたら、次はメイクアップ（CSS）の時間です。<br>
+        <strong>「誰を（セレクタ）」「どうする（プロパティ）」</strong>のセットで指示を出します。</p>
+
+        <h3>指示の書き方</h3>
+        <div class="code-easy">
+<span class="code-label">style.css</span>
+<span class="com">/* h1さん（見出し）を、赤くして！ */</span>
+<span class="tag">h1</span> {
+  <span class="attr">color</span>: <span class="val">red</span>;
+}
+
+<span class="com">/* 画面全体の背景を、グレーにして！ */</span>
+<span class="tag">body</span> {
+  <span class="attr">background-color</span>: <span class="val">#f0f0f0</span>;
+}
+        </div>
+
+        <h3>【重要】すべての要素は「箱」である</h3>
+        <p>ここが一番のポイントです。Web上のパーツは、すべて<strong>「四角い箱」</strong>でできています。<br>
+        この箱には「3つのバリア」があります。</p>
+
+        <div class="box-viz">
+            <div class="b-margin">
+                <span class="viz-lbl" style="top:5px; left:5px; color:#d84315;">Margin (外の距離)</span>
+                <div class="b-border">
+                    <span class="viz-lbl" style="top:-22px; right:0; color:#f9a825;">Border (枠線)</span>
+                    <div class="b-padding">
+                        <span class="viz-lbl" style="top:5px; left:5px; color:#2e7d32;">Padding (内側のスキマ)</span>
+                        <div class="b-content">文字や画像</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mentor-box">
+            <div class="mentor-face">💡</div>
+            <div class="mentor-text">
+                <strong>ここがテストに出ます！</strong><br>
+                「文字の背景に色をつけたい」時は、<strong>Padding（内側のスキマ）</strong>を使います。<br>
+                Margin（外の距離）には色はつきません。ここを間違えると、思った通りのデザインになりません。
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2><span class="icon">🗺️</span> 3. パス：ファイルの住所</h2>
+        <p>試験で不合格になる最大の原因は、コードのミスではなく<strong>「画像の場所指定（パス）」の間違い</strong>です。<br>
+        「画像が表示されない！」とならないよう、住所の書き方をマスターしましょう。</p>
+
+        <h3>「相対パス」の考え方</h3>
+        <div class="metaphor">
+            <span class="metaphor-title">たとえ話：「隣の家」</span>
+            <p>
+                <strong>❌ 絶対パス（ダメな例）</strong><br>
+                「宇宙 地球 日本 ○○市 1-1 タロウさんの家」<br>
+                <small>→ 長すぎますし、タロウさんが引越したら届かなくなります。</small>
+            </p>
+            <p>
+                <strong>⭕ 相対パス（正解！）</strong><br>
+                「隣の家」<br>
+                <small>→ これなら、自分がどこにいても「隣」の関係は変わりません。</small>
+            </p>
+        </div>
+
+        <h3>魔法の記号「../」</h3>
+        <p>これは<strong>「一つ上の階層（フォルダ）に戻る」</strong>という意味です。<br>
+        「部屋を出る」とイメージしてください。</p>
+        
+        <div style="background:#fff3e0; padding:20px; border-radius:8px; border:1px solid #ffe0b2;">
+            <strong>シチュエーション：</strong><br>
+            あなたは今、<code>css</code> という部屋の中にいます。隣の部屋（<code>img</code>）にある画像を取りに行くには？<br><br>
+            <strong>正解の手順：</strong><br>
+            1. <code>../</code> で、一旦部屋を出る（廊下に出る）<br>
+            2. <code>img/</code> で、隣の部屋に入る<br>
+            3. <code>logo.png</code> を取る<br>
+            <br>
+            <strong>合体させると：</strong> <code>url("../img/logo.png");</code>
+        </div>
+    </section>
+
+    <section>
+        <h2><span class="icon">⏰</span> 4. 本番：60分の戦い方</h2>
+        <p>試験時間は60分。迷っている暇はありません。以下の手順通りに進めれば、確実に間に合います。</p>
+
+        <ol style="line-height:2.2; font-weight:bold; color:#444;">
+            <li><span style="color:var(--color-primary);">[開始 05分]</span> フォルダを開いて観察。「どこに画像があるか？」地図を頭に入れる。</li>
+            <li><span style="color:var(--color-primary);">[前半 20分]</span> HTMLタグ打ち。見た目は崩れていてOK。まずは骨組みを作る。</li>
+            <li><span style="color:var(--color-primary);">[中盤 25分]</span> CSSで色塗り。上から順にやる。わからない場所は飛ばす！</li>
+            <li><span style="color:var(--color-primary);">[最後 10分]</span> リンクと画像の確認。これだけで20点アップします。</li>
+        </ol>
+    </section>
+
+    <div class="btn-area">
+        <p style="margin-bottom:20px; font-weight:bold;">準備はできましたか？<br>次は実際の画面で、トラブルを解決してみましょう。</p>
+        
+        <a href="app.html" class="btn-start">👉 実践トレーニングを開始する</a>
+    </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Design Grade 3 | The Masterpiece</title>
+    <style>
+        /* =========================================
+           THEME: PREMIUM TECH MAGAZINE
+           「国家検定」にふさわしい権威性と、
+           最新のWebトレンドを取り入れた没入型UI
+           ========================================= */
+        :root {
+            --color-bg: #f3f4f6;
+            --color-paper: #ffffff;
+            --color-text-main: #111827;
+            --color-text-muted: #4b5563;
+            --color-primary: #0f766e; /* Deep Teal */
+            --color-accent: #be123c;  /* Crimson */
+            --color-highlight: #fef3c7;
+            --color-code-bg: #1e293b;
+            --font-serif: "Georgia", "Yu Mincho", serif;
+            --font-sans: "Helvetica Neue", Arial, "Hiragino Kaku Gothic ProN", sans-serif;
+            --font-mono: "Menlo", "Consolas", monospace;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: var(--font-sans);
+            color: var(--color-text-main);
+            background-color: var(--color-bg);
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+            font-size: 16px;
+        }
+
+        /* -------------------------------------------
+           LAYOUT & CONTAINER
+           ------------------------------------------- */
+        .wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+            padding: 40px 20px;
+        }
+
+        /* -------------------------------------------
+           SIDEBAR NAVIGATION (Sticky)
+           ------------------------------------------- */
+        .sidebar {
+            position: sticky;
+            top: 40px;
+            height: calc(100vh - 80px);
+            background: var(--color-paper);
+            border-radius: 16px;
+            padding: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+        .brand {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: var(--color-primary);
+            border-bottom: 2px solid var(--color-primary);
+            padding-bottom: 15px;
+            margin-bottom: 30px;
+            line-height: 1.2;
+        }
+        .brand span { font-size: 0.8rem; color: var(--color-text-muted); font-weight: normal; display: block; margin-top:5px; font-family: var(--font-sans); }
+
+        .nav-list { list-style: none; padding: 0; margin: 0; }
+        .nav-item { margin-bottom: 10px; }
+        .nav-link {
+            display: block;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--color-text-muted);
+            font-weight: 600;
+            border-radius: 8px;
+            transition: all 0.2s;
+            border-left: 4px solid transparent;
+        }
+        .nav-link:hover, .nav-link.active {
+            background: #f0fdfa;
+            color: var(--color-primary);
+            border-left-color: var(--color-primary);
+        }
+        .nav-link small { display: block; font-size: 0.75rem; opacity: 0.7; font-weight: normal; }
+
+        /* -------------------------------------------
+           MAIN CONTENT AREA
+           ------------------------------------------- */
+        .content {
+            background: var(--color-paper);
+            border-radius: 16px;
+            padding: 60px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding-bottom: 60px;
+            border-bottom: 1px solid #e5e7eb;
+            margin-bottom: 60px;
+        }
+        .hero-tag {
+            display: inline-block;
+            background: var(--color-primary);
+            color: #fff;
+            font-size: 0.8rem;
+            padding: 4px 12px;
+            border-radius: 50px;
+            margin-bottom: 20px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+        .hero h1 {
+            font-family: var(--font-serif);
+            font-size: 3rem;
+            margin: 0 0 20px 0;
+            line-height: 1.2;
+            color: #111;
+        }
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--color-text-muted);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Typography */
+        h2 {
+            font-family: var(--font-serif);
+            font-size: 2rem;
+            margin-top: 80px;
+            margin-bottom: 30px;
+            color: #111;
+            display: flex;
+            align-items: center;
+        }
+        h2::before {
+            content: '';
+            display: block;
+            width: 50px;
+            height: 4px;
+            background: var(--color-accent);
+            margin-right: 20px;
+        }
+        h3 {
+            font-size: 1.5rem;
+            margin-top: 50px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e5e7eb;
+            color: #374151;
+        }
+        p { margin-bottom: 2rem; text-align: justify; }
+
+        /* RICH COMPONENTS */
+        
+        /* 1. The "Concept" Box (Two Columns) */
+        .concept-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+        .concept-card {
+            background: #f8fafc;
+            padding: 30px;
+            border-radius: 12px;
+            border-top: 5px solid var(--color-primary);
+        }
+        .concept-card h4 { margin-top: 0; color: var(--color-primary); font-size: 1.2rem; }
+
+        /* 2. The "Warning" Box (Examination Trap) */
+        .trap-box {
+            background: #fef2f2;
+            border: 2px solid #fecaca;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 40px 0;
+            position: relative;
+        }
+        .trap-label {
+            position: absolute;
+            top: -15px;
+            left: 30px;
+            background: var(--color-accent);
+            color: #fff;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            border-radius: 4px;
+        }
+
+        /* 3. The "Code" Window (Terminal Style) */
+        .code-window {
+            background: var(--color-code-bg);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+            font-family: var(--font-mono);
+            color: #e2e8f0;
+            overflow-x: auto;
+            position: relative;
+        }
+        .code-window::before {
+            content: "SOURCE CODE";
+            position: absolute;
+            top: 0;
+            right: 0;
+            background: rgba(255,255,255,0.1);
+            padding: 5px 10px;
+            font-size: 0.7rem;
+            color: #94a3b8;
+        }
+        .code-line { display: block; margin-bottom: 5px; }
+        .c-tag { color: #f472b6; } /* Pink */
+        .c-attr { color: #60a5fa; } /* Blue */
+        .c-val { color: #facc15; } /* Yellow */
+        .c-com { color: #94a3b8; font-style: italic; } /* Gray */
+
+        /* 4. The "Metaphor" Section */
+        .metaphor {
+            display: flex;
+            align-items: center;
+            background: #ecfdf5;
+            padding: 30px;
+            border-radius: 12px;
+            margin: 40px 0;
+            gap: 30px;
+        }
+        .metaphor-icon { font-size: 4rem; }
+        .metaphor-text h4 { margin: 0 0 10px 0; color: #065f46; font-size: 1.3rem; }
+
+        /* Footer Navigation */
+        .next-step {
+            margin-top: 80px;
+            padding: 40px;
+            background: var(--color-primary);
+            color: #fff;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .next-step h3 { color: #fff; border: none; margin-top: 0; }
+        .btn-next {
+            display: inline-block;
+            background: #fff;
+            color: var(--color-primary);
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            transition: transform 0.2s;
+        }
+        .btn-next:hover { transform: scale(1.05); }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .wrapper { grid-template-columns: 1fr; }
+            .sidebar { height: auto; position: relative; top: 0; margin-bottom: 40px; }
+            .content { padding: 30px; }
+            .hero h1 { font-size: 2rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <nav class="sidebar">
+        <div class="brand">
+            WEB DESIGN<br>GRADE 3
+            <span>THE OFFICIAL GUIDEBOOK</span>
+        </div>
+        <ul class="nav-list">
+            <li class="nav-item">
+                <a href="#intro" class="nav-link active">
+                    0. 序論
+                    <small>Introduction</small>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#html-structure" class="nav-link">
+                    1. HTML構造と意味
+                    <small>Semantics & Structure</small>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#css-layout" class="nav-link">
+                    2. CSSレイアウト
+                    <small>Visual Presentation</small>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#file-management" class="nav-link">
+                    3. ファイル管理とパス
+                    <small>File Management</small>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="#exam-tips" class="nav-link">
+                    4. 合格への戦術
+                    <small>Strategy & Tactics</small>
+                </a>
+            </li>
+        </ul>
+        <div style="margin-top:auto; padding-top:20px; border-top:1px solid #eee; font-size:0.8rem; color:#999;">
+            Verified by Editor-in-Chief<br>Version 5.0 (Magazine Style)
+        </div>
+    </nav>
+
+    <main class="content">
+        
+        <div id="intro" class="hero">
+            <span class="hero-tag">MAGAZINE EDITION</span>
+            <h1>実技試験：包括的攻略バイブル</h1>
+            <p>なぜ、知識はあるのに落ちるのか？<br>それは「技術」ではなく「作法」を知らないからです。<br>合格率70%の壁を超えるための、唯一無二の教科書へようこそ。</p>
+        </div>
+
+        <section>
+            <p>ウェブデザイン技能検定3級の実技試験は、単に「綺麗なサイトを作る」試験ではありません。厚生労働省が定める国家規格に基づき、<strong>「正しい構文」「正しいファイル管理」「正しいアクセシビリティ」</strong>を実装できるかを問う、極めて実務的な試験です。</p>
+            <p>本稿では、過去の出題傾向を徹底分析し、合格に必要な知識体系を「読み物」として再構成しました。</p>
+        </section>
+
+        <section id="html-structure">
+            <h2>1. HTML5：構造と意味の定義</h2>
+            <p>HTML (HyperText Markup Language) は、ウェブページの骨格です。3級実技試験において最も重要な評価基準は、<strong>「見た目だけでなく、意味（セマンティクス）に基づいた正しいタグ選びができているか」</strong>です。</p>
+            
+            <div class="concept-grid">
+                <div class="concept-card">
+                    <h4>❌ 悪い例（Divの乱用）</h4>
+                    <p>すべてを <code>&lt;div&gt;</code> で囲む昔ながらの手法。<br>
+                    <code>&lt;div id="header"&gt;</code><br>
+                    これでは機械（検索エンジンや読み上げソフト）に「ここがヘッダーだ」と伝わりません。</p>
+                </div>
+                <div class="concept-card" style="border-top-color: var(--color-accent); background: #fff1f2;">
+                    <h4>⭕ 良い例（セマンティック）</h4>
+                    <p>HTML5の専用タグを使う手法。<br>
+                    <code>&lt;header&gt;</code>, <code>&lt;main&gt;</code>, <code>&lt;footer&gt;</code><br>
+                    タグ自体が意味を持っています。近年の試験ではこの記述が強く推奨されます。</p>
+                </div>
+            </div>
+
+            <h3>頻出タグとその役割</h3>
+            <p>試験で必ずと言っていいほど登場するタグには、明確な「使いどころ」があります。</p>
+
+            <ul>
+                <li><strong>h1〜h6 (Headings):</strong> 見出しです。<code>h1</code> はページの大主題（ロゴやメインタイトル）に1回だけ使うのが定石です。文字を太くするために使ってはいけません。</li>
+                <li><strong>ul / ol / li (Lists):</strong> 箇条書きです。特に <code>ul</code> は、ナビゲーションメニューを作る際の土台として100%出題されます。</li>
+                <li><strong>table (Table):</strong> 表組みです。<code>tr</code>（行）の中に <code>th</code>（見出し）と <code>td</code>（データ）が入る入れ子構造を、空で書けるようにしてください。</li>
+            </ul>
+
+            <div class="code-window">
+<span class="code-line"><span class="c-com">&lt;!-- 完璧なナビゲーションの構造 --&gt;</span></span>
+<span class="code-line"><span class="c-tag">&lt;nav&gt;</span></span>
+<span class="code-line">  <span class="c-tag">&lt;ul&gt;</span></span>
+<span class="code-line">    <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span>=<span class="c-val">"index.html"</span><span class="c-tag">&gt;</span>ホーム<span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span></span>
+<span class="code-line">    <span class="c-tag">&lt;li&gt;</span><span class="c-tag">&lt;a</span> <span class="c-attr">href</span>=<span class="c-val">"about.html"</span><span class="c-tag">&gt;</span>会社概要<span class="c-tag">&lt;/a&gt;</span><span class="c-tag">&lt;/li&gt;</span></span>
+<span class="code-line">  <span class="c-tag">&lt;/ul&gt;</span></span>
+<span class="code-line"><span class="c-tag">&lt;/nav&gt;</span></span>
+            </div>
+        </section>
+
+        <section id="css-layout">
+            <h2>2. CSS：装飾とレイアウトの制御</h2>
+            <p>CSS (Cascading Style Sheets) は、骨格に「皮膚」を与える技術です。3級実技では、複雑なアニメーションよりも<strong>「ボックスモデルの理解」</strong>と<strong>「基本的なレイアウト」</strong>が問われます。</p>
+
+            <h3>ボックスモデルの4要素</h3>
+            <p>Web上のすべての要素は「四角い箱」でできています。この箱の構造を理解していないと、「思ったより隙間が空く」「枠線がはみ出る」といったトラブルに対処できません。</p>
+            
+
+[Image of file directory structure diagram]
+
+
+            <div class="metaphor">
+                <div class="metaphor-icon">📦</div>
+                <div class="metaphor-text">
+                    <h4>Metaphor: 配送の段ボール箱</h4>
+                    <p><strong>Content:</strong> 箱の中身（荷物）。<br>
+                    <strong>Padding:</strong> 荷物を守るための「緩衝材（プチプチ）」。箱の内側の隙間。<br>
+                    <strong>Border:</strong> 段ボールの「厚み」。<br>
+                    <strong>Margin:</strong> トラックに積むときの「他の箱との距離」。</p>
+                </div>
+            </div>
+
+            <div class="trap-box">
+                <span class="trap-label">試験の罠</span>
+                <h3>背景色はどこまで塗られる？</h3>
+                <p>背景色（background-color）を指定した時、色は <strong>Padding（緩衝材）</strong> の領域まで塗られますが、<strong>Margin（外の距離）</strong> には塗られません（透明になります）。<br>
+                「文字の周りに色をつけたいのに、余白に色がつかない！」という時は、MarginではなくPaddingを増やすのが正解です。</p>
+            </div>
+        </section>
+
+        <section id="file-management">
+            <h2>3. ファイル管理：魔の「相対パス」</h2>
+            <p>はっきり申し上げます。<strong>実技試験不合格者の死因No.1は「パス指定ミス」による画像のリンク切れです。</strong><br>
+            コードがどれだけ美しくても、画像が表示されなければ0点です。</p>
+
+            <h3>絶対パス vs 相対パス</h3>
+            <p>試験では、必ず<strong>「相対パス」</strong>を使わなければなりません。</p>
+            <ul>
+                <li><strong>❌ 絶対パス:</strong> <code>C:\Users\taro\Desktop\exam\img\logo.png</code><br>これは「タロウ君のPCのデスクトップ」を指しています。採点官のPCにデータを持っていった瞬間、リンク切れします。</li>
+                <li><strong>⭕ 相対パス:</strong> <code>img/logo.png</code><br>「今いる場所（index.html）から見て、imgフォルダの中にあるlogo.png」という指定です。これならどのPCでも表示されます。</li>
+            </ul>
+
+            <div class="code-window">
+<span class="code-line"><span class="c-com">/* CSSから画像を指定する場合の最大の罠 */</span></span>
+<span class="code-line"><span class="c-com">/* CSSファイルが "css" フォルダの中にある場合 */</span></span>
+<span class="code-line"></span>
+<span class="code-line">body {</span>
+<span class="code-line">    <span class="c-com">/* ❌ 間違い：HTMLからの位置を書いている */</span></span>
+<span class="code-line">    background-image: url("img/bg.jpg");</span>
+<span class="code-line"></span>
+<span class="code-line">    <span class="c-com">/* ⭕ 正解：CSSファイルからの位置を書く */</span></span>
+<span class="code-line">    <span class="c-com">/* "../" で一つ上の階層に出てから、imgフォルダに入る */</span></span>
+<span class="code-line">    background-image: url("../img/bg.jpg");</span>
+<span class="code-line">}</span>
+            </div>
+        </section>
+
+        <section id="exam-tips">
+            <h2>4. 合格への戦術的アドバイス</h2>
+            <p>60分という試験時間は、迷っていると一瞬で過ぎ去ります。以下のルーティンを身体に染み込ませてください。</p>
+
+            <ol style="font-weight:bold; color:var(--color-primary); line-height:2;">
+                <li>開始5分：フォルダ確認。画像がどこにあり、HTMLとCSSがどこにあるか「地図」を頭に描く。</li>
+                <li>前半20分：HTMLコーディング。テキストをコピペし、ひたすらタグで囲む。装飾は後回し。</li>
+                <li>中盤25分：CSS装飾。上から順に色や配置を指定していく。わからない箇所は飛ばす。</li>
+                <li>ラスト10分：確認と提出。<strong>全角スペースが含まれていないか？</strong> リンクは飛ぶか？ 最後にフォルダをZIP圧縮する。</li>
+            </ol>
+        </section>
+
+        <div class="next-step">
+            <h3>理論武装は完了しました。</h3>
+            <p>しかし、本を読んだだけで泳げるようになる人はいません。<br>
+            次は、この知識を使って実際に手を動かす番です。</p>
+            
+            <p>次回、あなたが求めていた<strong>「全50問の鬼ドリル」と「リアルタイム採点機能」</strong>を搭載した、<br>
+            <strong>【Vol.2：実技演習シミュレーターアプリ】</strong>を提供します。</p>
+
+            <a href="app.html" class="btn-next">🚀 実践アプリを起動する</a>
+        </div>
+
+    </main>
+</div>
+
+</body>
+</html>
