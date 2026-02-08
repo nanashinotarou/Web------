@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>アトリエに『夜』が来ました。 | SHIMANEKO TECH LOG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                fontFamily: '"Zen Maru Gothic", sans-serif',
+                primaryColor: '#FFB74D',
+                primaryTextColor: '#5D4037',
+                primaryBorderColor: '#5D4037',
+                lineColor: '#5D4037',
+            }
+        });
+    </script>
+</head>
+
+<body>
+
+    <div data-include="../inc/header.html"></div>
+
+    <main class="container">
+        <article class="article-container">
+            <header class="article-header">
+                <span class="tag" style="background: var(--color-accent); color: white;">Tech</span>
+                <h1>アトリエに『夜』が来ました。<br><span
+                        style="font-size: 0.6em; color: var(--color-secondary);">〜CSS変数とJavaScriptの魔法〜</span></h1>
+            </header>
+
+            <div class="article-body">
+                <p>こんにちは、テック担当の<strong>コンブ</strong>です。<br>
+                    みなさん、お気づきでしょうか？<br>
+                    この「SHIMANEKO TECH LOG」が、アプリのように動くサイト（v2.0）に生まれ変わりました！</p>
+
+                <p>やったー！ただのHTMLファイルだった頃とは大違いです。<br>
+                    今回は、この大規模改装の裏側にある<strong>「JavaScriptという魔法」</strong>についてお話しします。</p>
+
+                <h2>1. Dark Mode (The Night Switch)</h2>
+                <div class="concept-box" style="background: var(--color-white); border-color: var(--color-primary);">
+                    <div class="concept-title">🌙 アトリエの照明を落とす</div>
+                    <p>右上のボタンを押すと、一瞬でアトリエが「夜」になります。<br>
+                        これは、ページを読み込み直しているわけではありません。<br>
+                        <strong>「色を入れる箱（変数）」を差し替えている</strong>のです。
+                    </p>
+                </div>
+
+                <h3>仕組み解説</h3>
+                <p>今まで <code>color: #5D4037;</code> と直接書いていた部分を、<br>
+                    <code>color: var(--text-color);</code> という風に「変数（箱）」に置き換えました。
+                </p>
+                <p>スイッチを押すと、JavaScriptがこの箱の中身を「昼の色」から「夜の色」にサッと入れ替えます。<br>
+                    すると、オセロが一気にひっくり返るように、サイト全体の色が変わるのです。</p>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+flowchart LR
+    Switch[👆 スイッチON] --> JS[🤖 JavaScript]
+    JS -->|箱の中身を入れ替え| CSS[🎨 CSS変数]
+    
+    subgraph ColorBox [変数の箱]
+        Day[☀️ 昼セット] --> Night[🌙 夜セット]
+    end
+    
+    CSS --> HTML[📄 画面全体]
+    
+    style Switch fill:#FFCC80
+    style JS fill:#FFF9C4
+    </pre>
+                    <div class="diagram-caption">図: 箱の中身を変えるだけで世界が変わる</div>
+                </div>
+
+                <h2>2. API (The Cat Waiter)</h2>
+                <p>「Lab」ページで猫の豆知識が見られるようになりました。<br>
+                    でも、この知識データは私たちのサーバーには入っていません。</p>
+
+                <div class="concept-box" style="background: var(--color-white); border-color: var(--color-accent);">
+                    <div class="concept-title">🐈 取り寄せの魔法 fetch()</div>
+                    <p>これは<strong>「アトリエにいながら、遠くの図書館から本を取り寄せる」</strong>ようなものです。<br>
+                        JavaScriptの <code>fetch()</code> という呪文を使うと、海の向こうにあるサーバー（図書館）にお願いして、データを運んできてもらうことができます。</p>
+                </div>
+
+                <p>ページ全体を読み込み直さず、欲しい情報だけを「スッ」と取ってくる。<br>
+                    これが現代のWebサイトがサクサク動く秘密です。</p>
+
+                <h2>3. Filtering (The Organizer)</h2>
+                <p>トップページの「All / Tech / Column / Lab」ボタン。<br>
+                    押した瞬間に記事が絞り込まれますよね？速すぎて見えないくらいです。</p>
+
+                <h3>仕組み解説: DOM操作</h3>
+                <p>実はこれ、<strong>「いらない記事を透明人間（display: none）にしている」</strong>だけなんです。</p>
+                <p>JavaScriptは、HTML（DOM）を裏から自由に操る黒子（くろこ）のような存在。<br>
+                    「キミは隠れて」「キミは出てきて」と指示を出すだけで、一瞬で表示を切り替えることができます。</p>
+
+                <hr style="margin: 60px 0; border: none; border-top: 2px dashed var(--color-border);">
+
+                <p>いかがでしたか？<br>
+                    ただの文字の羅列だったHTMLが、JavaScriptの魔法で「動く・変わる・繋がる」アプリケーションに進化しました。<br>
+                    Web制作って、まるで魔法使いになったみたいでワクワクしませんか？</p>
+
+                <div
+                    style="text-align: center; margin-top: 80px; padding: 40px; border-top: 1px solid var(--color-border);">
+                    <a href="../index.html" class="read-btn"
+                        style="display: inline-block; padding: 15px 40px; width: auto;">Topへ戻る</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <div data-include="../inc/footer.html"></div>
+    <script src="../js/include.js"></script>
+</body>
+
+</html>
