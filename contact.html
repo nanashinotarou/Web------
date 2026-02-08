@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Owl Post | SHIMANEKO TECH LOG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/contact.css">
+</head>
+
+<body>
+
+    <div data-include="inc/header.html"></div>
+
+    <main class="container">
+        <section class="owl-post-section">
+            <div class="owl-container">
+                <div class="owl">🦉</div>
+                <div class="speech-bubble">お手紙、預かりますよ。</div>
+            </div>
+
+            <div class="letter-form-container">
+                <form id="owl-form" class="letter-form">
+                    <div class="stamp-area">
+                        <div class="stamp">POST</div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>To: Shimaneko Design</label>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">From (Name):</label>
+                        <input type="text" id="name" required placeholder="お名前">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="message">Message:</label>
+                        <textarea id="message" required placeholder="ここにメッセージを書いてください..."></textarea>
+                    </div>
+
+                    <button type="submit" class="send-btn">フクロウに託す ✉️</button>
+                </form>
+
+                <div class="sent-message" style="display: none;">
+                    <h2>Thank You!</h2>
+                    <p>フクロウが手紙を持って飛び立ちました。</p>
+                    <button onclick="location.reload()">もう一通書く</button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <div data-include="inc/footer.html"></div>
+    <script src="js/include.js"></script>
+    <script src="js/game.js"></script>
+    <script src="js/radio.js"></script>
+
+    <script>
+        document.getElementById('owl-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Animation sequence
+            const form = document.querySelector('.letter-form');
+            const owl = document.querySelector('.owl');
+            const sentMsg = document.querySelector('.sent-message');
+
+            // 1. Fold the letter
+            form.classList.add('folding');
+
+            setTimeout(() => {
+                // 2. Owl takes it
+                form.style.display = 'none';
+                owl.classList.add('flying');
+                owl.innerHTML = '🦉💌'; // Owl holding letter
+
+                // 3. Show success message
+                setTimeout(() => {
+                    sentMsg.style.display = 'block';
+                    sentMsg.classList.add('fade-in');
+                }, 1500);
+            }, 1000);
+        });
+    </script>
+</body>
+
+</html>
