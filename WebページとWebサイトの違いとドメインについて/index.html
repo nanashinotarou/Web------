@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webデザイン基礎講座：ページとサイトとドメインの話</title>
+    <style>
+        /* --- CSS変数と基本設定 --- */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --accent-color: #e74c3c;
+            --bg-light: #f9fbfd;
+            --bg-dark: #eef2f7;
+            --text-color: #333;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-light);
+        }
+
+        h1, h2, h3 {
+            color: var(--secondary-color);
+            font-weight: 700;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* --- ヘッダー --- */
+        header {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            color: white;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        /* --- セクション共通 --- */
+        section {
+            background: white;
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            margin-bottom: 40px;
+            opacity: 0; /* スクロールアニメーション用 */
+            transform: translateY(30px);
+            transition: all 0.6s ease-out;
+        }
+
+        section.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2em;
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background: var(--accent-color);
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+
+        /* --- その1：ページとサイトの違い（タブUI） --- */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--bg-dark);
+        }
+
+        .tab-btn {
+            padding: 15px 30px;
+            cursor: pointer;
+            font-weight: bold;
+            color: #7f8c8d;
+            transition: all 0.3s;
+            border-bottom: 4px solid transparent;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            border-bottom: 4px solid var(--primary-color);
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .analogy-box {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            background: var(--bg-light);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-bottom: 15px;
+        }
+
+        .analogy-icon {
+            font-size: 3em;
+        }
+
+        .analogy-text h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        /* --- その2：サイトマップ体験（アコーディオンUI） --- */
+        .sitemap-tree {
+            background: var(--bg-dark);
+            padding: 20px;
+            border-radius: var(--border-radius);
+        }
+
+        .tree-item {
+            margin-bottom: 5px;
+        }
+
+        .tree-label {
+            display: block;
+            padding: 12px 20px;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            position: relative;
+            transition: background 0.3s;
+        }
+
+        .tree-label:hover {
+            background: #f0f4f8;
+        }
+
+        /* 親要素のアイコン */
+        .tree-label.has-children::after {
+            content: '▼';
+            position: absolute;
+            right: 20px;
+            font-size: 0.8em;
+            color: #999;
+            transition: transform 0.3s;
+        }
+
+        .tree-label.has-children.open::after {
+            transform: rotate(180deg);
+        }
+
+        .tree-children {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+            padding-left: 30px; /* インデント */
+            border-left: 3px solid var(--primary-color);
+            margin-left: 20px;
+        }
+
+        .tree-children .tree-label {
+            background: transparent;
+            border-bottom: 1px solid #eee;
+            font-weight: normal;
+        }
+        
+        /* --- その3：ドメインの話（比較カードUI） --- */
+        .domain-comparison {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .domain-card {
+            flex: 1;
+            min-width: 300px;
+            background: var(--bg-light);
+            border-radius: var(--border-radius);
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: default;
+        }
+
+        .domain-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--box-shadow);
+        }
+
+        .domain-card.premium {
+            background: #fff5f5; /* 少しリッチな色 */
+            border: 2px solid var(--accent-color);
+        }
+
+        .domain-icon {
+            font-size: 5em;
+            margin-bottom: 20px;
+        }
+
+        .domain-url {
+            display: inline-block;
+            background: #eee;
+            padding: 8px 15px;
+            border-radius: 4px;
+            font-family: monospace;
+            margin: 15px 0;
+        }
+        
+        .domain-url span {
+            color: var(--accent-color);
+            font-weight: bold;
+        }
+
+        /* --- フッター --- */
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #7f8c8d;
+        }
+
+        footer p.cheer {
+            font-size: 1.2em;
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+
+        /* アニメーション定義 */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* レスポンシブ対応 */
+        @media (max-width: 768px) {
+            header h1 { font-size: 1.8em; }
+            .section-title { font-size: 1.5em; }
+            .tabs { flex-direction: column; }
+            .tab-btn { border-bottom: none; border-left: 4px solid transparent; text-align: center; }
+            .tab-btn.active { border-left: 4px solid var(--primary-color); }
+            .analogy-box { flex-direction: column; text-align: center; }
+            .tree-children { padding-left: 15px; margin-left: 10px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <h1>Webの世界へようこそ！</h1>
+            <p>制作を始める前に知っておきたい「基本のキ」を、<br>見て、触って、楽しく理解しましょう。</p>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <section id="section1">
+            <h2 class="section-title">その1：WebページとWebサイトって違うの？</h2>
+            <p style="text-align: center;">「ページ」と「サイト」。言葉は似ていますが、指し示す範囲が違います。<br>分かりやすい例えで見てみましょう。下のタブをクリックして切り替えてね！</p>
+
+            <div class="tabs">
+                <div class="tab-btn active" data-target="tab-book">📚 本で例えると？</div>
+                <div class="tab-btn" data-target="tab-store">🏢 デパートで例えると？</div>
+            </div>
+
+            <div id="tab-book" class="tab-content active">
+                <div class="analogy-box">
+                    <div class="analogy-icon">📃</div>
+                    <div class="analogy-text">
+                        <h3>Webページ ＝ 「本の1ページ」</h3>
+                        <p>ブラウザで表示される、1枚1枚の画面のことです。<br>（例：「会社概要のページ」「お問い合わせのページ」など）</p>
+                    </div>
+                </div>
+                <div class="analogy-box" style="background: #e8f4fd;">
+                    <div class="analogy-icon">📘</div>
+                    <div class="analogy-text">
+                        <h3>Webサイト ＝ 「本そのもの（1冊）」</h3>
+                        <p>複数のWebページが集まった、ひとつのまとまり全体のことです。<br>（例：「Amazonというサイト全体」「Googleのサイト」）</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-store" class="tab-content">
+                <div class="analogy-box">
+                    <div class="analogy-icon">🏪</div>
+                    <div class="analogy-text">
+                        <h3>Webページ ＝ 「各テナント（売り場）」</h3>
+                        <p>デパートの中にある、靴売り場、レストラン、本屋さんなど、一つ一つの目的を持った場所です。</p>
+                    </div>
+                </div>
+                <div class="analogy-box" style="background: #e8f4fd;">
+                    <div class="analogy-icon">🏬</div>
+                    <div class="analogy-text">
+                        <h3>Webサイト ＝ 「デパートの建物全体」</h3>
+                        <p>すべての売り場が入っている、建物丸ごとのことを指します。</p>
+                    </div>
+                </div>
+                <div class="analogy-box" style="background: #fff3e0;">
+                    <div class="analogy-icon">🚪</div>
+                    <div class="analogy-text">
+                        <h3>💡 「ホームページ」って？</h3>
+                        <p>本来は**「正面玄関（最初に表示されるページ）」**のこと。日本では「デパート全体（サイト）」の意味で使われることが多いですが、プロの現場では使い分けるとスマートです！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="section2">
+            <h2 class="section-title">その2：サイトの構造（サイトマップ）</h2>
+            <p style="text-align: center;">Webサイトは、トップページを頂点とした**「木の形（ツリー構造）」**で作るのが基本です。<br>下の「架空のカフェサイト」のメニューをクリックして、構造を展開してみよう！</p>
+
+            <div class="sitemap-tree">
+                <div class="tree-item">
+                    <span class="tree-label has-children">🏠 トップページ (Home)</span>
+                    <div class="tree-children">
+                        
+                        <div class="tree-item">
+                            <span class="tree-label">☕ メニュー紹介</span>
+                        </div>
+
+                        <div class="tree-item">
+                            <span class="tree-label has-children">📰 お知らせ・ブログ</span>
+                            <div class="tree-children">
+                                <div class="tree-item"><span class="tree-label">新作ケーキはじめました</span></div>
+                                <div class="tree-item"><span class="tree-label">年末年始の営業について</span></div>
+                            </div>
+                        </div>
+
+                        <div class="tree-item">
+                            <span class="tree-label has-children">📍 店舗情報・アクセス</span>
+                            <div class="tree-children">
+                                <div class="tree-item"><span class="tree-label">渋谷店の地図</span></div>
+                                <div class="tree-item"><span class="tree-label">新宿店の地図</span></div>
+                            </div>
+                        </div>
+
+                        <div class="tree-item">
+                            <span class="tree-label">✉️ お問い合わせ</span>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+            <p style="font-size: 0.9em; color: #666; text-align: center; margin-top: 20px;">↑ このように情報が整理されていると、ユーザーも迷わず、Googleの検索ロボットも理解しやすい良いサイトになります。</p>
+        </section>
+
+        <section id="section3">
+            <h2 class="section-title">その3：ドメイン（Web上の住所）の話</h2>
+            <p style="text-align: center;">Webサイトを公開するには「住所」が必要です。<br>「借り物の住所（無料）」と「自分の住所（有料）」の違いを、家の種類で比べてみましょう。<br>カードにマウスを乗せてみてね！</p>
+
+            <div class="domain-comparison">
+                <div class="domain-card">
+                    <div class="domain-icon">🏢</div>
+                    <h3>🅰️ 共有ドメイン (無料)</h3>
+                    <p>イメージ：<strong>「賃貸マンションの一室」</strong></p>
+                    <div class="domain-url">https://my-cafe.<span>pages.dev</span></div>
+                    <ul style="text-align: left; display: inline-block; margin-top: 20px;">
+                        <li>無料で手軽に始められる（今の練習環境はこれ！）。</li>
+                        <li>住所の後半は大家さん（サービス会社）の持ち物。</li>
+                        <li>大家さんの都合で住所が変わる可能性も…。</li>
+                    </ul>
+                    <p style="color: var(--primary-color); font-weight: bold; margin-top: 20px;">👉 練習用・学習用ならこれで十分OK！</p>
+                </div>
+
+                <div class="domain-card premium">
+                    <div class="domain-icon">🏡</div>
+                    <h3>🅱️ 独自ドメイン (有料)</h3>
+                    <p>イメージ：<strong>「一戸建て（表札付き）」</strong></p>
+                    <div class="domain-url">https://<span>my-cafe.com</span></div>
+                    <ul style="text-align: left; display: inline-block; margin-top: 20px;">
+                        <li>年間1,000円〜程度の維持費（土地代）がかかる。</li>
+                        <li><strong>世界に一つだけの、あなただけの住所。</strong></li>
+                        <li>サーバー（家）を引っ越しても住所はずっと同じ！信頼感UP。</li>
+                    </ul>
+                    <p style="color: var(--accent-color); font-weight: bold; margin-top: 20px;">👉 ポートフォリオや仕事用におすすめ！</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>Webの世界はパズルのようで面白いですよ。<br>まずは今の環境で、どんどんページを作って楽しんでくださいね！</p>
+        <p class="cheer">Enjoy Web Design!</p>
+    </footer>
+
+    <script>
+        // 1. スクロールしたらふわっと表示させるやつ（Intersection Observer）
+        const sections = document.querySelectorAll('section');
+        
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                }
+            });
+        }, { threshold: 0.2 }); // 20%見えたら発火
+
+        sections.forEach(section => {
+            observer.observe(section);
+        });
+
+
+        // 2. タブ切り替えの動き
+        const tabBtns = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // 全てのactiveクラスを外す
+                tabBtns.forEach(b => b.classList.remove('active'));
+                tabContents.forEach(c => c.classList.remove('active'));
+
+                // クリックされたボタンをactiveにする
+                btn.classList.add('active');
+                // 対応するコンテンツを表示する
+                const targetId = btn.getAttribute('data-target');
+                document.getElementById(targetId).classList.add('active');
+            });
+        });
+
+
+        // 3. サイトマップのアコーディオン（開閉）の動き
+        const treeLabels = document.querySelectorAll('.tree-label.has-children');
+
+        treeLabels.forEach(label => {
+            label.addEventListener('click', function() {
+                // 自分の次の要素（tree-children）を取得
+                const childrenContainer = this.nextElementSibling;
+                
+                // 開閉状態を切り替える
+                this.classList.toggle('open');
+
+                if (childrenContainer.style.maxHeight) {
+                    // 開いている場合は閉じる（高さを0にする）
+                    childrenContainer.style.maxHeight = null;
+                } else {
+                    // 閉じている場合は開く（中身の高さを計算して設定）
+                    childrenContainer.style.maxHeight = childrenContainer.scrollHeight + "px";
+                }
+            });
+        });
+
+        // 最初のトップページだけ初期状態で開いておく
+        document.querySelector('.tree-label.has-children').click();
+
+    </script>
+</body>
+</html>

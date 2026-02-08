@@ -1,0 +1,355 @@
+/* style.css */
+
+/* --- ベース設定 & 変数定義 --- */
+:root {
+    /* カラーパレット */
+    --primary: #2c3e50;
+    --accent-blue: #0984e3;
+    --accent-green: #00b894;
+    --accent-orange: #e17055;
+    --accent-purple: #6c5ce7;
+    
+    /* UIカラー */
+    --bg-sidebar: #1e272e;
+    --text-sidebar: #dfe6e9;
+    --bg-body: #f1f2f6;
+    --bg-card: #ffffff;
+    
+    /* サイズ */
+    --radius-L: 24px;
+    --radius-M: 12px;
+    --radius-S: 8px;
+    --sidebar-width: 280px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: "Inter", "Noto Sans JP", "Helvetica Neue", Arial, sans-serif;
+    color: #2d3436;
+    height: 100vh;
+    overflow: hidden; /* スクロールは各エリア内で行う */
+    background-color: var(--bg-body);
+}
+
+/* --- レイアウト構造 --- */
+.app-container {
+    display: flex;
+    height: 100%;
+}
+
+/* サイドバー（既存維持） */
+.sidebar {
+    width: var(--sidebar-width);
+    background-color: var(--bg-sidebar);
+    color: var(--text-sidebar);
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    z-index: 10;
+}
+.sidebar-header {
+    padding: 25px;
+    background: rgba(0,0,0,0.2);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+.sidebar-header h1 { font-size: 1.4rem; letter-spacing: 0.05em; font-weight: 900; }
+.sidebar-header p { font-size: 0.75rem; opacity: 0.7; margin-top: 5px; }
+
+.toc-list { list-style: none; overflow-y: auto; flex-grow: 1; padding: 10px 0; }
+.toc-btn {
+    width: 100%; text-align: left; background: none; border: none;
+    color: #b2bec3; padding: 14px 25px; cursor: pointer;
+    transition: all 0.2s; font-size: 0.9rem; border-left: 4px solid transparent;
+}
+.toc-btn:hover { background: rgba(255,255,255,0.05); color: white; }
+.toc-btn.active {
+    background: rgba(255,255,255,0.1); color: white;
+    border-left-color: var(--accent-green);
+    font-weight: bold;
+}
+
+/* メインエリア全体 */
+.main-area {
+    flex-grow: 1;
+    position: relative;
+    background: var(--bg-body);
+    overflow: hidden; /* 内部でスクロールさせる */
+    display: flex;
+    flex-direction: column;
+}
+
+/* =================================================================
+   ▼▼▼ 新規追加: ランディングページ (LP) 用スタイル ▼▼▼
+   =================================================================
+*/
+.landing-container {
+    height: 100%;
+    overflow-y: auto; /* LP自体をスクロール可能に */
+    padding-bottom: 60px;
+}
+
+/* 1. ヒーローセクション */
+.lp-hero {
+    background: white;
+    padding: 80px 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px;
+    border-bottom: 1px solid #eee;
+}
+.lp-hero-content { max-width: 600px; }
+.lp-badge {
+    background: #ffeaa7; color: #d35400; padding: 5px 12px;
+    border-radius: 20px; font-weight: bold; font-size: 0.8rem;
+    margin-bottom: 15px; display: inline-block;
+}
+.lp-title {
+    font-size: 3.5rem; line-height: 1.2; color: var(--primary);
+    font-weight: 900; margin-bottom: 20px; letter-spacing: -0.02em;
+}
+.text-highlight {
+    color: var(--accent-blue);
+    position: relative;
+    display: inline-block;
+}
+.text-highlight::after {
+    content: ""; position: absolute; bottom: 5px; left: 0; width: 100%; height: 10px;
+    background: rgba(9, 132, 227, 0.2); z-index: -1; transform: skewX(-10deg);
+}
+.lp-desc { font-size: 1.1rem; line-height: 1.8; color: #636e72; margin-bottom: 30px; }
+
+/* CTAボタン */
+.cta-button {
+    background: var(--primary); color: white;
+    font-size: 1.2rem; font-weight: bold; padding: 16px 40px;
+    border: none; border-radius: 50px; cursor: pointer;
+    box-shadow: 0 10px 20px rgba(44, 62, 80, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.cta-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 25px rgba(44, 62, 80, 0.4);
+}
+
+/* ヒーロービジュアル（装飾） */
+.lp-hero-visual { position: relative; width: 400px; height: 300px; }
+.hero-graphic { position: relative; width: 100%; height: 100%; }
+.g-circle {
+    position: absolute; top: 20px; right: 20px; width: 150px; height: 150px;
+    background: #00cec9; border-radius: 50%; opacity: 0.2;
+    animation: float 6s ease-in-out infinite;
+}
+.g-card {
+    position: absolute; top: 80px; left: 40px; width: 240px; height: 160px;
+    background: white; border: 2px solid var(--primary); border-radius: 12px;
+    box-shadow: 20px 20px 0 var(--accent-orange);
+    z-index: 2;
+}
+.g-cursor {
+    position: absolute; bottom: 40px; right: 80px;
+    width: 0; height: 0;
+    border-left: 20px solid var(--accent-purple);
+    border-right: 10px solid transparent;
+    border-bottom: 20px solid transparent;
+    transform: rotate(-20deg);
+    z-index: 3;
+    animation: float 4s ease-in-out infinite reverse;
+}
+
+/* 2. 特徴セクション */
+.lp-features {
+    padding: 60px; background: #fdfdfd;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px;
+}
+.feature-item {
+    background: white; padding: 30px; border-radius: var(--radius-M);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03); border: 1px solid #eee;
+    text-align: center;
+}
+.f-icon { font-size: 3rem; margin-bottom: 15px; }
+.feature-item h3 { font-size: 1.2rem; margin-bottom: 10px; color: var(--primary); }
+.feature-item p { font-size: 0.9rem; color: #636e72; line-height: 1.6; }
+
+/* 3. カリキュラム（ロードマップ） */
+.lp-curriculum { padding: 60px; max-width: 1200px; margin: 0 auto; }
+.section-title {
+    font-size: 2rem; margin-bottom: 40px; padding-bottom: 15px;
+    border-bottom: 2px solid #ddd;
+    display: flex; align-items: baseline;
+}
+
+/* カードグリッド */
+.course-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px;
+}
+
+/* コースカード */
+.course-card {
+    background: white; border-radius: var(--radius-M); padding: 25px;
+    border: 1px solid #eee; position: relative; overflow: hidden;
+    cursor: pointer; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: flex; flex-direction: column;
+}
+.course-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    border-color: transparent;
+}
+/* ホバー時のボーダー色制御 */
+.course-card.theme-theory:hover { border-top: 5px solid var(--accent-blue); }
+.course-card.theme-drill:hover { border-top: 5px solid var(--accent-green); }
+.course-card.special-card:hover { border-top: 5px solid var(--primary); }
+
+.card-badge {
+    font-size: 0.75rem; font-weight: bold; color: #b2bec3;
+    margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.05em;
+}
+.course-card h3 { font-size: 1.3rem; margin-bottom: 10px; color: var(--primary); }
+.course-card p { font-size: 0.9rem; color: #636e72; line-height: 1.6; flex-grow: 1; margin-bottom: 20px; }
+
+.card-link {
+    font-size: 0.9rem; font-weight: bold; color: var(--accent-blue);
+    text-align: right; display: block;
+}
+.course-card.disabled { opacity: 0.5; cursor: not-allowed; background: #f9f9f9; }
+.course-card.special-card { background: #2d3436; }
+.course-card.special-card h3, 
+.course-card.special-card p, 
+.course-card.special-card .card-badge { color: white; }
+.course-card.special-card .card-link { color: #ffeaa7; }
+
+
+/* =================================================================
+   ▼▼▼ 学習画面 (Learning View) 用スタイル（既存スタイルの継承） ▼▼▼
+   =================================================================
+*/
+.learning-container {
+    height: 100%;
+    display: flex; flex-direction: column;
+    background: white;
+}
+
+#content-display {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 60px 80px; /* 余白を広めに */
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* タイポグラフィ（記事内） */
+h1 { font-size: 2.2rem; color: var(--primary); margin-bottom: 20px; font-weight: 900; }
+h2 {
+    font-size: 1.6rem; color: var(--primary);
+    margin: 50px 0 25px; padding-bottom: 15px;
+    border-bottom: 2px dashed #eee;
+}
+h3 { font-size: 1.3rem; margin: 30px 0 15px; color: #2d3436; }
+p { line-height: 2.0; margin-bottom: 2em; color: #444; font-size: 1.05rem; }
+
+/* ページネーション */
+.pagination-bar {
+    padding: 20px 40px; background: white; border-top: 1px solid #eee;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-shrink: 0;
+}
+.nav-btn {
+    padding: 12px 24px; background: var(--primary); color: white;
+    border: none; border-radius: 8px; cursor: pointer; font-weight: bold;
+    font-size: 0.95rem; transition: opacity 0.2s;
+}
+.nav-btn.secondary { background: transparent; color: #636e72; border: 1px solid #dfe6e9; }
+.nav-btn:disabled { background: #ccc; cursor: not-allowed; }
+.nav-btn:hover:not(:disabled) { opacity: 0.9; }
+
+/* --- コンテンツ内コンポーネント（既存コードから移植） --- */
+
+/* YouTube推奨 */
+.youtube-recommend {
+    background: #fff0f0; border: 2px solid #ffcccc;
+    border-radius: var(--radius-M); padding: 25px; margin: 40px 0;
+    display: flex; gap: 20px; align-items: flex-start;
+}
+.yt-icon { font-size: 2.5rem; }
+.yt-query {
+    background: white; padding: 4px 8px; border-radius: 4px;
+    font-weight: bold; font-family: monospace; border: 1px solid #ddd;
+}
+
+/* コラム */
+.column-box {
+    background: #fff8e1; border-top: 5px solid #ffc107;
+    padding: 30px; margin: 40px 0; border-radius: 8px; position: relative;
+}
+.column-box::before {
+    content: "☕ Coffee Break"; position: absolute; top: -15px; left: 20px;
+    background: #ffc107; color: #333; padding: 5px 15px;
+    border-radius: 20px; font-weight: bold; font-size: 0.85rem;
+}
+
+/* 副音声 */
+.engineer-voice {
+    background: #e3f2fd; border-left: 5px solid #2196f3;
+    padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;
+    color: #0d47a1;
+}
+.designer-voice {
+    background: #fce4ec; border-left: 5px solid #e91e63;
+    padding: 25px; margin: 30px 0; border-radius: 0 8px 8px 0;
+    color: #880e4f;
+}
+
+/* ビジュアル図解 */
+.visual-demo {
+    background: #f8f9fa; border: 2px solid #e1e4e8;
+    border-radius: var(--radius-M); padding: 40px; margin: 40px 0;
+    text-align: center;
+}
+.visual-caption {
+    display: block; margin-top: 15px; font-size: 0.85rem;
+    color: #636e72; font-weight: bold;
+}
+
+/* ドリルカード */
+.drill-card {
+    background: white; border-radius: 12px; overflow: hidden;
+    margin-bottom: 50px; border: 1px solid #eee;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+.drill-card .card-content { padding: 40px; border-left: 8px solid #ccc; }
+.drill-card.lv1 .card-content { border-left-color: #00b894; }
+.drill-card.lv2 .card-content { border-left-color: #fdcb6e; }
+.drill-card.lv3 .card-content { border-left-color: #0d99ff; }
+
+/* アコーディオン */
+details { margin-bottom: 15px; background: #f9f9f9; border-radius: 8px; }
+summary { padding: 15px 20px; cursor: pointer; font-weight: bold; color: #555; }
+.step-content { padding: 20px; font-size: 0.95rem; line-height: 1.8; border-top: 1px solid #eee; }
+
+/* キーボード装飾 */
+kbd {
+    background: #fff; border: 1px solid #ccc; border-radius: 4px;
+    padding: 2px 6px; margin: 0 3px; font-family: monospace;
+    box-shadow: 0 2px 0 #ddd; font-size: 0.9em;
+}
+
+/* アニメーション定義 */
+@keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+/* モバイルレスポンシブ (簡易) */
+@media (max-width: 768px) {
+    .app-container { flex-direction: column; }
+    .sidebar { display: none; } /* スマホではサイドバー省略（LP中心にするため） */
+    .lp-hero { flex-direction: column; padding: 40px 20px; text-align: center; }
+    .lp-hero-visual { display: none; }
+    .lp-features { grid-template-columns: 1fr; padding: 40px 20px; }
+    #content-display { padding: 30px 20px; }
+}

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Figma Master Course - ゼロからの完全習得ガイド</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <nav class="sidebar">
+            <div class="sidebar-header" onclick="location.reload()" style="cursor:pointer;">
+                <h1>Figma Master</h1>
+                <p>ゼロからの完全習得ガイド</p>
+            </div>
+            <ul id="toc-list" class="toc-list">
+                </ul>
+        </nav>
+
+        <main class="main-area">
+            
+            <div id="landing-view" class="landing-container">
+                
+                <header class="lp-hero">
+                    <div class="lp-hero-content">
+                        <span class="lp-badge">For Beginners</span>
+                        <h1 class="lp-title">Figmaを、<br>開発の<span class="text-highlight">武器</span>にする。</h1>
+                        <p class="lp-desc">
+                            単なるツールの使い方ではありません。<br>
+                            エンジニアと連携し、システムとして破綻しない<br>
+                            「プロの設計思想」を学ぶためのハンズオン形式ガイドです。
+                        </p>
+                        <button id="start-learning-btn" class="cta-button">
+                            学習をスタートする
+                        </button>
+                    </div>
+                    <div class="lp-hero-visual">
+                        <div class="hero-graphic">
+                            <div class="g-circle"></div>
+                            <div class="g-card"></div>
+                            <div class="g-cursor"></div>
+                        </div>
+                    </div>
+                </header>
+
+                <section class="lp-features">
+                    <div class="feature-item">
+                        <div class="f-icon">🔰</div>
+                        <h3>完全未経験OK</h3>
+                        <p>専門用語にはすべて解説がつきます。デザインの知識ゼロから始められます。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="f-icon">🤝</div>
+                        <h3>エンジニア視点</h3>
+                        <p>「コーディングしやすいデザインデータ」を作るための作法が身につきます。</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="f-icon">🎮</div>
+                        <h3>実践ドリル付き</h3>
+                        <p>読むだけじゃなく、実際に手を動かす「ミッション」で確実に習得します。</p>
+                    </div>
+                </section>
+
+                <section class="lp-curriculum">
+                    <h2 class="section-title">Curriculum <span style="font-size:1rem; font-weight:normal; color:#666; margin-left:10px;">学習ロードマップ</span></h2>
+                    <div class="course-grid">
+                        <div class="course-card theme-theory" onclick="startChapter(0)">
+                            <div class="card-badge">Chapter 0</div>
+                            <h3>Figmaの概念</h3>
+                            <p>なぜFigmaなのか？従来ツールとの決定的な違いと「WebのOS」としての仕組み。</p>
+                            <span class="card-link">Start →</span>
+                        </div>
+                        <div class="course-card theme-theory" onclick="startChapter(1)">
+                            <div class="card-badge">Chapter 1</div>
+                            <h3>フレームの物理学</h3>
+                            <p>「グループ化」は禁止？箱と中身の関係性と、レスポンシブの基礎理論。</p>
+                            <span class="card-link">Start →</span>
+                        </div>
+                        <div class="course-card theme-ch2" onclick="startChapter(2)">
+                            <div class="card-badge">Chapter 2</div>
+                            <h3>オートレイアウト</h3>
+                            <p>CSS Flexboxの視覚化。<br>魔法の自動整列機能を極める。</p>
+                            <span class="card-link">Start →</span>
+                        </div>
+                        <div class="course-card theme-theory" onclick="startChapter(3)">
+                            <div class="card-badge">Chapter 3</div>
+                            <h3>コンポーネント設計</h3>
+                            <p>修正に強いデータを作るための「クラスとインスタンス」の設計論。</p>
+                            <span class="card-link">Start →</span>
+                        </div>
+                        <div class="course-card theme-theory" onclick="startChapter(4)">
+                            <div class="card-badge">Chapter 4</div>
+                            <h3>変数とシステム</h3>
+                            <p>色コード直書きからの脱却。Design TokensとVariablesの活用。</p>
+                            <span class="card-link">Start →</span>
+                        </div>
+                        <div class="course-card theme-theory" onclick="startChapter(5)">
+                            <div class="card-badge">Chapter 5</div>
+                            <h3>動的ロジック</h3>
+                            <p>If文と変数を使った、本物そっくりのプロトタイプ作成。</p>
+                            <span class="card-link">Start →</span>
+                        </div>
+                        <div class="course-card theme-drill" onclick="startChapter(6)">
+                            <div class="card-badge">Chapter 6</div>
+                            <h3>実装ハンドオフ</h3>
+                            <p>エンジニアへのラブレター。Dev Modeの正しい歩き方。</p>
+                            <span class="card-link">Start →</span>
+                        </div>
+                        <div class="course-card theme-drill special-card" onclick="startChapter(7)">
+                            <div class="card-badge">FINAL</div>
+                            <h3>最終試験</h3>
+                            <p>崩れたレイアウトを修正せよ。<br>免許皆伝のためのトラブルシューティング。</p>
+                            <span class="card-link">Challenge! →</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div id="learning-view" class="learning-container" style="display: none;">
+                <div id="content-display">
+                    </div>
+                
+                <div class="pagination-bar">
+                    <button id="prev-btn" class="nav-btn">← 前の章</button>
+                    <button id="home-btn" class="nav-btn secondary" onclick="location.reload()">HOME</button>
+                    <span id="page-indicator"></span>
+                    <button id="next-btn" class="nav-btn">次の章 →</button>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script src="content.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
