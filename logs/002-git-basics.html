@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gitと「脳みそ」の話 | SHIMANEKO TECH LOG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container" style="text-align: center;">
+            <a href="../index.html" class="logo">SHIMANEKO TECH LOG</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="article-container">
+            <header class="article-header">
+                <span class="tag"
+                    style="background: var(--color-primary); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold;">TUTORIAL</span>
+                <h1>Gitと「脳みそ」の話。<br><span
+                        style="font-size: 0.6em; color: var(--color-secondary);">なぜフォルダをコピーすると壊れるのか？</span>
+                </h1>
+                <time
+                    style="display: block; margin-top: 10px; color: var(--color-secondary); font-weight: bold;">2026.02.09</time>
+            </header>
+
+            <div class="article-body">
+                <p>こんにちは、しまねこデザインのコンブです。<br>
+                    今日は、私たちが開発中に遭遇した「謎のデプロイエラー」と、その正体についてお話しします。</p>
+
+                <h2>1. Gitは「タイムマシン」であり「交換日記」</h2>
+                <p>まずは基本のおさらいです。Git（ギット）って何でしょう？<br>
+                    難しく考えずに、こうイメージしてください。</p>
+
+                <div class="concept-box">
+                    <ul>
+                        <li><strong>タイムマシン機能:</strong> 「あの時の状態に戻して！」ができる（セーブポイント作成）</li>
+                        <li><strong>交換日記機能:</strong> 「私はここを直したよ」「僕はここを足したよ」を合体させる</li>
+                    </ul>
+                </div>
+
+                <h2>2. 「本体」と「脳みそ」</h2>
+                <p>ここからが本題です。Gitを使っているフォルダ（リポジトリ）の中には、実は<strong>2種類のデータ</strong>が入っています。</p>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+graph TD
+    Root[📁 プロジェクトフォルダ]
+    
+    subgraph Visible [目に見えるもの]
+        File1[📄 index.html]
+        File2[🎨 style.css]
+        File3[🖼️ image.jpg]
+    end
+    
+    subgraph Invisible [見えないもの]
+        GitFolder[🧠 .git フォルダ]
+    end
+    
+    Root --> Visible
+    Root --> Invisible
+    
+    GitFolder -.->|全ての変更履歴を記憶| Visible
+    style GitFolder fill:#ffcccc,stroke:#ff0000,stroke-width:2px
+                    </pre>
+                    <div class="diagram-caption">図: 普段見ているファイルと、隠れている脳みそ(.git)</div>
+                </div>
+
+                <p>この <code>.git</code> という隠しフォルダこそが<strong>Gitの本体（脳みそ）</strong>です。<br>
+                    「誰が、いつ、どこを変更したか」という記憶は、すべてこの小箱に入っています。<br>
+                    私たちが普段いじっているファイルは、この脳みそが見せてくれている「現在の姿」にすぎません。</p>
+
+                <h2>3. マトリョーシカの罠（サブモジュール問題）</h2>
+                <p>さて、今回起きたトラブルはこれです。<br>
+                    <strong>「他のGitプロジェクトのフォルダを、そのままコピーして持ってきた」</strong><br>
+                    これがなぜいけないのでしょうか？
+                </p>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+graph TD
+    Main[📁 メインプロジェクト] --> MainBrain[🧠 メインの脳 (.git)]
+    
+    subgraph CopyFailure [❌ 危険な状態]
+        Copied[📁 コピーしてきたフォルダ]
+        CopiedBrain[🧠 コピー元の脳 (.git)]
+    end
+    
+    Main --> Copied
+    Copied --> CopiedBrain
+    
+    MainBrain --×|他人の脳みそは理解できない| CopiedBrain
+    
+    style CopiedBrain fill:#ff0000,color:#fff
+                    </pre>
+                    <div class="diagram-caption">図: 脳みその中に別の脳みそが入ってしまう</div>
+                </div>
+
+                <p>フォルダの中に、別の <code>.git</code>（脳みそ）が入ったままコピーしてしまうと、<br>
+                    メインの脳みそは<strong>「あ、ここは別の独立した国（サブモジュール）なんだな」</strong>と判断します。<br>
+                    その結果、中身のファイルを無視したり、クラウドへのアップロード時に「その国の住所（URL）を知らないよ！」とエラーになったりするのです。</p>
+
+                <h2>4. 解決策：脳みそを置いてくる</h2>
+                <p>他のプロジェクトから素材としてフォルダを持ってきたいときは、どうすればいいか。<br>
+                    答えはシンプルです。<br>
+                    <strong>「脳みそ（.git）を削除してから取り込む」</strong>これだけです。
+                </p>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+flowchart LR
+    Step1[📁 コピーしたフォルダ] -->|中を見る| Step2[🧠 .git フォルダを発見]
+    Step2 -->|削除！| Step3[🗑️ ゴミ箱]
+    Step1 -->|ただのファイルの束になる| Step4[✨ 安全な素材]
+    
+    Step4 -->|メインに取り込み| Main[📁 メインプロジェクト]
+                    </pre>
+                    <div class="diagram-caption">図: 正しい取り込み方</div>
+                </div>
+
+                <p><code>.git</code> フォルダさえ消してしまえば、それはただの「HTMLや画像の集まり」になります。<br>
+                    そうすれば、メインプロジェクトの脳みそが「これらは私の体の一部だ」と認識して、正しく管理してくれます。</p>
+
+                <div class="concept-box">
+                    <div class="concept-title">💡 今日の教訓</div>
+                    <p>他からフォルダを持ってきたら、まずは隠しファイルを表示して <code>.git</code> がないかチェックしよう！<br>
+                        あったら即削除！これだけで平和が訪れます。</p>
+                </div>
+
+                <div
+                    style="text-align: center; margin-top: 80px; padding: 40px; border-top: 1px solid var(--color-border);">
+                    <a href="../index.html" class="read-btn"
+                        style="display: inline-block; padding: 15px 40px; width: auto;">Topへ戻る</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Shimaneko Design</p>
+        </div>
+    </footer>
+
+    <!-- Mermaid Loader -->
+    <script type="module" src="../js/visuals.js"></script>
+
+</body>
+
+</html>
