@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ウェブデザイン技能検定3級 模擬試験【学科編】50問</title>
+  <style>
+    /* CSSは元のファイルと同じものを全て維持 */
+    :root{
+      --bg:#ffffff;
+      --card:#f9fafb;
+      --accent:#2563eb;
+      --muted:#374151;
+      --ok:#16a34a;
+      --bad:#ef4444;
+      --text:#111827;
+    }
+    *{box-sizing:border-box}
+    body{
+      font-family:system-ui,-apple-system,"Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,Segoe UI,Roboto,Arial;
+      background:var(--bg);
+      color:var(--text);
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .card{
+      background:var(--card);
+      max-width:820px;
+      width:100%;
+      border-radius:12px;
+      padding:24px;
+      box-shadow:0 8px 20px rgba(0,0,0,0.1);
+    }
+    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+    h1{font-size:20px;margin:0}
+    .meta{color:var(--muted);font-size:13px}
+    .progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden;margin-top:12px}
+    .progress > i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),#7c3aed);width:0%}
+    .question{margin:18px 0;padding:18px;border-radius:8px;background:#f3f4f6}
+    .qnum{font-size:13px;color:var(--muted)}
+    .qtext{font-size:18px;margin-top:8px}
+
+    .choices{display:grid;grid-template-columns:1fr;gap:10px;margin-top:14px}
+    .choice{padding:12px 14px;border-radius:8px;border:1px solid #d1d5db;background:#ffffff;cursor:pointer;text-align:left;color:var(--text)}
+    .choice:hover{transform:translateY(-2px);background:#f9fafb}
+    .choice.correct{border-color:var(--ok);background:#dcfce7}
+    .choice.wrong{border-color:var(--bad);background:#fee2e2}
+
+    .controls{display:flex;gap:10px;align-items:center;margin-top:18px}
+    button.btn{background:var(--accent);color:#fff; padding:10px 14px;border-radius:8px;border:none;cursor:pointer;font-weight:600}
+    button.ghost{background:transparent;border:1px solid #d1d5db;color:var(--muted)}
+
+    .result{display:none;padding:18px;margin-top:18px;border-radius:8px;background:#f3f4f6}
+    .result.show{display:block}
+    .score{font-size:22px;font-weight:700;color:var(--text)}
+    .small{font-size:13px;color:var(--muted)}
+
+    @media(min-width:640px){.choices{grid-template-columns:repeat(2,1fr)}}
+
+    footer{margin-top:14px;color:var(--muted);font-size:13px}
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <header>
+      <div>
+        <h1>ウェブデザイン技能検定3級 模擬試験【学科編】</h1>
+        <div class="meta">50問 — Web概論・法規・デザイン・ビジネス</div>
+        <div class="progress" aria-hidden="true"><i id="progBar"></i></div>
+      </div>
+      <div class="meta" id="status">問題 1 / 50</div>
+    </header>
+
+    <section id="quizArea">
+      <div class="question">
+        <div class="qnum" id="qNum">問題 1</div>
+        <div class="qtext" id="qText">読み込み中...</div>
+        <div class="choices" id="choices"></div>
+      </div>
+
+      <div class="controls">
+        <button class="btn" id="nextBtn" disabled>次へ</button>
+        <button class="ghost" id="restartBtn">最初から</button>
+        <div style="margin-left:auto" class="small" id="feedback"></div>
+      </div>
+    </section>
+
+    <section class="result" id="resultBox" aria-live="polite">
+      <div class="score" id="finalScore">あなたのスコア: 0 / 50</div>
+      <div class="small" id="detailText">良いところと、改善ポイントを表示します。</div>
+      <div style="margin-top:12px">
+        <button class="btn" id="retryBtn">もう一度チャレンジ</button>
+        <button class="ghost" id="reviewBtn">解答を確認</button>
+      </div>
+    </section>
+
+    <footer>作成: ウェブデザイン技能検定3級 模擬試験【学科編】</footer>
+  </main>
+
+<script>
+// =========================================================
+// 問題データ 50問 (学科編)
+// =========================================================
+const QUESTIONS = [
+  {q: 'Webサイトの著作権に関する記述として、**適切でない**ものはどれか。', choices: ['著作権は、創作された時点で自動的に発生する。', '著作権の保護期間は、著作者の死後50年で満了する。', 'Webサイトのデザインやレイアウトも著作権で保護される場合がある。', '著作権を譲渡する場合でも、著作者人格権は著作者に残る。'], a: 1, explain: '著作権の保護期間は、原則として**著作者の死後70年**で満了します。（一部例外あり）'},
+  {q: 'Webサイトを公開する際、通常、Webサーバーの**公開ディレクトリの直下**に配置し、ブラウザが最初に読み込むファイル名はどれか。', choices: ['`style.css`', '`access.html`', '`index.html`', '`default.php`'], a: 2, explain: '`index.html`は、ディレクトリにアクセスした際に自動的に読み込まれるトップページとして最も一般的に使用されます。'},
+  {q: '特定の情報をユーザーから取得する際に、その**利用目的を明確に示し、同意を得る**ことが義務付けられている日本の法律はどれか。', choices: ['著作権法', '不正アクセス禁止法', '個人情報保護法', '景品表示法'], a: 2, explain: '**個人情報保護法**は、個人情報の適切な取り扱いについて定めており、利用目的の明示や同意取得などを求めています。'},
+  {q: 'WebサーバーとクライアントPC間でファイルを転送する際に最も一般的に使用されるプロトコルはどれか。', choices: ['HTTP', 'FTP', 'SMTP', 'POP3'], a: 1, explain: 'FTP (File Transfer Protocol) は、Webサイトのファイルをサーバーへアップロード・ダウンロードする際に使用されます。'},
+  {q: 'Webデザインにおける**補色（反対色）**の関係を利用した効果として適切なものはどれか。', choices: ['統一感が生まれ、落ち着いた印象になる。', '互いの色を最も際立たせ、強調する効果がある。', '複数の色を調和させ、視覚的な安定感を生む。', '柔らかく、温かい印象を与える。'], a: 1, explain: '補色は、色相環で反対に位置する色であり、組み合わせることで互いの色を最大限に引き立てる、強調効果があります。'},
+  {q: '他人のIDやパスワードを不正に取得・利用することを禁じている法律はどれか。', choices: ['著作権法', '不正アクセス禁止法', '個人情報保護法', '景品表示法'], a: 1, explain: '**不正アクセス禁止法**は、ネットワークを通じて他人の識別符号（IDやパスワード）を不正に利用する行為などを禁じています。'},
+  {q: 'Webサイトのセキュリティ脆弱性の一つで、入力フォームなどに不正なスクリプトを埋め込み、訪問者のブラウザで実行させる攻撃を何と呼ぶか。', choices: ['SQLインジェクション', 'クロスサイトスクリプティング（XSS）', 'DDoS攻撃', 'フィッシング'], a: 1, explain: 'XSSは、悪意のあるスクリプトをWebページに埋め込み、ユーザーのブラウザ上で実行させる攻撃手法です。'},
+  {q: 'Webサイトの**ユーザビリティ（使いやすさ）**を高めるために、サイト内のどこにいても現在地を把握できるようにする工夫を、主に何と呼ぶか。', choices: ['グリッドシステム', 'ブレッドクラムリスト', 'ヒーローイメージ', 'F字パターン'], a: 1, explain: '**ブレッドクラムリスト**（パンくずリスト）は、ユーザーがサイト構造の中でどの階層にいるかを示すナビゲーションです。'},
+  {q: 'インターネットでWebページを閲覧する際に、ブラウザとサーバー間でデータをやり取りするためのプロトコルはどれか。', choices: ['HTTP', 'TCP', 'IP', 'DNS'], a: 0, explain: '**HTTP (HyperText Transfer Protocol)** は、Webクライアント（ブラウザ）とWebサーバー間で通信を行うためのルールです。'},
+  {q: 'Webサイトの色使いで、背景色と文字色の**明度差を大きく**取る理由として最も適切なものはどれか。', choices: ['デザイン性を高めるため。', 'ページの読み込み速度を上げるため。', '可読性を高めるため。', '配色に統一感を出すため。'], a: 2, explain: '明度差が大きいほど、文字が背景から浮き立ち、**可読性**が向上します。（アクセシビリティの基本）'},
+  {q: '**個人情報**に該当しないものはどれか。', choices: ['個人の思想', '氏名、生年月日', '個人が特定されない統計情報', '特定の個人を識別できる情報'], a: 2, explain: '**個人が特定されない統計情報**は、通常、個人情報保護法の対象外です。'},
+  {q: 'Webサイトを公開するために、サーバーに接続する際に必要な情報でないものはどれか。', choices: ['FTPホスト名', 'ユーザー名', 'IPアドレス', '**ブラウザの種類**'], a: 3, explain: 'ブラウザの種類はサーバーへの接続に必須ではありません。ホスト名、ユーザー名、パスワード（またはIPアドレス）が必須です。'},
+  {q: '多数の情報や要素を規則的に配置し、整理された印象を与えるデザイン手法は？', choices: ['F字パターン', 'グリッドシステム', 'Zパターン', 'スケルトン'], a: 1, explain: '**グリッドシステム**は、要素を一定のルールで配置し、デザインの統一感と秩序を生み出します。'},
+  {q: 'HTTPS通信において、データを暗号化し、通信相手の**正当性を証明**するために利用されるものは何か。', choices: ['IPアドレス', 'CSSファイル', 'SSL/TLSサーバー証明書', 'クッキー'], a: 2, explain: '**SSL/TLSサーバー証明書**は、サイトの運営者が実在することや、通信の暗号化を保証します。'},
+  {q: 'Webサイトが対応すべき国際的な標準規格を策定している団体はどこか。', choices: ['ISO', 'W3C', 'JIS', 'IEEE'], a: 1, explain: '**W3C (World Wide Web Consortium)** は、HTMLやCSSなどのWeb技術の標準化を進める国際的な非営利団体です。'},
+  {q: 'ユーザーの視線がWebページの左上から右下へ、アルファベットの「F」の形に動くという研究結果を何と呼ぶか。', choices: ['Zパターン', 'F字パターン', 'グリッドパターン', 'T字パターン'], a: 1, explain: '**F字パターン**は、Webページの読み込み方に関する、ユーザーの行動傾向を示すものです。'},
+  {q: 'Webサイトで他人の著作物を利用する場合、原則として必要となる行為は？', choices: ['著作権者への報告', '著作権者の許諾', '著作権料の支払い', '著作物の購入'], a: 1, explain: '著作権法に基づき、著作物を利用するには**著作権者の許諾**（許可）が原則必要です。'},
+  {q: 'WebブラウザがWebサーバーへリクエストを送り、Webページの内容を受け取る際に使用されるプロトコルは？', choices: ['FTP', 'SMTP', 'HTTP', 'POP3'], a: 2, explain: 'HTTP/HTTPSが、Webページの送受信に使用されます。'},
+  {q: 'Webサイトを閲覧しにくい状況にある人にも、情報がきちんと伝わるように配慮することを何と呼ぶか。', choices: ['ユーザビリティ', 'ユニバーサルデザイン', 'アクセシビリティ', 'インターフェイス'], a: 2, explain: '**アクセシビリティ**は、年齢や身体能力に関係なく、誰でも情報にアクセス・利用できるようにすることです。'},
+  {q: 'Webサーバーがブラウザに一時的に保存させる情報で、ユーザーのログイン状態や設定などを保持するために使われる小さなデータは？', choices: ['キャッシュ', 'クッキー（Cookie）', 'セッション', 'スクリプト'], a: 1, explain: '**クッキー（Cookie）** は、サーバーから送られ、ユーザーのブラウザに保存される小さなデータです。'},
+  {q: 'Webサイトを公開した情報発信者の氏名、住所、連絡先などを明確にすることが求められる法律はどれか。', choices: ['不正競争防止法', '特定商取引法', '著作権法', '景品表示法'], a: 1, explain: '**特定商取引法**では、インターネット販売などで、運営者の情報開示（氏名、住所、連絡先など）が義務付けられています。'},
+  {q: '**赤、青、黄色**の3色のように、混ぜ合わせても作れない基本的な色を何と呼ぶか。', choices: ['補色', '対照色', '原色（三原色）', '中間色'], a: 2, explain: '**原色**は、他の色を混ぜても作れない、色の基本となる色です。'},
+  {q: 'コンピュータ上でWebページを閲覧するためのソフトウェアを何と呼ぶか。', choices: ['Webサーバー', 'FTPクライアント', 'Webブラウザ', 'OS'], a: 2, explain: '**Webブラウザ**（Chrome, Safariなど）は、HTMLファイルを解釈・表示するためのソフトウェアです。'},
+  {q: '著作権のうち、**著作者が自分の作品について持つ人格的な権利**で、譲渡できないものはどれか。', choices: ['複製権', '公衆送信権', '著作者人格権', '財産権'], a: 2, explain: '**著作者人格権**は、著作者固有の名誉や感情を守る権利で、他人に譲渡することはできません。'},
+  {q: 'Webサイトのデザインにおいて、要素を揃えたり、視線の流れを誘導したりする力学的な要素を何と呼ぶか。', choices: ['タイポグラフィ', '視線誘導', 'カラーパレット', 'レイアウト'], a: 1, explain: '**視線誘導**は、ユーザーが見てほしい情報へ自然と目が向くように、要素を配置することです。'},
+  {q: 'Webサイトの運営者が、災害などでサイトが利用できなくなった場合に備えて行うべき対策は？', choices: ['アクセシビリティの確保', 'バックアップの取得', '広告の停止', 'OSのアップデート'], a: 1, explain: 'データ消失に備え、定期的に**バックアップ**を取得することが重要です。'},
+  {q: '企業や商品の不当な表示（誇大広告など）を規制し、消費者の利益を守るための日本の法律はどれか。', choices: ['著作権法', '不正アクセス禁止法', '個人情報保護法', '景品表示法'], a: 3, explain: '**景品表示法**（景表法）は、商品やサービスに関する不当な表示や過大な景品を規制します。'},
+  {q: 'ウェブサイトのアクセス状況を分析し、改善点を見つけるためのツールを一般に何と呼ぶか。', choices: ['CMS', 'FTPクライアント', 'アクセス解析ツール', 'IDE'], a: 2, explain: 'アクセス解析ツール（Google Analyticsなど）は、ユーザーの行動やトラフィックを分析します。'},
+  {q: 'Webサイトのデザインで、ユーザーが操作しやすいように、ボタンやリンクの大きさ、配置を工夫することを何と呼ぶか。', choices: ['タイポグラフィ', 'マイクロコピー', 'インターフェースデザイン', 'カラースキーム'], a: 2, explain: 'インターフェースデザインは、ユーザーとシステムの間をつなぐ部分（ボタン、メニューなど）の設計です。'},
+  {q: 'Webサイトの企画・設計段階で、ページごとの構成要素や配置を視覚的に示したシンプルな図を何と呼ぶか。', choices: ['ワイヤーフレーム', 'プロトタイプ', 'ユーザーストーリー', 'ペルソナ'], a: 0, explain: '**ワイヤーフレーム**は、デザインや色を付けず、情報配置の骨組みだけを示す図です。'},
+  {q: 'Webサイト公開後も、コンテンツを最新の状態に保ち、技術的な問題がないかチェックすることを何と呼ぶか。', choices: ['SEO対策', 'インフォメーションアーキテクチャ', 'サイトメンテナンス', 'リターゲティング'], a: 2, explain: 'サイトメンテナンスは、Webサイトの継続的な運用管理に関わる活動です。'},
+  {q: 'ウェブサイトが様々なデバイス（PC、スマホ、タブレット）で最適に表示されるように設計する手法は？', choices: ['ピクセルパーフェクト', 'リキッドレイアウト', 'レスポンシブWebデザイン', '固定レイアウト'], a: 2, explain: '**レスポンシブWebデザイン**は、CSSのメディアクエリなどを用い、画面幅に応じてレイアウトを変化させる手法です。'},
+  {q: 'Webサイトのドメイン名とIPアドレスを結びつける仕組みを何と呼ぶか。', choices: ['FTP', 'HTTP', 'DNS', 'SSL'], a: 2, explain: '**DNS (Domain Name System)** は、人間が読むドメイン名を、コンピュータが認識するIPアドレスに変換します。'},
+  {q: 'Webサイトの制作において、著作権者の許可なく、他者の作品を自分のものとして公開する行為は、**どの権利の侵害**にあたるか。', choices: ['公衆送信権', '複製権', '同一性保持権', '財産権'], a: 1, explain: '複製権（コピーする権利）の侵害にあたります。'},
+  {q: 'ユーザーのブラウザに一時的にデータを保存させ、ページの表示速度を向上させる仕組みは？', choices: ['クッキー', 'キャッシュ', 'セッション', 'プロキシ'], a: 1, explain: 'キャッシュは、画像などのデータを一時的にブラウザに保存し、次回アクセス時の読み込み時間を短縮します。'},
+  {q: 'Webデザインにおいて、**ゴールデン比率**（約1:1.618）や**三分割法**などの法則が使われる主な目的は？', choices: ['サイトの読み込み速度を上げるため', '情報の構造を複雑にするため', '視覚的に心地よい、美しいレイアウトを作るため', 'SEOの評価を高めるため'], a: 2, explain: 'これらの比率や法則は、人間が美しく感じるレイアウトを作るための指針となります。'},
+  {q: 'Webサイトがターゲットとするユーザー像を具体的に設定し、そのユーザーの属性や行動を仮想的に定義したものを何と呼ぶか。', choices: ['ターゲット層', 'ペルソナ', 'ユーザーフロー', 'カスタマージャーニー'], a: 1, explain: '**ペルソナ**は、ユーザーのニーズや行動を深く理解するために作成される、架空の具体的なユーザー像です。'},
+  {q: '情報提供者が、訪問者の年齢や性別などの属性に応じて、表示する広告やコンテンツを変化させる手法は？', choices: ['バナー広告', 'リスティング広告', 'ターゲティング広告', 'アフィリエイト広告'], a: 2, explain: 'ターゲティング広告は、ユーザーの属性や過去の行動に基づいて、最も関心の高い広告を表示します。'},
+  {q: 'Webページのデザインにおいて、**テキスト情報の階層構造**を分かりやすく表現するための工夫を何と呼ぶか。', choices: ['カラーマネジメント', 'タイポグラフィ', '配色計画', 'ブランディング'], a: 1, explain: '**タイポグラフィ**は、フォントの種類、サイズ、行間、文字間などを調整し、テキストを読みやすく美しく見せる技術です。'},
+  {q: 'Webサイトで使用する画像形式で、**写真のように多くの色数**を必要とし、**非可逆圧縮**（元の画質に戻せない圧縮）でファイルサイズを小さくできる形式は？', choices: ['PNG', 'GIF', 'JPEG', 'SVG'], a: 2, explain: '**JPEG**は、写真などのフルカラー画像を扱うのに適しており、非可逆圧縮（多少画質は劣化するが、大幅にファイルサイズを小さくできる）を用います。'},
+  {q: 'Webサイトの**情報構造**を設計し、ユーザーが必要な情報にスムーズにたどり着けるように整理することを何と呼ぶか。', choices: ['UI設計', 'インフォメーションアーキテクチャ', 'ユーザビリティ', 'アクセシビリティ'], a: 1, explain: '**インフォメーションアーキテクチャ (IA)** は、サイトのコンテンツの構造、分類、ナビゲーションの設計を行うことです。'},
+  {q: 'Webサイトの運用において、悪意のある攻撃者からシステムを守るための行為は、主にどの分野の対策か。', choices: ['Webマーケティング', 'Webデザイン', 'Webセキュリティ', 'Webビジネス'], a: 2, explain: '不正アクセスや情報漏洩を防ぐ活動は、**Webセキュリティ**に含まれます。'},
+  {q: '他者のサイトのコンテンツをそのままコピーし、自分のサイトで公開する行為は、著作権法上、主にどの権利を侵害するか。', choices: ['頒布権', '同一性保持権', '公衆送信権', '二次的著作物創作権'], a: 2, explain: 'インターネットを通じて他者に提供する権利である**公衆送信権**の侵害にあたります。'},
+  {q: 'Webサイトの目的が達成されているか（例: 商品が購入されたか）を数値で測る指標を何と呼ぶか。', choices: ['PV (ページビュー)', 'UU (ユニークユーザー)', 'CV (コンバージョン)', 'CTR (クリック率)'], a: 2, explain: '**CV (コンバージョン)** は、サイトの目標達成（購入、資料請求など）を意味します。'},
+  {q: 'Webサイトのデザインにおいて、**色の調和**や組み合わせのルールを定める計画を何と呼ぶか。', choices: ['レイアウト', '配色計画', 'ワイヤーフレーム', 'タイポグラフィ'], a: 1, explain: '配色計画は、ブランドイメージやユーザーの感情に訴えかけるための色の使い方を定義します。'},
+  {q: 'ユーザーがWebサイトで目的を達成するまでの道のりを示した図を何と呼ぶか。', choices: ['サイトマップ', 'ユーザージャーニーマップ', 'ペルソナ', 'ワイヤーフレーム'], a: 1, explain: '**ユーザージャーニーマップ**は、ユーザーがサイト内で体験するプロセスを可視化します。'},
+  {q: 'Webサイトのファイル構成で、画像を保存するために通常作成されるディレクトリ名として一般的なものは？', choices: ['`styles`', '`scripts`', '`htmls`', '`images`'], a: 3, explain: '画像を保存するためのフォルダ名は、一般的に`images`や`img`が使われます。'},
+  {q: 'WebブラウザでページのURLを入力すると、ブラウザがWebサーバーに「このページがほしい」と要求するメッセージを何と呼ぶか。', choices: ['レスポンス', 'リクエスト', 'ハンドシェイク', 'エラーコード'], a: 1, explain: 'クライアント（ブラウザ）からサーバーへの要求が**リクエスト**です。'},
+  {q: 'Webサイトの信頼性を高めるため、外部の公的な認証機関から取得できる証明書は？', choices: ['運転免許証', 'SSL/TLSサーバー証明書', '品質管理システム認証', '電子署名'], a: 1, explain: 'サーバー証明書は、サイトの暗号化と運営者の実在性を証明します。'},
+  {q: 'Webサイトの利用者が、情報を提供する際の責任と、情報の取り扱いについて定めた文書は？', choices: ['著作権表示', 'プライバシーポリシー', '免責事項', '特定商取引法に基づく表記'], a: 1, explain: '**プライバシーポリシー**は、個人情報の収集、利用、管理について定めた文書です。'},
+  {q: 'Webサイトのコンテンツを、検索エンジンに正しく理解させ、検索結果の上位に表示させるための施策を何と呼ぶか。', choices: ['アフィリエイト', 'リスティング広告', 'SEO', 'PPC'], a: 2, explain: '**SEO (Search Engine Optimization)** は、検索エンジン最適化のことです。'},
+  {q: 'Webサイトのデザインで、すべてのページで共通して使用される、サイトの顔となる大きな画像や要素を何と呼ぶか。', choices: ['ファビコン', 'ヒーローイメージ', 'アイキャッチ', 'フッター'], a: 1, explain: 'ページの最上部などに配置される、ユーザーの目を引く大きな画像を**ヒーローイメージ**と呼びます。'}
+];
+
+// =========================================================
+// 元のコードのクイズロジック（変更なし）
+// =========================================================
+let idx = 0;
+let score = 0;
+let answered = false;
+const total = QUESTIONS.length;
+
+const qText = document.getElementById('qText');
+const qNum = document.getElementById('qNum');
+const choicesEl = document.getElementById('choices');
+const nextBtn = document.getElementById('nextBtn');
+const restartBtn = document.getElementById('restartBtn');
+const status = document.getElementById('status');
+const progBar = document.getElementById('progBar');
+const feedback = document.getElementById('feedback');
+const resultBox = document.getElementById('resultBox');
+const finalScore = document.getElementById('finalScore');
+const detailText = document.getElementById('detailText');
+const retryBtn = document.getElementById('retryBtn');
+const reviewBtn = document.getElementById('reviewBtn');
+
+function renderQuestion() {
+  const item = QUESTIONS[idx];
+  qNum.textContent = `問題 ${idx+1}`;
+  qText.textContent = item.q;
+  choicesEl.innerHTML = '';
+  item.choices.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'choice';
+    btn.type = 'button';
+    btn.innerHTML = `<strong>${String.fromCharCode(65+i)}.</strong> ${c}`;
+    btn.dataset.index = i;
+    btn.addEventListener('click', onChoose);
+    choicesEl.appendChild(btn);
+  });
+  status.textContent = `問題 ${idx+1} / ${total}`;
+  progBar.style.width = `${Math.round((idx/total)*100)}%`;
+  nextBtn.disabled = true;
+  feedback.textContent = '';
+  answered = false;
+}
+
+function onChoose(e) {
+  if (answered) return;
+  answered = true;
+  const chosen = Number(e.currentTarget.dataset.index);
+  const item = QUESTIONS[idx];
+  const correctIndex = item.a;
+  const choiceButtons = [...choicesEl.querySelectorAll('.choice')];
+  choiceButtons.forEach((b)=>{ b.disabled = true; });
+
+  if (chosen === correctIndex) {
+    e.currentTarget.classList.add('correct');
+    score += 1;
+    feedback.textContent = '正解！';
+  } else {
+    e.currentTarget.classList.add('wrong');
+    // 正解表示
+    const correctBtn = choiceButtons.find(b => Number(b.dataset.index) === correctIndex);
+    if (correctBtn) correctBtn.classList.add('correct');
+    feedback.textContent = '不正解。';
+  }
+
+  // 説明文を下に追加
+  const explain = document.createElement('div');
+  explain.style.marginTop = '12px';
+  explain.style.color = 'var(--muted)';
+  explain.textContent = '【解説】' + item.explain || '';
+  document.querySelector('.question').appendChild(explain);
+
+  nextBtn.disabled = false;
+}
+
+nextBtn.addEventListener('click', ()=>{
+  if (!answered) return;
+  idx += 1;
+  if (idx >= total) {
+    showResult();
+  } else {
+    // remove previous explanation if any
+    const prevExplain = document.querySelector('.question > div[style]');
+    if (prevExplain) prevExplain.remove();
+    renderQuestion();
+  }
+});
+
+function showResult() {
+  progBar.style.width = '100%';
+  document.getElementById('quizArea').style.display = 'none';
+  resultBox.classList.add('show');
+  finalScore.textContent = `あなたのスコア: ${score} / ${total}`;
+  const rate = Math.round((score/total)*100);
+  detailText.textContent = `正答率 ${rate}% — ` + (
+    rate >= 80 ? '素晴らしい！ 基礎はしっかりしています。' :
+    rate >= 60 ? 'まずまずです。苦手な部分を復習しましょう。' :
+    '復習をおすすめします。用語や指標の意味を確認しましょう。'
+  );
+}
+
+restartBtn.addEventListener('click', ()=>{
+  resetQuiz();
+});
+retryBtn.addEventListener('click', ()=>{
+  resetQuiz();
+});
+reviewBtn.addEventListener('click', ()=>{
+  // シンプルなレビュー: 全問題と解説を表示
+  let rev = '--- 全問題と解説一覧 ---\n\n';
+  QUESTIONS.forEach((q,i)=>{
+    rev += `${i+1}. ${q.q}\n正解: ${String.fromCharCode(65+q.a)}. ${q.choices[q.a]}\n【解説】: ${q.explain || ''}\n\n`;
+  });
+  alert(rev);
+});
+
+function resetQuiz() {
+  idx = 0; score = 0; answered = false;
+  document.getElementById('quizArea').style.display = '';
+  resultBox.classList.remove('show');
+  // clear any leftover explain
+  const prevExplain = document.querySelector('.question > div[style]');
+  if (prevExplain) prevExplain.remove();
+  renderQuestion();
+}
+
+// 初期化
+renderQuestion();
+</script>
+</body>
+</html>
