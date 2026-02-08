@@ -550,3 +550,118 @@ a {
         padding: 15px;
     }
 }
+
+/* ==========================================================================
+   Feature: The Hidden Cats (Game)
+   ========================================================================== */
+.hidden-cat {
+    position: absolute;
+    font-size: 2rem;
+    cursor: pointer;
+    opacity: 0.3;
+    transition: all 0.3s ease;
+    z-index: 10;
+    filter: grayscale(100%);
+    user-select: none;
+}
+
+.hidden-cat:hover {
+    opacity: 1;
+    transform: scale(1.2) rotate(10deg);
+}
+
+.hidden-cat.found {
+    opacity: 1;
+    filter: grayscale(0%);
+    pointer-events: none;
+    /* Can't click again */
+    animation: bounce 0.5s;
+}
+
+.cat-counter {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    background: var(--color-card-bg);
+    border: 2px solid var(--color-primary);
+    padding: 10px 15px;
+    border-radius: 30px;
+    font-weight: bold;
+    box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    font-size: 1rem;
+    color: var(--color-text);
+    transition: transform 0.3s;
+}
+
+.cat-counter:hover {
+    transform: scale(1.1);
+}
+
+.cat-counter.complete {
+    background: gold;
+    color: #5D4037;
+    border-color: #5D4037;
+    animation: shine 2s infinite;
+}
+
+@keyframes bounce {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+/* Sparkle Effect */
+.click-sparkle {
+    position: fixed;
+    width: 20px;
+    height: 20px;
+    background: radial-gradient(circle, gold 0%, transparent 70%);
+    border-radius: 50%;
+    pointer-events: none;
+    animation: popFade 0.8s ease-out forwards;
+    z-index: 1000;
+}
+
+@keyframes popFade {
+    0% {
+        transform: scale(0);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(3);
+        opacity: 0;
+    }
+}
+
+/* Victory Modal */
+.cat-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    backdrop-filter: blur(5px);
+}
+
+.cat-modal-content {
+    background: var(--color-card-bg);
+    padding: 40px;
+    border-radius: 20px;
+    text-align: center;
+    border: 4px solid var(--color-primary);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: popIn 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+}
