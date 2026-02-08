@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Atelier Collection (v3.0) | SHIMANEKO TECH LOG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <div data-include="../inc/header.html"></div>
+
+    <main class="container">
+        <article class="article-container">
+            <header class="article-header">
+                <span class="tag" style="background: var(--color-primary); color: white;">Update</span>
+                <h1>The Atelier Collection (v3.0)<br><span
+                        style="font-size: 0.6em; color: var(--color-secondary);">〜アトリエに「遊び心」を〜</span></h1>
+            </header>
+
+            <div class="article-body">
+                <p>こんにちは、テック担当の<strong>コンブ</strong>です。<br>
+                    v2.0から間髪入れずに、v3.0アップデートを実施しました！<br>
+                    今回は「機能」というよりは、<strong>「遊び心」</strong>をテーマにした4つの新機能を追加しました。</p>
+
+                <h2>1. The Hidden Cats (隠れ猫)</h2>
+                <div class="concept-box" style="background: var(--color-white); border-color: var(--color-accent);">
+                    <div class="concept-title">🐈 アトリエの住人たち</div>
+                    <p>サイト内のあちこちに、5匹の猫が隠れています。<br>
+                        クリックすると捕まえることができます。左下のカウンターが目印です。<br>
+                        全部見つけると何かが起きるかも...？</p>
+                </div>
+
+                <h2>2. Atelier Radio (BGM)</h2>
+                <p>画面右下に、小さなラジオ・プレイヤーを置きました。<br>
+                    再生ボタンを押すと、作業に集中できるLo-fiな音楽が流れます。<br>
+                    深夜のアトリエで作業しているような気分に浸ってください。</p>
+
+                <h2>3. The Owl Post (お手紙)</h2>
+                <p>お問い合わせフォームをリニューアルしました。<br>
+                    <a href="../contact.html">Contactページ</a>に行ってみてください。<br>
+                    送信ボタンを押すと、フクロウがあなた手紙を運んでくれます。
+                </p>
+
+                <h2>4. The Sketchbook (落書き帳)</h2>
+                <p>ちょっと息抜きしたいですか？<br>
+                    <a href="play-canvas.html">The Sketchbook</a>で、自由にお絵かきができます。<br>
+                    Canvas APIを使ったシンプルなお絵かきアプリです。描いた絵は画像として保存もできますよ。
+                </p>
+
+                <hr style="margin: 60px 0; border: none; border-top: 2px dashed var(--color-border);">
+
+                <p>Webサイトは、ただ情報を伝えるだけの場所ではありません。<br>
+                    訪れた人が少しでも「楽しい」「心地よい」と感じてくれるような、そんな空間作りを目指しました。</p>
+
+                <p>ぜひ、アトリエの隅々まで探検してみてくださいね！</p>
+            </div>
+        </article>
+    </main>
+
+    <div data-include="../inc/footer.html"></div>
+    <script src="../js/include.js"></script>
+    <script src="../js/game.js"></script>
+    <script src="../js/radio.js"></script>
+
+    <!-- Hidden Cat #5 re-placed here for consistency if needed, but game.js handles global check -->
+</body>
+
+</html>
