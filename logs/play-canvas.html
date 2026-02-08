@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Sketchbook | SHIMANEKO TECH LOG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .sketch-container {
+            max-width: 800px;
+            margin: 40px auto;
+            text-align: center;
+        }
+
+        .canvas-wrapper {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            position: relative;
+            display: inline-block;
+        }
+
+        canvas {
+            border: 2px dashed var(--color-border);
+            cursor: crosshair;
+            background: #fff;
+            touch-action: none;
+            /* Prevent scrolling on touch */
+        }
+
+        .tools {
+            margin-top: 20px;
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .color-picker {
+            width: 40px;
+            height: 40px;
+            border: 2px solid var(--color-text);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .color-picker:hover,
+        .color-picker.active {
+            transform: scale(1.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-tool {
+            background: var(--color-white);
+            border: 2px solid var(--color-text);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn-tool:hover {
+            background: var(--color-primary);
+        }
+
+        .eraser {
+            background: #FFE0E0;
+            border-color: #EF9A9A;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div data-include="../inc/header.html"></div>
+
+    <main class="container">
+        <section class="sketch-container">
+            <h1 class="section-title">The Sketchbook</h1>
+            <p style="margin-bottom: 30px;">息抜きに、落書きしていきませんか？</p>
+
+            <div class="canvas-wrapper">
+                <canvas id="drawing-board" width="600" height="400"></canvas>
+            </div>
+
+            <div class="tools">
+                <div class="color-picker active" style="background: #5D4037;" data-color="#5D4037"></div>
+                <div class="color-picker" style="background: #E57373;" data-color="#E57373"></div>
+                <div class="color-picker" style="background: #64B5F6;" data-color="#64B5F6"></div>
+                <div class="color-picker" style="background: #81C784;" data-color="#81C784"></div>
+                <div class="color-picker" style="background: #FFB74D;" data-color="#FFB74D"></div>
+
+                <button class="btn-tool eraser" id="btn-clear">Clear 🗑️</button>
+                <button class="btn-tool" id="btn-save">Save 📷</button>
+            </div>
+        </section>
+    </main>
+
+    <div data-include="../inc/footer.html"></div>
+    <script src="../js/include.js"></script>
+    <script src="../js/game.js"></script>
+    <script src="../js/radio.js"></script>
+    <script src="../js/canvas.js"></script>
+</body>
+
+</html>
