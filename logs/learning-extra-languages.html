@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webの厨房を覗いてみよう！ | SHIMANEKO TECH LOG</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;700;900&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+
+<body>
+
+    <header class="site-header">
+        <div class="container" style="text-align: center;">
+            <a href="../index.html" class="logo">SHIMANEKO TECH LOG</a>
+        </div>
+    </header>
+
+    <main class="container">
+        <article class="article-container">
+            <header class="article-header">
+                <span class="tag"
+                    style="background: var(--color-primary); color: white; padding: 5px 15px; border-radius: 20px; font-weight: bold;">EXTRA</span>
+                <h1>Webの厨房を覗いてみよう！<br><span
+                        style="font-size: 0.6em; color: var(--color-secondary);">〜PHP・Python・Rubyの正体〜</span>
+                </h1>
+                <time
+                    style="display: block; margin-top: 10px; color: var(--color-secondary); font-weight: bold;">2026.02.09</time>
+            </header>
+
+            <div class="article-body">
+                <p>こんにちは、しまねこデザインのコンブです。<br>
+                    普段私たちは HTML/CSS/JS という「表側」の技術ばかり触っていますが、今日は少しだけ「裏側（サーバーサイド）」の厨房を覗いてみましょう。</p>
+
+                <h2>1. お弁当屋 vs レストラン</h2>
+                <p>Webサイトには大きく分けて2種類の提供スタイルがあります。<br>
+                    <strong>「静的サイト（Static）」</strong>と<strong>「動的サイト（Dynamic）」</strong>です。
+                </p>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+graph TD
+    subgraph Bentoya [🍱 静的サイト（お弁当屋）]
+        Customer1[お客さん] -->|注文| Clerk1[店員さん]
+        Clerk1 -->|即座に渡す| Bento[作り置き弁当<br>(HTMLファイル)]
+        Bento --> Customer1
+    end
+
+    subgraph Restaurant [🍽️ 動的サイト（レストラン）]
+        Customer2[お客さん] -->|注文| Clerk2[店員さん]
+        Clerk2 -->|オーダー通す| Chef[👨‍🍳 シェフ<br>(サーバー言語)]
+        Chef -->|調理開始| Kitchen[厨房<br>(データベース)]
+        Kitchen -->|食材取得| Chef
+        Chef -->|盛り付け| Dish[出来立て料理<br>(HTML生成)]
+        Dish --> Customer2
+    end
+    
+    style Chef fill:#FFCC80
+    style Kitchen fill:#ffcccc
+                    </pre>
+                    <div class="diagram-caption">図: 作り置きか、その場で作るか</div>
+                </div>
+
+                <p>この「SHIMANEKO TECH LOG」は<strong>お弁当屋さん（静的サイト）</strong>です。<br>
+                    私が事前に作っておいた HTML ファイルを、皆さんがサーバーから取っていくだけ。<br>
+                    だから提供が爆速なんです。</p>
+
+                <p>一方、Amazon や X（Twitter）のようなサイトは<strong>レストラン（動的サイト）</strong>です。<br>
+                    「あなたへのオススメ」や「最新の投稿」など、人によって違う内容をその場で作って出す必要があります。<br>
+                    そこで活躍するのが、厨房にいる<strong>「シェフ（サーバーサイド言語）」</strong>たちです。</p>
+
+                <h2>2. 厨房の3人のシェフ</h2>
+                <p>Web業界には有名な3人のシェフがいます。<br>
+                    彼らの特徴を知っておくと、システム屋さんの話が少し分かるようになるかもしれません。</p>
+
+                <h3>🐘 PHP（ピーエイチピー）</h3>
+                <div class="concept-box">
+                    <div class="concept-title">👨‍🍳 大衆食堂のベテランおやじ</div>
+                    <p>「へいらっしゃい！何にする？ま、とりあえず座んな！」<br>
+                        世界で一番普及しているCMS「WordPress」の生みの親。<br>
+                        歴史が長く、どんなサーバー（厨房）にも大抵いる。ちょっとコードが雑でも動いてくれる、懐の深いおっちゃん。</p>
+                </div>
+
+                <h3>💎 Ruby（ルビー）</h3>
+                <div class="concept-box">
+                    <div class="concept-title">👩‍🍳 こだわりの職人シェフ</div>
+                    <p>「美しくない料理は出さないわ」<br>
+                        日本人の まつもとゆきひろ氏 が生み出した言語。「開発者がハッピーになれること」を理念に持っており、コードが直感的で美しい。<br>
+                        日本発のベンチャー企業などで大人気。</p>
+                </div>
+
+                <h3>🐍 Python（パイソン）</h3>
+                <div class="concept-box">
+                    <div class="concept-title">👨‍🔬 データ分析官兼シェフ</div>
+                    <p>「この食材の栄養価と焼成温度の最適解は…」<br>
+                        AI（人工知能）や機械学習が得意な理系シェフ。<br>
+                        最近のAIブームで人気爆発中。Web料理も作れるし、裏で複雑な計算もこなす万能選手。</p>
+                </div>
+
+                <h2>3. なぜ今回はシェフを雇わなかったの？</h2>
+                <p>これだけ優秀なシェフたちがいるのに、なぜこのテックログは「お弁当屋」スタイルを選んだのでしょうか？</p>
+
+                <div class="diagram-container">
+                    <pre class="mermaid">
+details
+    title なぜ静的サイトなのか？
+    
+    Item1[全員に同じ内容を見せる] --> Reason1[オーダーメイド不要]
+    Item2[スピード重視] --> Reason2[調理時間ゼロ]
+    Item3[コスト削減] --> Reason3[シェフの人件費ゼロ]
+    
+    Reason1 --> Conclusion[✨ 静的サイトで十分！]
+    Reason2 --> Conclusion
+    Reason3 --> Conclusion
+                    </pre>
+                    <div class="diagram-caption">図: 今回の戦略</div>
+                </div>
+
+                <p>ブログのような「全員に同じ記事を見せる」サイトなら、わざわざ注文のたびにシェフが調理する必要はありません。<br>
+                    美味しいお弁当（HTML）を事前に作って並べておく方が、お客さん（皆さん）を待たせず、サーバー代（場所代）も安く済むのです。</p>
+
+                <p>適材適所。これがWeb制作の面白いところですね！</p>
+
+                <div
+                    style="text-align: center; margin-top: 80px; padding: 40px; border-top: 1px solid var(--color-border);">
+                    <a href="../index.html" class="read-btn"
+                        style="display: inline-block; padding: 15px 40px; width: auto;">Topへ戻る</a>
+                </div>
+            </div>
+        </article>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            <p>&copy; 2026 Shimaneko Design</p>
+        </div>
+    </footer>
+
+    <!-- Mermaid Loader -->
+    <script type="module" src="../js/visuals.js"></script>
+
+</body>
+
+</html>
