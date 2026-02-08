@@ -12,18 +12,18 @@ function initLogSorter() {
     if (!logsList) return;
 
     // 1. Inject Controls
-    const controlsContainer = document.createElement('div');
-    controlsContainer.className = 'log-controls';
+    const sortersContainer = document.getElementById('log-sorters');
+    if (sortersContainer) {
+        // Sort Buttons
+        const btnNewest = createSortButton('新しい順', true);
+        const btnOldest = createSortButton('古い順', false);
 
-    // Sort Buttons
-    const btnNewest = createSortButton('新しい順', true);
-    const btnOldest = createSortButton('古い順', false);
+        sortersContainer.appendChild(btnNewest);
+        sortersContainer.appendChild(btnOldest);
 
-    controlsContainer.appendChild(btnNewest);
-    controlsContainer.appendChild(btnOldest);
-
-    // Insert before the list
-    logsList.parentNode.insertBefore(controlsContainer, logsList);
+        // Expose buttons for state updates
+        window.logSortButtons = { btnNewest, btnOldest };
+    }
 
     // 2. Parse & Enhance Logs
     const logs = Array.from(logsList.querySelectorAll('.log-card'));
@@ -61,8 +61,10 @@ function initLogSorter() {
         sorted.forEach(log => logsList.appendChild(log));
 
         // Update active state
-        btnNewest.classList.toggle('active', isDesc);
-        btnOldest.classList.toggle('active', !isDesc);
+        if (window.logSortButtons) {
+            window.logSortButtons.btnNewest.classList.toggle('active', isDesc);
+            window.logSortButtons.btnOldest.classList.toggle('active', !isDesc);
+        }
     }
 
     function createSortButton(text, isDesc) {
